@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()

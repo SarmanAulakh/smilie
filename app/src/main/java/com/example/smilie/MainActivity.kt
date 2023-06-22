@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.smilie.screens.HomeScreen
 import com.example.smilie.ui.components.BottomNav
 import com.example.smilie.ui.theme.SMILIETheme
 
@@ -27,19 +28,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainApp()
         }
-    }
-}
-
-@Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier
-            .verticalScroll(rememberScrollState())
-            .padding(vertical = 16.dp)
-    ) {
-        Spacer(Modifier.height(16.dp))
-        Text(text = "test")
-        Spacer(Modifier.height(16.dp))
     }
 }
 
