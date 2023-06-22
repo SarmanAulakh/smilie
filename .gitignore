@@ -1,0 +1,13 @@
+.DS_Store
+captures
+/.idea/caches
+
+*.jar
+*.war
+*.ear
+*.class
+
+### Gradle ###
+.gradle
+/build/
+local.properties
