@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 
 @Composable
-fun ProfileScreen() {
+fun FeedbackScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -22,7 +22,7 @@ fun ProfileScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "PROFILE",
+            text = "Feedback Page",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -32,6 +32,6 @@ fun ProfileScreen() {
 
 @Composable
 @Preview
-fun ProfileScreenPreview() {
-    ProfileScreen()
+fun FeedbackScreenPreview() {
+    FeedbackScreen()
 }
