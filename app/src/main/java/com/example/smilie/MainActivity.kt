@@ -3,23 +3,27 @@ package com.example.smilie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.smilie.annotations.DarkLightPreviews
 import com.example.smilie.screens.HomeScreen
-import com.example.smilie.ui.components.BottomNav
+import com.example.smilie.screens.ProfileScreen
+import com.example.smilie.screens.SettingsScreen
+import com.example.smilie.ui.components.navigation.BottomNavBar
+import com.example.smilie.ui.components.navigation.Home
+import com.example.smilie.ui.components.navigation.Profile
+import com.example.smilie.ui.components.navigation.Settings
+import com.example.smilie.ui.components.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
 
 class MainActivity : ComponentActivity() {
@@ -31,25 +35,58 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// REFERENCE: https://github.com/android/codelab-android-compose/blob/main/NavigationCodelab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainApp() {
     SMILIETheme {
         val navController = rememberNavController()
-        val backStackEntry = navController.currentBackStackEntryAsState()
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination
+        val currentScreen = smilieTabRowScreens.find { it.route == currentDestination?.route } ?: Home
 
         Scaffold(
-            bottomBar = { BottomNav(
-                currentRoute = backStackEntry.value?.destination?.route,
+            bottomBar = {
+                BottomNavBar(
+                    allScreens = smilieTabRowScreens,
+                    onTabSelected = { newScreen ->
+                        navController.navigateSingleTopTo(newScreen.route)
+                    },
+                    currentScreen = currentScreen
+                )
+            }
+        ) { innerPadding ->
+            NavHost(
                 navController = navController,
-            )}
-        ) { padding ->
-            HomeScreen(Modifier.padding(padding))
+                startDestination = Home.route,
+                modifier = Modifier.padding(innerPadding),
+            ) {
+                composable(route = Home.route) {
+                    HomeScreen()
+                }
+                composable(route = Profile.route) {
+                    ProfileScreen()
+                }
+                composable(route = Settings.route) {
+                    SettingsScreen()
+                }
+            }
         }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
+// REFERENCE: https://github.com/android/codelab-android-compose/blob/main/NavigationCodelab
+fun NavHostController.navigateSingleTopTo(route: String) =
+    this.navigate(route) {
+        popUpTo(this@navigateSingleTopTo.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+
+
+@DarkLightPreviews
 @Composable
 fun FavoriteCollectionsGridPreview() {
     MainApp()

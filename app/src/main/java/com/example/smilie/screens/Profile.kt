@@ -22,7 +22,7 @@ fun ProfileScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "HOME",
+            text = "PROFILE",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
