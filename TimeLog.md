@@ -2,3 +2,4 @@
 |---|---|---|---|---|---|---|---|
 | 2023/06/12  | 0.5 | 0 | 0 | 0 | 0 | 0 | Setup Repo |
 | 2023/06/17  | 0  | 1 | 0 | 0 | 0 | 0 | Setup Android App |
+| 2023/06/22  | 4  | 0 | 0 | 0 | 0 | 0 | Setup navbar and basic screens for navigation |
