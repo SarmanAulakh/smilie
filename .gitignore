@@ -1,6 +1,6 @@
 .DS_Store
 captures
-/.idea/caches
+/.idea
 
 *.jar
 *.war
