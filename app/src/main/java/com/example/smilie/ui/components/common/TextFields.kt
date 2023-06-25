@@ -24,12 +24,12 @@ import com.example.smilie.R
 @Composable
 fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
     OutlinedTextField(
-        singleLine = true,
         modifier = modifier,
-        value = TextFieldValue(value),
-        onValueChange = { value: TextFieldValue -> onNewValue(value.text) },
+        value = value,
+        onValueChange = { onNewValue(it) },
         placeholder =  { Text(stringResource(R.string.email)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
     )
 }
 

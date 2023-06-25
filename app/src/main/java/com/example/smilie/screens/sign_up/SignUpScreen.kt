@@ -1,4 +1,4 @@
-package com.example.smilie.screens.login
+package com.example.smilie.screens.sign_up
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,18 +20,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.ui.components.common.EmailField
 import com.example.smilie.ui.components.common.PasswordField
 import com.example.smilie.ui.components.common.ext.fieldModifier
+import com.example.smilie.ui.components.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.components.navigation.SIGN_UP_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
+fun SignUpScreen(
     openAndPopUp: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
 
-    TopAppBar(title = { Text("Login In Page") })
+    TopAppBar(title = { Text("Sign Up Page") }, actions = {
+        Row() {
+            Button(
+                onClick = { openAndPopUp(LOGIN_SCREEN) }
+            ) {
+                Text(text = "Go Back")
+            }
+        }
+    })
 
     Column(
         modifier = modifier
@@ -43,21 +52,13 @@ fun LoginScreen(
     ) {
         EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
         PasswordField(uiState.password, viewModel::onPasswordChange, Modifier.fieldModifier())
+        PasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, Modifier.fieldModifier())
 
         Button(
             onClick = { viewModel.onSignInClick(openAndPopUp) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
-        ) {
-            Text(text = "Sign in")
-        }
-        Button(
-            onClick = { openAndPopUp(SIGN_UP_SCREEN) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
         ) {
             Text(text = "Sign up")
         }
