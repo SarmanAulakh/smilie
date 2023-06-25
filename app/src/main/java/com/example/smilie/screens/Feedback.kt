@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
-import com.example.smilie.R
-
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.LinearProgressIndicator
 
 @Composable
 fun FeedbackScreen(modifier: Modifier = Modifier) {
@@ -26,39 +26,42 @@ fun FeedbackScreen(modifier: Modifier = Modifier) {
     ) {
         MaterialTheme {
             Column {
-                Title(text = "User Feedback Page")
+//                Title1(text = "User Feedback Page")
+//
+//                Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 20.dp)
+                ) {
+                    val metricData = listOf(
+                        Metric1("Metric 1", 80),
+                        Metric1("Metric 2", 60),
+                        Metric1("Metric 3", 40),
+                        Metric1("Metric 4", 70),
+                        Metric1("Metric 5", 90),
+                        Metric1("Metric 6", 35),
+                        Metric1("Metric 7", 20),
+                        Metric1("Metric 8", 90),
+                        Metric1("Metric 9", 45),
+                        Metric1("Metric 10", 75)
+                    )
 
-                val metricData = listOf(
-                    Metric("Metric 1", 80),
-                    Metric("Metric 2", 60),
-                    Metric("Metric 3", 40),
-                    Metric("Metric 4", 70),
-                    Metric("Metric 5", 90),
-                    Metric("Metric 6", 35),
-                    Metric("Metric 7", 20),
-                    Metric("Metric 8", 90),
-                    Metric("Metric 9", 45),
-                    Metric("Metric 10", 75)
-                )
-
-                for (metric in metricData) {
-                    Box(
-                        modifier = Modifier.padding(start = 20.dp)
-                    ) {
-                        MaterialTheme {
+                    items(metricData) {metric ->
+                        Box(
+                            modifier = Modifier.padding(start = 0.dp)
+                        ) {
                             Column {
                                 Text(
                                     text = metric.name,
                                     style = TextStyle(
                                         color = Color.DarkGray,
-                                        fontSize = 18.sp,
+                                        fontSize = 28.sp,
                                         fontWeight = FontWeight.Bold
                                     ),
-                                    modifier = Modifier.padding(10.dp)
+                                    modifier = Modifier.padding(8.dp)
                                 )
-                                Rectangle(metric.value)
+                                Rectangle1(metric.value)
                             }
                         }
                     }
@@ -69,25 +72,45 @@ fun FeedbackScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Rectangle(value: Int) {
+fun Rectangle1(value: Int) {
 //    val hexcolor = "B200ED"
 //    val color = Color(android.graphics.Color.parseColor(hexcolor))
     val color = Color.Magenta
-    val height: Dp = 64.dp
+    val height: Dp = 25.dp
     val width = (value / 100f)
+    Row() {
+        LinearProgressIndicator(
+            progress = width,
+            modifier = Modifier
+                .weight(10f)
+                .height(height)
+                .fillMaxWidth(0.75f),
+            color = color,
+        )
+        Text(
+            text = value.toString(),
+            style = TextStyle(
+                color = Color.DarkGray,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(start = 25.dp)
+        )
+    }
 
-    Box(
-        modifier = Modifier
-            .wrapContentWidth(align = Alignment.Start)
-            .height(height)
-            .fillMaxWidth(width)
-            .background(color)
-            .padding(20.dp)
-    )
+
+//    Box(
+//        modifier = Modifier
+//            .wrapContentWidth(align = Alignment.Start)
+//            .height(height)
+//            .fillMaxWidth(width)
+//            .background(color)
+//            .padding(20.dp)
+//    )
 }
 
 @Composable
-fun Title(text: String) {
+fun Title1(text: String) {
     Text(
         text = text,
         style = TextStyle(
@@ -101,10 +124,10 @@ fun Title(text: String) {
             .wrapContentWidth(align = Alignment.CenterHorizontally)
     )
 }
-data class Metric(val name: String, val value: Int)
+data class Metric1(val name: String, val value: Int)
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun FeedbackScreenPreview() {
     FeedbackScreen()
 }
