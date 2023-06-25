@@ -7,4 +7,7 @@
 | 2023/06/23  | 0 | 0 | 0 | 2 | 0 | 0 | Initial setup for rate your day page |
 | 2023/06/24  | 0 | 0 | 5.5 | 0 | 0 | 0 | Add bars and metrics examples in the feedback page |
 | 2023/06/24  | 0 | 0 | 0 | 7 | 0 | 0 | Preparing Rate Your Day page for initial demo and adding it to the navbar |
+| 2023/06/24  | 0 | 0 | 3.5 | 0 | 0 | 0 | Add bars and metrics examples in the feedback page |
 | 2023/06/25  | 0 | 0 | 0 | 0 | 11 | 0 | Created the initial design for the profile page |
+| 2023/06/25  | 0 | 0 | 2 | 0 | 0 | 0 | Merge Feedback page with homescreen with homescreen message displayed on top of the feedback bars |
+
