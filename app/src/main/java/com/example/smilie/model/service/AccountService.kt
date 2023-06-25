@@ -12,6 +12,6 @@ interface AccountService {
     val currentUser: Flow<User>
 
     suspend fun authenticate(email: String, password: String)
-    suspend fun linkAccount(email: String, password: String)
+    suspend fun signUp(email: String, password: String)
     suspend fun signOut()
 }

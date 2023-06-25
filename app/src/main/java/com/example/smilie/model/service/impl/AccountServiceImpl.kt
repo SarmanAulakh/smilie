@@ -35,10 +35,11 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth): Ac
         auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun linkAccount(email: String, password: String) {
+    override suspend fun signUp(email: String, password: String) {
         println("$email: $password")
-        val credential = EmailAuthProvider.getCredential(email, password)
-        auth.currentUser!!.linkWithCredential(credential).await()
+        auth.createUserWithEmailAndPassword(email, password).await()
+//        val credential = EmailAuthProvider.getCredential(email, password)
+//        auth.currentUser!!.linkWithCredential(credential).await()
     }
 
     override suspend fun signOut() {
