@@ -39,4 +39,9 @@ object RateYourDay : NavDestination {
     override val icon = Icons.Rounded.Settings
 }
 
+// tab routes
 val smilieTabRowScreens = listOf(Home, Profile, Settings, RateYourDay)
+
+// non-tab routes
+const val LOGIN_SCREEN = "LoginScreen"
+const val SIGN_UP_SCREEN = "SignUpScreen"
