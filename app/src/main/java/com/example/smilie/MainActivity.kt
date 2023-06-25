@@ -3,6 +3,7 @@ package com.example.smilie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -18,17 +19,37 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smilie.annotations.DarkLightPreviews
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.screens.ProfileScreen
+import com.example.smilie.screens.RateYourDay
 import com.example.smilie.screens.SettingsScreen
+import com.example.smilie.screens.login.LoginScreen
+import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.ui.components.navigation.BottomNavBar
 import com.example.smilie.ui.components.navigation.Home
+import com.example.smilie.ui.components.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.components.navigation.Profile
+import com.example.smilie.ui.components.navigation.SIGN_UP_SCREEN
 import com.example.smilie.ui.components.navigation.Settings
+import com.example.smilie.ui.components.navigation.RateYourDay
 import com.example.smilie.ui.components.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 
+
+
+@AndroidEntryPoint
+@ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
+//    private lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        FirebaseApp.initializeApp(this)
+//        firebaseAuth = FirebaseAuth.getInstance()
+
         setContent {
             MainApp()
         }
@@ -58,17 +79,26 @@ fun MainApp() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Home.route,
+                startDestination = LOGIN_SCREEN,
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(route = Home.route) {
                     HomeScreen()
                 }
                 composable(route = Profile.route) {
-                    ProfileScreen()
+                    ProfileScreen(name = "Dohyun")
                 }
                 composable(route = Settings.route) {
                     SettingsScreen()
+                }
+                composable(LOGIN_SCREEN) {
+                    LoginScreen(openAndPopUp = { route -> navController.navigateSingleTopTo(route) })
+                }
+                composable(SIGN_UP_SCREEN) {
+                    SignUpScreen(openAndPopUp = { route -> navController.navigateSingleTopTo(route) })
+                }
+                composable(route = RateYourDay.route) {
+                    RateYourDay()
                 }
             }
         }

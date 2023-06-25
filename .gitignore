@@ -27,3 +27,6 @@ IntelliJ
 .gradle
 /build/
 local.properties
+
+# Google
+google-services.json
