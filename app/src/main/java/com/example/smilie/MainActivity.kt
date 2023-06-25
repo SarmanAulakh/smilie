@@ -1,7 +1,6 @@
 package com.example.smilie
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,13 +18,24 @@ import com.example.smilie.annotations.DarkLightPreviews
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.screens.ProfileScreen
 import com.example.smilie.screens.SettingsScreen
+import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.ui.components.navigation.BottomNavBar
 import com.example.smilie.ui.components.navigation.Home
+import com.example.smilie.ui.components.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.components.navigation.Profile
 import com.example.smilie.ui.components.navigation.Settings
 import com.example.smilie.ui.components.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
+import dagger.hilt.android.AndroidEntryPoint
+import android.app.Application
+import androidx.activity.ComponentActivity
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
+class SmilieHiltApp : Application() {}
+
+@AndroidEntryPoint
+@ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +68,7 @@ fun MainApp() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Home.route,
+                startDestination = LOGIN_SCREEN,
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(route = Home.route) {
@@ -70,6 +80,12 @@ fun MainApp() {
                 composable(route = Settings.route) {
                     SettingsScreen()
                 }
+                composable(LOGIN_SCREEN) {
+                    LoginScreen(openAndPopUp = { route -> navController.navigateSingleTopTo(route) })
+                }
+//                composable(SIGN_UP_SCREEN) {
+//                    SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+//                }
             }
         }
     }

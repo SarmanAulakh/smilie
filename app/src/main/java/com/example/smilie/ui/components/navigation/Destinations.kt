@@ -34,3 +34,7 @@ object Settings : NavDestination {
 }
 
 val smilieTabRowScreens = listOf(Home, Profile, Settings)
+
+// non-tab routes
+const val LOGIN_SCREEN = "LoginScreen"
+const val SIGN_UP_SCREEN = "SignUpScreen"
