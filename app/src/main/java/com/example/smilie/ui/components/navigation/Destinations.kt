@@ -33,4 +33,10 @@ object Settings : NavDestination {
     override val icon = Icons.Rounded.Settings
 }
 
-val smilieTabRowScreens = listOf(Home, Profile, Settings)
+object RateYourDay : NavDestination {
+    override val name = "RateYourDay"
+    override val route = "RateYourDay"
+    override val icon = Icons.Rounded.Settings
+}
+
+val smilieTabRowScreens = listOf(Home, Profile, Settings, RateYourDay)

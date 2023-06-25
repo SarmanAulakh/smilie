@@ -18,11 +18,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smilie.annotations.DarkLightPreviews
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.screens.ProfileScreen
+import com.example.smilie.screens.RateYourDay
 import com.example.smilie.screens.SettingsScreen
 import com.example.smilie.ui.components.navigation.BottomNavBar
 import com.example.smilie.ui.components.navigation.Home
 import com.example.smilie.ui.components.navigation.Profile
 import com.example.smilie.ui.components.navigation.Settings
+import com.example.smilie.ui.components.navigation.RateYourDay
 import com.example.smilie.ui.components.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
 
@@ -69,6 +71,9 @@ fun MainApp() {
                 }
                 composable(route = Settings.route) {
                     SettingsScreen()
+                }
+                composable(route = RateYourDay.route) {
+                    RateYourDay()
                 }
             }
         }
