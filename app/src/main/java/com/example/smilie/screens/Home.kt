@@ -29,7 +29,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     ) {
         MaterialTheme {
             Column {
-//                Home("Dohyun", 7.8)
+                Home("Dohyun", 7.8)
 //                Title(text = "User Feedback Page")
 //
 //                Spacer(modifier = Modifier.height(16.dp))
@@ -129,54 +129,76 @@ fun Title(text: String) {
 
 @Composable
 fun Home(name: String, value: Double) {
-    val welcomeMessage = buildAnnotatedString {
-        withStyle(style = SpanStyle()) {}
-    }
-
-    Column() {
-        Text(
-            text = "",
-            style = TextStyle(
-                color = Color.DarkGray,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.ExtraBold
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-                .wrapContentWidth(align = Alignment.CenterHorizontally)
+    Column(modifier = Modifier.padding(16.dp)) {
+        val textData = listOf(
+            TextType("Hello $name! Welcome!", 2),
+            TextType("Over the last week, you've average a ${value.toString()}/10!", 1),
+            TextType("Keep up the work!", 1)
         )
+        for (textval in textData) {
+            Text(
+                text = textval.text,
+                style = TextStyle(
+                    color = Color.DarkGray,
+                    fontSize = (18 * textval.type).sp,
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .wrapContentWidth(align = Alignment.CenterHorizontally)
+            )
+        }
+
 
         Row() {
-            Column() {
-                Text(
-                    text = "Popular Metrics:\n - sleep\n - time spent with friends\n productivity\n ...",
-                    style = TextStyle(
-                        color = Color.DarkGray,
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    ),
-                    modifier = Modifier
-                        .padding(top = 16.dp)
+            Column(modifier = Modifier.padding(10.dp)) {
+                val metricText = listOf(
+                    TextType("Popular Metrics:", 2),
+                    TextType("- sleep", 1),
+                    TextType("- time spent with friends", 1),
+                    TextType("- productivity", 1),
                 )
+                for (metric in metricText) {
+                    Text(
+                        text = metric.text,
+                        style = TextStyle(
+                            color = Color.DarkGray,
+                            fontSize = (15 * metric.type).sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                    )
+                }
             }
-            Column() {
-                Text(
-                    text = "Helpful Links:\n - betterhelp.com\n - ...",
-                    style = TextStyle(
-                        color = Color.DarkGray,
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    ),
-                    modifier = Modifier
-                        .padding(top = 16.dp)
+            Column(modifier = Modifier.padding(10.dp)) {
+                val helpfulLinks = listOf(
+                    TextType("Helpful Links:", 2),
+                    TextType("- betterhelp.org", 1),
+                    TextType("- LeagueofLegends.com", 1),
                 )
+                for (link in helpfulLinks) {
+                    Text(
+                        text = link.text,
+                        style = TextStyle(
+                            color = Color.DarkGray,
+                            fontSize = (15 * link.type).sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                    )
+                }
             }
         }
     }
 
 }
 data class Metric(val name: String, val value: Int)
+
+// text: text to display, type: determines fontsize
+data class TextType(val text: String, val type: Int)
 
 @Composable
 @Preview(showBackground = true)
