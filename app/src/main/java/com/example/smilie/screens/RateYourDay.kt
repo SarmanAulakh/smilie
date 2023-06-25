@@ -94,7 +94,7 @@ fun RateYourDay() {
             }
         }
         Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(horizontal=15.dp,vertical=10.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End
         ) {
