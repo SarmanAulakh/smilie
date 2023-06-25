@@ -67,7 +67,7 @@ fun MainApp() {
                     HomeScreen()
                 }
                 composable(route = Profile.route) {
-                    ProfileScreen()
+                    ProfileScreen(name = "Dohyun")
                 }
                 composable(route = Settings.route) {
                     SettingsScreen()
