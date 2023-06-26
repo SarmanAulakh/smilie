@@ -31,7 +31,7 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.uiState
 
-    TopAppBar(title = { Text("Login In Page") })
+    TopAppBar(title = { Text("Login Page") })
 
     Column(
         modifier = modifier

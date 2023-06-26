@@ -29,7 +29,8 @@ fun RateYourDay() {
         "Time with Friends",
         "Video Games",
         "Food",
-        "Overall"
+        "Overall",
+        "Time spent on Assignments"
     )
     var sliders = mutableListOf<MutableState<Float>>()
     metrics.indices.forEach {

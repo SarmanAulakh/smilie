@@ -33,15 +33,7 @@ fun SignUpScreen(
     val uiState by viewModel.uiState
     val errorMessage by viewModel.errorMessage
 
-    TopAppBar(title = { Text("Sign Up Page") }, actions = {
-        Row() {
-            Button(
-                onClick = { openAndPopUp(LOGIN_SCREEN) }
-            ) {
-                Text(text = "Go Back")
-            }
-        }
-    })
+    TopAppBar(title = { Text("Sign up Page") })
 
     Column(
         modifier = modifier
@@ -62,6 +54,11 @@ fun SignUpScreen(
                 .padding(12.dp)
         ) {
             Text(text = "Sign up")
+        }
+        Button(
+            onClick = { openAndPopUp(LOGIN_SCREEN) }
+        ) {
+            Text(text = "Go Back")
         }
         Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
         Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))

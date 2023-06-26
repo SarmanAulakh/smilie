@@ -80,6 +80,12 @@ fun ProfileScreen(name: String) {
                 );
             }
             Text(
+                text = "Type: Student",
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            );
+            Text(
                 text = "Current Quality of Life Rating: 9/10",
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                 fontWeight = FontWeight.Bold,
