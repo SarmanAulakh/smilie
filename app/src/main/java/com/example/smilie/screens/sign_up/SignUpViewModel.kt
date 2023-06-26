@@ -50,9 +50,7 @@ class SignUpViewModel @Inject constructor(private val accountService: AccountSer
         }
 
         launchCatching {
-            uiState.value = uiState.value.copy(message = "")
-            accountService.linkAccount(email, password)
-            uiState.value = uiState.value.copy(message = "WE MADE IT!")
+            accountService.signUp(email, password)
             openAndPopUp(Settings.route)
         }
     }

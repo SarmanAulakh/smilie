@@ -4,8 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.smilie.model.service.AccountService
 import com.example.smilie.screens.SmilieViewModel
 import com.example.smilie.ui.components.common.ext.isValidEmail
-import com.example.smilie.ui.components.navigation.LOGIN_SCREEN
-import com.example.smilie.ui.components.navigation.Settings
+import com.example.smilie.ui.components.navigation.Home
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -39,7 +38,7 @@ class LoginViewModel @Inject constructor(private val accountService: AccountServ
 
         launchCatching {
             accountService.authenticate(email, password)
-            openAndPopUp(Settings.route)
+            openAndPopUp(Home.route)
         }
     }
 }

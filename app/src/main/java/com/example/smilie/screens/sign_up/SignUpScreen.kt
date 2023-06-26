@@ -31,6 +31,7 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
+    val errorMessage by viewModel.errorMessage
 
     TopAppBar(title = { Text("Sign Up Page") }, actions = {
         Row() {
@@ -63,5 +64,6 @@ fun SignUpScreen(
             Text(text = "Sign up")
         }
         Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
+        Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
     }
 }
