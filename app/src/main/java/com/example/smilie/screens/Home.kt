@@ -29,26 +29,24 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     ) {
         MaterialTheme {
             Column {
-                Home("Dohyun", 7.8)
 //                Title(text = "User Feedback Page")
 //
 //                Spacer(modifier = Modifier.height(16.dp))
 
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(horizontal = 20.dp)
+                    contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
+                    item { Home("Dohyun", 7.8) }
+
                     val metricData = listOf(
-                        Metric("Metric 1", 80),
-                        Metric("Metric 2", 60),
-                        Metric("Metric 3", 40),
-                        Metric("Metric 4", 70),
-                        Metric("Metric 5", 90),
-                        Metric("Metric 6", 35),
-                        Metric("Metric 7", 20),
-                        Metric("Metric 8", 90),
-                        Metric("Metric 9", 45),
-                        Metric("Metric 10", 75)
+                        Metric("Amount of Sleep", 80),
+                        Metric("Quality of Sleep", 35),
+                        Metric("Time spent with Friends", 60),
+                        Metric("Productivity", 40),
+                        Metric("Exercise", 70),
+                        Metric("Entertainment", 90),
+                        Metric("Time spent Studying", 20),
                     )
 
                     items(metricData) {metric ->
@@ -131,8 +129,8 @@ fun Title(text: String) {
 fun Home(name: String, value: Double) {
     Column(modifier = Modifier.padding(16.dp)) {
         val textData = listOf(
-            TextType("Hello $name! Welcome!", 2),
-            TextType("Over the last week, you've average a ${value.toString()}/10!", 1),
+            TextType("Hello $name! Welcome back!", 2),
+            TextType("Over the last week, you've average a ${value.toString()}/10 !", 1),
             TextType("Keep up the work!", 1)
         )
         for (textval in textData) {
@@ -152,7 +150,7 @@ fun Home(name: String, value: Double) {
 
 
         Row() {
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column(modifier = Modifier.padding(10.dp).weight(1f)) {
                 val metricText = listOf(
                     TextType("Popular Metrics:", 2),
                     TextType("- sleep", 1),
@@ -172,11 +170,11 @@ fun Home(name: String, value: Double) {
                     )
                 }
             }
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column(modifier = Modifier.padding(10.dp).weight(1f)) {
                 val helpfulLinks = listOf(
                     TextType("Helpful Links:", 2),
                     TextType("- betterhelp.org", 1),
-                    TextType("- LeagueofLegends.com", 1),
+                    TextType("- LeagueofLeg.com", 1),
                 )
                 for (link in helpfulLinks) {
                     Text(
