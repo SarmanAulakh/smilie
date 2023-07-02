@@ -19,12 +19,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
+val bg_color = "DCD0FF"
+val txt_color = "0D0D0D"
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Cyan),
+            .background(Color(android.graphics.Color.parseColor(bg_color))),
         contentAlignment = Alignment.TopCenter
     ) {
         MaterialTheme {
@@ -57,7 +60,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 Text(
                                     text = metric.name,
                                     style = TextStyle(
-                                        color = Color.DarkGray,
+                                        color = Color(android.graphics.Color.parseColor(txt_color)),
                                         fontSize = 28.sp,
                                         fontWeight = FontWeight.Bold
                                     ),
@@ -75,9 +78,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun Rectangle(value: Int) {
-//    val hexcolor = "B200ED"
-//    val color = Color(android.graphics.Color.parseColor(hexcolor))
-    val color = Color.Magenta
+    val hexcolor = "87CEEB"
+    val color = Color(android.graphics.Color.parseColor(hexcolor))
+//    val color = Color.Magenta
     val height: Dp = 25.dp
     val width = (value / 100f)
     Row() {
@@ -92,7 +95,7 @@ fun Rectangle(value: Int) {
         Text(
             text = value.toString(),
             style = TextStyle(
-                color = Color.DarkGray,
+                color = (Color(android.graphics.Color.parseColor(txt_color))),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             ),
@@ -114,7 +117,7 @@ fun Title(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            color = Color.DarkGray,
+            color = Color(android.graphics.Color.parseColor(txt_color)),
             fontSize = 36.sp,
             fontWeight = FontWeight.ExtraBold
         ),
@@ -137,7 +140,7 @@ fun Home(name: String, value: Double) {
             Text(
                 text = textval.text,
                 style = TextStyle(
-                    color = Color.DarkGray,
+                    color = Color(android.graphics.Color.parseColor(txt_color)),
                     fontSize = (18 * textval.type).sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
@@ -158,7 +161,7 @@ fun Home(name: String, value: Double) {
             Text(
                 text = metric.text,
                 style = TextStyle(
-                    color = Color.DarkGray,
+                    color = Color(android.graphics.Color.parseColor(txt_color)),
                     fontSize = (15 * metric.type).sp,
                     fontWeight = FontWeight.Bold
                 ),
@@ -176,7 +179,7 @@ fun Home(name: String, value: Double) {
             Text(
                 text = link.text,
                 style = TextStyle(
-                    color = Color.DarkGray,
+                    color = Color(android.graphics.Color.parseColor(txt_color)),
                     fontSize = (15 * link.type).sp,
                     fontWeight = FontWeight.Bold
                 ),
