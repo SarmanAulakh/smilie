@@ -148,47 +148,41 @@ fun Home(name: String, value: Double) {
             )
         }
 
+        val metricText = listOf(
+            TextType("Popular Metrics:", 2),
+            TextType("- sleep", 1),
+            TextType("- time spent with friends", 1),
+            TextType("- productivity", 1),
+        )
+        for (metric in metricText) {
+            Text(
+                text = metric.text,
+                style = TextStyle(
+                    color = Color.DarkGray,
+                    fontSize = (15 * metric.type).sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            )
+        }
 
-        Row() {
-            Column(modifier = Modifier.padding(10.dp).weight(1f)) {
-                val metricText = listOf(
-                    TextType("Popular Metrics:", 2),
-                    TextType("- sleep", 1),
-                    TextType("- time spent with friends", 1),
-                    TextType("- productivity", 1),
-                )
-                for (metric in metricText) {
-                    Text(
-                        text = metric.text,
-                        style = TextStyle(
-                            color = Color.DarkGray,
-                            fontSize = (15 * metric.type).sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                    )
-                }
-            }
-            Column(modifier = Modifier.padding(10.dp).weight(1f)) {
-                val helpfulLinks = listOf(
-                    TextType("Helpful Links:", 2),
-                    TextType("- betterhelp.org", 1),
-                    TextType("- LeagueofLeg.com", 1),
-                )
-                for (link in helpfulLinks) {
-                    Text(
-                        text = link.text,
-                        style = TextStyle(
-                            color = Color.DarkGray,
-                            fontSize = (15 * link.type).sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                    )
-                }
-            }
+        val helpfulLinks = listOf(
+            TextType("Helpful Links:", 2),
+            TextType("- betterhelp.org", 1),
+            TextType("- LeagueofLeg.com", 1),
+        )
+        for (link in helpfulLinks) {
+            Text(
+                text = link.text,
+                style = TextStyle(
+                    color = Color.DarkGray,
+                    fontSize = (15 * link.type).sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            )
         }
     }
 
