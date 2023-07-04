@@ -1,0 +1,60 @@
+{
+  "users": {
+    "sarman": {
+      "userHandle": "sarman",
+      "firstName": "string",
+      "lastName": "string",
+      "type": "student",
+      "email": "string",
+      "imageUrl" "",
+      "bio": "",
+      "createdAt": "dateString",
+      "followers": ["uid1", "uid2", ...],
+    },
+    "uid": {
+      "userHandle": "uid",
+      "firstName": "string",
+      "lastName": "string",
+      "type": "default",
+      "email": "string",
+      "imageUrl" "",
+      "bio": "",
+      "createdAt": "dateString",
+      "followers": ["uid2"],
+    }
+  },
+  "metrics": {
+    "sarman": {
+      "metircId1": {
+        "name": "string",
+        "public": "boolean",
+        // sorted, new items appended to back
+        "values": [
+          {
+            "value": "number",
+            "date": "dateString",
+          },
+          {
+            "value": "number",
+            "date": "dateString",
+          }
+        ],
+      },
+      "metircId2": {
+        "name": "string",
+        "public": "boolean",
+        // sorted, new items appended to back
+        "values": [
+          {
+            "value": "number",
+            "date": "dateString",
+          },
+          {
+            "value": "number",
+            "date": "dateString",
+          }
+        ],
+      }
+    }
+  }
+}
