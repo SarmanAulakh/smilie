@@ -13,4 +13,6 @@
 | 2023/06/25 | 0                 | 0                | 4               | 0               | 0                | 0                | Merge Feedback page with homescreen with homescreen message displayed on top of the feedback bars |
 | 2023/06/25 | 5                 | 0                | 0               | 0               | 0                | 0                | Firebase signout configuration and UI, fixed user creation bugs                         |
 | 2023/06/30 | 0                 | 0                | 0               | 0               | 0                | 2                | Started sample db for users using FireStore                                             |
+| 2023/07/06 | 0                 | 0                | 2               | 0               | 0                | 0                | Began formatting homescreen with more soothing colors and layout                        |
+| 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
 
