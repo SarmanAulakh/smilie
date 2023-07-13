@@ -15,4 +15,6 @@
 | 2023/06/30 | 0                 | 0                | 0               | 0               | 0                | 2                | Started sample db for users using FireStore                                             |
 | 2023/07/06 | 0                 | 0                | 2               | 0               | 0                | 0                | Began formatting homescreen with more soothing colors and layout                        |
 | 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
+| 2023/07/12 | 0		 | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
 
+| 2023/07/13 | 0                 | 2                | 0               | 0               | 0                | 0                | Initial dark mode functionality
