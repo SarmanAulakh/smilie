@@ -46,7 +46,6 @@ import com.example.smilie.ui.navigation.LOGIN_SCREEN
 @Composable
 fun UserRegisterScreen(
     openAndPopUp: (String) -> Unit,
-    setUser: (User) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: UserRegisterViewModel = hiltViewModel()
 ) {
@@ -67,7 +66,7 @@ fun UserRegisterScreen(
         UserTypeDropdown(uiState.userType.name, viewModel::onUserTypeChange)
 
         Button(
-            onClick = { viewModel.onRegisterUserClick(openAndPopUp, setUser) },
+            onClick = { viewModel.onRegisterUserClick(openAndPopUp) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)

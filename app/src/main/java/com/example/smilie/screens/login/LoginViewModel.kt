@@ -31,7 +31,7 @@ class LoginViewModel @Inject constructor(private val accountService: AccountServ
         uiState.value = uiState.value.copy(password = newValue)
     }
 
-    fun onSignInClick(openAndPopUp: (String) -> Unit, setUser: (User) -> Unit, setLoading: (Boolean) -> Unit) {
+    fun onSignInClick(openAndPopUp: (String) -> Unit) {
         if (!email.isValidEmail()) {
             uiState.value = uiState.value.copy(message = "Invalid Email")
             return
@@ -45,12 +45,11 @@ class LoginViewModel @Inject constructor(private val accountService: AccountServ
         launchCatching(onError = { setLoading(false) }) {
             accountService.authenticate(email, password)
             openAndPopUp(Home.route)
-            val userDoc = db.collection("users")
-                .document(accountService.currentUserId)
-                .get()
-                .await()
-            setUser(userDoc.toObject<User>() ?: User(username = "error"))
             setLoading(false)
         }
+    }
+
+    private fun setLoading(newVal: Boolean) {
+        uiState.value = uiState.value.copy(loading = newVal)
     }
 }

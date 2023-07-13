@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.smilie.model.User
 import com.example.smilie.screens.HomeScreen
+import com.example.smilie.screens.MainViewModel
 import com.example.smilie.screens.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
@@ -38,12 +40,11 @@ import com.google.firebase.auth.FirebaseAuth
 // REFERENCE: https://github.com/android/codelab-android-compose/blob/main/NavigationCodelab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainApp() {
+fun MainApp(
+    viewModel: MainViewModel = hiltViewModel()
+) {
     val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     val startingRoute = if (isUserSignedIn) Home.route else LOGIN_SCREEN
-
-    var isLoading by remember {mutableStateOf(false)}
-    var user by remember { mutableStateOf(User()) }
 
     SMILIETheme {
         val navController = rememberNavController()
@@ -71,17 +72,17 @@ fun MainApp() {
                     HomeScreen()
                 }
                 composable(route = Profile.route) {
-                    ProfileScreen(user=user)
+                    var userData = viewModel.userData
+                    ProfileScreen(user=userData)
                 }
                 composable(route = Settings.route) {
                     SettingsScreen(openAndPopUp = { route -> navController.navigateSingleTopTo(route) })
                 }
                 composable(LOGIN_SCREEN) {
                     LoginScreen(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        setUser = { user = it },
-                        setLoading = { isLoading = it },
-                        loading = isLoading
+                        openAndPopUp = {
+                            navController.navigateSingleTopTo(it)
+                            viewModel.getUserDetails() },
                     )
                 }
                 composable(SIGN_UP_SCREEN) {
@@ -90,7 +91,6 @@ fun MainApp() {
                 composable(USER_REGISTER_SCREEN) {
                     UserRegisterScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        setUser = { user = it },
                     )
                 }
                 composable(route = RateYourDay.route) {

@@ -47,7 +47,7 @@ class UserRegisterViewModel @Inject constructor(private val accountService: Acco
         uiState.value = uiState.value.copy(imageUrl = newValue)
     }
 
-    fun onRegisterUserClick(openAndPopUp: (String) -> Unit, setUser: (User) -> Unit,) {
+    fun onRegisterUserClick(openAndPopUp: (String) -> Unit) {
         val currentFirebaseUser = accountService.currentUser
         currentFirebaseUser?.let {
             val user = User(
@@ -60,7 +60,6 @@ class UserRegisterViewModel @Inject constructor(private val accountService: Acco
 
             // add user to db
             db.collection("users").document(it.id).set(user)
-            setUser(user)
             openAndPopUp(Home.route)
         }
     }

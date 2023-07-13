@@ -33,7 +33,7 @@ import com.example.smilie.screens.sign_up.SignUpViewModel
 
 @Composable
 fun ProfileScreen(
-    user: User,
+    user: User?,
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun ProfileScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "${user.username}'s profile",
+                text = if (user != null) "${user.username}'s profile" else "loading...",
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,

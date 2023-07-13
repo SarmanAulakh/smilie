@@ -28,9 +28,6 @@ import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 @Composable
 fun LoginScreen(
     openAndPopUp: (String) -> Unit,
-    setUser: (User) -> Unit,
-    setLoading: (Boolean) -> Unit,
-    loading: Boolean,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -51,8 +48,8 @@ fun LoginScreen(
 
         LoadingButton(
             text = "Sign In",
-            onClick = { viewModel.onSignInClick(openAndPopUp, setUser, setLoading) },
-            isLoading = loading,
+            onClick = { viewModel.onSignInClick(openAndPopUp) },
+            isLoading = uiState.loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
