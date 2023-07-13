@@ -2,16 +2,22 @@ package com.example.smilie.screens.sign_up
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
+import com.example.smilie.model.User
+import com.example.smilie.model.UserTypes
 import com.example.smilie.model.service.AccountService
 import com.example.smilie.screens.SmilieViewModel
 import com.example.smilie.ui.components.common.ext.isValidEmail
 import com.example.smilie.ui.components.common.ext.passwordMatches
-import com.example.smilie.ui.components.navigation.Settings
-import com.google.firebase.firestore.AggregateSource
+import com.example.smilie.ui.navigation.Home
+import com.example.smilie.ui.navigation.USER_REGISTER_SCREEN
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -29,7 +35,6 @@ class SignUpViewModel @Inject constructor(private val accountService: AccountSer
 
     private var db = Firebase.firestore
 
-
     fun onEmailChange(newValue: String) {
         uiState.value = uiState.value.copy(email = newValue)
     }
@@ -42,7 +47,7 @@ class SignUpViewModel @Inject constructor(private val accountService: AccountSer
         uiState.value = uiState.value.copy(repeatPassword = newValue)
     }
 
-    fun onSignInClick(openAndPopUp: (String) -> Unit) {
+    fun onSignUpClick(openAndPopUp: (String) -> Unit) {
         if (!email.isValidEmail()) {
             uiState.value = uiState.value.copy(message = "Invalid Email")
             return
@@ -58,24 +63,12 @@ class SignUpViewModel @Inject constructor(private val accountService: AccountSer
             return
         }
 
-
-        val users = db.collection("Users")
-
-
-        launchCatching {
-
-            var id = Random.nextInt(0, Int.MAX_VALUE)
-            //TO:DO add some sort of checking to make sure values are unique
-
-            Log.i("SignUpViewModel", "this is count:$id")
-            val userMap = hashMapOf(
-                "Username" to email,
-                "id" to id
-            )
+        uiState.value = uiState.value.copy(loading = true)
+        launchCatching(onError = {uiState.value = uiState.value.copy(loading = false)}) {
+            // create user auth
             accountService.signUp(email, password)
-            openAndPopUp(Settings.route)
-
-            db.collection("Users").document().set(userMap)
+            openAndPopUp(USER_REGISTER_SCREEN)
+            uiState.value = uiState.value.copy(loading = false)
         }
     }
 }

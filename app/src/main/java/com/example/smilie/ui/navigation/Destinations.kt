@@ -1,4 +1,4 @@
-package com.example.smilie.ui.components.navigation
+package com.example.smilie.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
@@ -45,3 +45,4 @@ val smilieTabRowScreens = listOf(Home, Profile, Settings, RateYourDay)
 // non-tab routes
 const val LOGIN_SCREEN = "LoginScreen"
 const val SIGN_UP_SCREEN = "SignUpScreen"
+const val USER_REGISTER_SCREEN = "UserRegisterScreen"

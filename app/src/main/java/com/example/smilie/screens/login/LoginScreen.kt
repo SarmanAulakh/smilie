@@ -17,15 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smilie.model.User
 import com.example.smilie.ui.components.common.EmailField
+import com.example.smilie.ui.components.common.LoadingButton
 import com.example.smilie.ui.components.common.PasswordField
 import com.example.smilie.ui.components.common.ext.fieldModifier
-import com.example.smilie.ui.components.navigation.SIGN_UP_SCREEN
+import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     openAndPopUp: (String) -> Unit,
+    setUser: (User) -> Unit,
+    setLoading: (Boolean) -> Unit,
+    loading: Boolean,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -42,16 +47,16 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
-        PasswordField(uiState.password, viewModel::onPasswordChange, Modifier.fieldModifier())
+        PasswordField(uiState.password, "password", viewModel::onPasswordChange, Modifier.fieldModifier())
 
-        Button(
-            onClick = { viewModel.onSignInClick(openAndPopUp) },
+        LoadingButton(
+            text = "Sign In",
+            onClick = { viewModel.onSignInClick(openAndPopUp, setUser, setLoading) },
+            isLoading = loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
-        ) {
-            Text(text = "Sign in")
-        }
+        )
         Button(
             onClick = { openAndPopUp(SIGN_UP_SCREEN) },
             modifier = Modifier

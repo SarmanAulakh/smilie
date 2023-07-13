@@ -1,4 +1,4 @@
-package com.example.smilie.ui.components.navigation
+package com.example.smilie.ui.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme

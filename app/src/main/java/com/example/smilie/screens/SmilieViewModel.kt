@@ -11,11 +11,12 @@ import kotlinx.coroutines.launch
 open class SmilieViewModel() : ViewModel() {
     var errorMessage = mutableStateOf("")
         private set
-    fun launchCatching(block: suspend CoroutineScope.() -> Unit) =
+    open fun launchCatching(onError: () -> Unit = {}, block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 run {
                     errorMessage.value = throwable.message.orEmpty()
+                    onError()
                 }
             },
             block = block
