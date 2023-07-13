@@ -1,7 +1,6 @@
 package com.example.smilie.screens.profile
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +36,6 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
@@ -52,7 +49,6 @@ fun ProfileScreen(
                 text = if (user != null) "${user.username}'s profile" else "loading...",
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
                 textAlign = TextAlign.Center
             );
             Row(
@@ -78,20 +74,17 @@ fun ProfileScreen(
                     text = "I like long walks on the beach. I try to get enough sleep but that doesn't always work",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 );
             }
             Text(
                 text = "Type: Student",
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
             );
             Text(
                 text = "Current Quality of Life Rating: 9/10",
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
             );
 
             // Week metric Averages
@@ -100,18 +93,15 @@ fun ProfileScreen(
                     text = "This Week's Metric Averages",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 );
                 Text(
                     text = "7 Hours of Sleep",
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    color = Color.Black
                 );
                 LinearProgressIndicator(progress = 0.5f);
                 Text(
                     text = "600 Minutes Playing Video Games",
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    color = Color.Black
                 );
                 LinearProgressIndicator(progress = 0.95f);
             }
@@ -122,7 +112,6 @@ fun ProfileScreen(
                     text = "Current Metrics",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 );
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
@@ -130,12 +119,10 @@ fun ProfileScreen(
                     Text(
                         text = "Hours of Sleep",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                     Text(
                         text = "Minutes Playing Video Games",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                 }
             }
@@ -146,7 +133,6 @@ fun ProfileScreen(
                     text = "Past Metrics",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 );
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
@@ -154,12 +140,10 @@ fun ProfileScreen(
                     Text(
                         text = "Minutes of Exercise",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                     Text(
                         text = "Minutes Watching YouTube",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                 }
             }
@@ -170,7 +154,6 @@ fun ProfileScreen(
                     text = "Recommended Metrics",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
                 );
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
@@ -178,12 +161,10 @@ fun ProfileScreen(
                     Text(
                         text = "Minutes Studying",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                     Text(
                         text = "Hours Working",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        color = Color.Black
                     );
                 }
             }
@@ -203,7 +184,6 @@ fun ProfileScreen(
                         text = "Friends",
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
                     );
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -214,7 +194,6 @@ fun ProfileScreen(
                             Text(
                                 text = "Brian Peng",
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                color = Color.Black
                             );
                             Card(
                                 modifier = Modifier
@@ -236,7 +215,6 @@ fun ProfileScreen(
                             Text(
                                 text = "William Tam",
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                color = Color.Black
                             );
                             Card(
                                 modifier = Modifier
@@ -258,7 +236,6 @@ fun ProfileScreen(
                             Text(
                                 text = "Sarman Aulakh",
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                color = Color.Black
                             );
                             Card(
                                 modifier = Modifier

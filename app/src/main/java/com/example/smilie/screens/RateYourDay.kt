@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +39,7 @@ fun RateYourDay() {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
+            .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
@@ -49,7 +47,6 @@ fun RateYourDay() {
                 text = "Rate Your Day",
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
                 modifier = Modifier.padding(10.dp)
             )
             LazyColumn(modifier = Modifier.padding(10.dp)) {
@@ -58,7 +55,6 @@ fun RateYourDay() {
                 //                text = "Rate Your Day",
                 //                fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 //                fontWeight = FontWeight.Bold,
-                //                color = Color.Black
                 //            )}
 
                 for (i in metrics.indices) {
@@ -68,7 +64,6 @@ fun RateYourDay() {
                                 text = metrics[i],
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black
                             )
                             Spacer(Modifier.weight(1f))
                             Text(
@@ -102,7 +97,6 @@ fun RateYourDay() {
             Button(onClick = { /*TODO*/ }) {
                 Text(
                     text = "Done",
-                    color = Color.Green
                 )
             }
         }
