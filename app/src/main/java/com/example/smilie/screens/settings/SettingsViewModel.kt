@@ -2,7 +2,7 @@ package com.example.smilie.screens.settings
 
 import com.example.smilie.model.service.AccountService
 import com.example.smilie.screens.SmilieViewModel
-import com.example.smilie.ui.components.navigation.LOGIN_SCREEN
+import com.example.smilie.ui.navigation.LOGIN_SCREEN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

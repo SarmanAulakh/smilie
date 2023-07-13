@@ -1,6 +1,5 @@
-package com.example.smilie.screens
+package com.example.smilie.screens.profile
 
-import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,16 +21,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.R
+import com.example.smilie.model.User
+import com.example.smilie.screens.sign_up.SignUpViewModel
 
 
 @Composable
-fun ProfileScreen(name: String) {
+fun ProfileScreen(
+    user: User?,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +49,7 @@ fun ProfileScreen(name: String) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "${name}'s profile",
+                text = if (user != null) "${user.username}'s profile" else "loading...",
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -278,10 +280,4 @@ fun ProfileScreen(name: String) {
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun ProfileScreenPreview() {
-    ProfileScreen(name = "Dohyun")
 }
