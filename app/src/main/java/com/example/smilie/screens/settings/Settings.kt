@@ -14,10 +14,10 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,31 +41,32 @@ fun SettingsScreen(
     settingsList.forEach{
         mCheckedState.add(it.isEnabled)
     }
+    val darkModeManager = DarkModeManager()
+    AppTheme(darkModeManager) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Magenta),
-        contentAlignment = Alignment.Center
-    ) {
-
-        Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text(
-                text = "SETTINGS",
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
-                Text(text = "Sign Out")
+            Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Text(
+                    text = "SETTINGS",
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                )
+                DarkModeSwitch(darkModeManager)
+                Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
+                    Text(text = "Sign Out")
+                }
+                Text(
+                    text = "Metrics Privacy",
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                )
+                MetricPrivacy(settingsList, mCheckedState)
             }
-            Text(
-                text = "Metrics Privacy",
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            MetricPrivacy(settingsList, mCheckedState)
         }
     }
 }
@@ -85,5 +86,31 @@ fun MetricPrivacy(settingsList: List<SettingsItem>, mCheckedState: MutableList<B
                 checked = mCheckedState[index],
                 onCheckedChange = { mCheckedState[index] = it })
         }
+    }
+}
+
+class DarkModeManager {
+    val isDark = mutableStateOf(false)
+
+    fun toggleDarkMode() {
+        isDark.value = !isDark.value
+    }
+}
+
+@Composable
+fun DarkModeSwitch(darkModeManager: DarkModeManager) {
+    val isDarkMode = darkModeManager.isDark.value
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        Text(text = "Dark Mode")
+        Switch(
+            checked = isDarkMode,
+            onCheckedChange = { darkModeManager.toggleDarkMode() }
+        )
     }
 }
