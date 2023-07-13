@@ -17,4 +17,4 @@
 | 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
 | 2023/07/12 | 0		 | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
 
-| 2023/07/13 | 0                 | 2                | 0               | 0               | 0                | 0                | Initial dark mode functionality
+| 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality

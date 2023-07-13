@@ -1,13 +1,11 @@
 package com.example.smilie.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
@@ -20,8 +18,7 @@ import androidx.compose.material3.LinearProgressIndicator
 fun FeedbackScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
+            .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         MaterialTheme {
@@ -55,7 +52,6 @@ fun FeedbackScreen(modifier: Modifier = Modifier) {
                                 Text(
                                     text = metric.name,
                                     style = TextStyle(
-                                        color = Color.DarkGray,
                                         fontSize = 28.sp,
                                         fontWeight = FontWeight.Bold
                                     ),
@@ -73,9 +69,6 @@ fun FeedbackScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun Rectangle1(value: Int) {
-//    val hexcolor = "B200ED"
-//    val color = Color(android.graphics.Color.parseColor(hexcolor))
-    val color = Color.Magenta
     val height: Dp = 25.dp
     val width = (value / 100f)
     Row() {
@@ -85,12 +78,10 @@ fun Rectangle1(value: Int) {
                 .weight(10f)
                 .height(height)
                 .fillMaxWidth(0.75f),
-            color = color,
         )
         Text(
             text = value.toString(),
             style = TextStyle(
-                color = Color.DarkGray,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             ),
@@ -104,7 +95,6 @@ fun Rectangle1(value: Int) {
 //            .wrapContentWidth(align = Alignment.Start)
 //            .height(height)
 //            .fillMaxWidth(width)
-//            .background(color)
 //            .padding(20.dp)
 //    )
 }
@@ -114,7 +104,6 @@ fun Title1(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            color = Color.DarkGray,
             fontSize = 36.sp,
             fontWeight = FontWeight.ExtraBold
         ),

@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +30,7 @@ data class SettingsItem(val name: String, var isEnabled: Boolean)
 @Composable
 fun SettingsScreen(
     openAndPopUp: (String) -> Unit,
+    darkModeManager: DarkModeManager,
     settingViewModel: SignUpViewModel = hiltViewModel()
 ) {
     val settingsList: MutableList<SettingsItem> = remember {
@@ -41,32 +45,34 @@ fun SettingsScreen(
     settingsList.forEach{
         mCheckedState.add(it.isEnabled)
     }
-    val darkModeManager = DarkModeManager()
-    AppTheme(darkModeManager) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
 
-            Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Text(
-                    text = "SETTINGS",
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    fontWeight = FontWeight.Bold,
-                )
-                DarkModeSwitch(darkModeManager)
-                Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
-                    Text(text = "Sign Out")
-                }
-                Text(
-                    text = "Metrics Privacy",
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    fontWeight = FontWeight.Bold,
-                )
-                MetricPrivacy(settingsList, mCheckedState)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "SETTINGS",
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = FontWeight.Bold,
+            )
+            DarkModeSwitch(darkModeManager)
+            Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
+                Text(text = "Sign Out")
             }
+            Spacer(Modifier.height(30.dp))
+            Text(
+                text = "Metrics Privacy",
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontWeight = FontWeight.Bold,
+            )
+            MetricPrivacy(settingsList, mCheckedState)
         }
     }
 }
@@ -77,9 +83,9 @@ fun MetricPrivacy(settingsList: List<SettingsItem>, mCheckedState: MutableList<B
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = item.name)
             Switch(
@@ -89,8 +95,8 @@ fun MetricPrivacy(settingsList: List<SettingsItem>, mCheckedState: MutableList<B
     }
 }
 
-class DarkModeManager {
-    val isDark = mutableStateOf(false)
+class DarkModeManager(initialDark: Boolean) {
+    val isDark = mutableStateOf(initialDark)
 
     fun toggleDarkMode() {
         isDark.value = !isDark.value
@@ -102,10 +108,10 @@ fun DarkModeSwitch(darkModeManager: DarkModeManager) {
     val isDarkMode = darkModeManager.isDark.value
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth().
+            padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(text = "Dark Mode")
         Switch(

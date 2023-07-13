@@ -21,6 +21,7 @@ import com.example.smilie.screens.profile.ProfileScreen
 import com.example.smilie.screens.RateYourDay
 import com.example.smilie.screens.settings.SettingsScreen
 import com.example.smilie.screens.login.LoginScreen
+import com.example.smilie.screens.settings.DarkModeManager
 import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.screens.sign_up.UserRegisterScreen
 import com.example.smilie.ui.navigation.BottomNavBar
