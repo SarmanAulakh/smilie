@@ -23,27 +23,29 @@ class MainViewModel @Inject constructor(
         getUserDetails()
     }
 
-    fun getUserDetails() {
-        db.collection("users")
-            .document(accountService.currentUserId)
-            .get()
-            .addOnSuccessListener {
-                if (it.exists()) {
-                    userData = it.toObject<User>()
-                } else {
+    fun getUserDetails(userId: String = accountService.currentUserId) {
+        if (userId != "") {
+            db.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener {
+                    if (it.exists()) {
+                        userData = it.toObject<User>()
+                    } else {
+                        Toast.makeText(
+                            application,
+                            "user data not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                .addOnFailureListener {
                     Toast.makeText(
                         application,
-                        "user data not found",
+                        "Failed to get user data.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
-            .addOnFailureListener {
-                Toast.makeText(
-                    application,
-                    "Failed to get user data.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        }
     }
 }
