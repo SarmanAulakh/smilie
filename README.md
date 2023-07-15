@@ -17,6 +17,14 @@ Credit to Open Source projects Used in this Project:
 - copy to root of project file and RENAME to appConfig.json
 - IMPORTANT: make sure it doesnt get pushed to repo, that is why appConfig.json was added to gitignore
 
+## how to run firebase functions locally
+
+- cd functions
+- npm i
+- npm run server
+- example url in postman: http://127.0.0.1:5001/smilie-90a63/us-central1/api/user/Amf9aiievGSTYdNuj3Wmg49if8C3
+- all api routes will be under /api, example /api/user
+
 ## download firestore content
 
 - `npx -p node-firestore-import-export firestore-export -a appConfig.json -b backup.json`
@@ -25,3 +33,4 @@ Credit to Open Source projects Used in this Project:
 
 - device file explorer (bottom left) -> storage -> emulated -> 0 -> Download
 - right click on Download folder -> click upload -> add images from /ece452-group2/tempContent
+
