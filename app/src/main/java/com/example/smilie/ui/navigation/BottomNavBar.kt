@@ -18,27 +18,25 @@ fun BottomNavBar(
     onTabSelected: (NavDestination) -> Unit,
     currentScreen: NavDestination,
 ) {
-    val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
-        if (isUserSignedIn) {
-            allScreens.forEach { screen ->
-                NavigationBarItem(
-                    selected = screen.route == currentScreen.route,
-                    onClick = { onTabSelected(screen) },
-                    label = {
-                        Text(
-                            text = screen.name,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = "${screen.name} Icon",
-                        )
-                    }
-                )
-            }
+        allScreens.forEach { screen ->
+            NavigationBarItem(
+                selected = screen.route == currentScreen.route,
+                onClick = { onTabSelected(screen) },
+                label = {
+                    Text(
+                        text = screen.name,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                },
+                icon = {
+                    Icon(
+                        imageVector = screen.icon,
+                        contentDescription = "${screen.name} Icon",
+                    )
+                }
+            )
         }
+
     }
 }

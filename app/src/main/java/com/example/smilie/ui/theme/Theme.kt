@@ -20,7 +20,7 @@ import com.example.smilie.screens.settings.DarkModeManager
 
 @Composable
 fun SMILIETheme(
-    darkModeManager: DarkModeManager,
+    darkModeManager: DarkModeManager = DarkModeManager(true),
     content: @Composable () -> Unit
 ) {
     val colorPalette = when {

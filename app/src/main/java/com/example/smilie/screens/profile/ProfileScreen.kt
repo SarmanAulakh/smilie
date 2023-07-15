@@ -1,5 +1,6 @@
 package com.example.smilie.screens.profile
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,47 +28,35 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.R
 import com.example.smilie.model.User
 import com.example.smilie.screens.sign_up.SignUpViewModel
+import com.example.smilie.ui.components.ProfileImage
 
 
 @Composable
 fun ProfileScreen(
     user: User?,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    if (user == null) {
+        Text(text = "loading...")
+    } else {
         Column(
             modifier = Modifier
-                .padding(horizontal = 5.dp, vertical = 25.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(space = 10.dp)
+                .fillMaxSize()
         ) {
-            Text(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                text = if (user != null) "${user.username}'s profile" else "loading...",
-                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            );
-            Row(
-                modifier = Modifier
-                    .padding(top = 5.dp)
+                    .padding(horizontal = 5.dp, vertical = 25.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(space = 10.dp)
             ) {
-                Card(
+                Text(
                     modifier = Modifier
-                        .size(100.dp),
-                    shape = CircleShape,
-                ) {
-                    Image(
-                        painterResource(R.drawable.ic_profile),
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
-                    )
-                };
+                        .fillMaxWidth(),
+                    text = "${user.username}'s profile",
+                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                );
+                ProfileImage(imageUri = Uri.parse(user.imageUrl), setImageUri = {})
                 Text(
                     modifier = Modifier
                         .padding(start = 10.dp),
@@ -75,186 +64,187 @@ fun ProfileScreen(
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
                 );
-            }
-            Text(
-                text = "Type: Student",
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-            );
-            Text(
-                text = "Current Quality of Life Rating: 9/10",
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-            );
-
-            // Week metric Averages
-            Column() {
                 Text(
-                    text = "This Week's Metric Averages",
+                    text = "Type: Student",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
                 );
                 Text(
-                    text = "7 Hours of Sleep",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                );
-                LinearProgressIndicator(progress = 0.5f);
-                Text(
-                    text = "600 Minutes Playing Video Games",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                );
-                LinearProgressIndicator(progress = 0.95f);
-            }
-
-            // Current Metrics
-            Column() {
-                Text(
-                    text = "Current Metrics",
+                    text = "Current Quality of Life Rating: 9/10",
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Bold,
                 );
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(15.dp)
-                ) {
+
+                // Week metric Averages
+                Column() {
                     Text(
-                        text = "Hours of Sleep",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        text = "This Week's Metric Averages",
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        fontWeight = FontWeight.Bold,
                     );
                     Text(
-                        text = "Minutes Playing Video Games",
+                        text = "7 Hours of Sleep",
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     );
+                    LinearProgressIndicator(progress = 0.5f);
+                    Text(
+                        text = "600 Minutes Playing Video Games",
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    );
+                    LinearProgressIndicator(progress = 0.95f);
                 }
-            }
 
-            // Past Metrics
-            Column() {
-                Text(
-                    text = "Past Metrics",
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    fontWeight = FontWeight.Bold,
-                );
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(15.dp)
-                ) {
+                // Current Metrics
+                Column() {
                     Text(
-                        text = "Minutes of Exercise",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    );
-                    Text(
-                        text = "Minutes Watching YouTube",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    );
-                }
-            }
-
-            // Recommended Metrics
-            Column() {
-                Text(
-                    text = "Recommended Metrics",
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    fontWeight = FontWeight.Bold,
-                );
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(15.dp)
-                ) {
-                    Text(
-                        text = "Minutes Studying",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    );
-                    Text(
-                        text = "Hours Working",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    );
-                }
-            }
-
-            // Friends list
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Friends",
+                        text = "Current Metrics",
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                         fontWeight = FontWeight.Bold,
                     );
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Text(
+                            text = "Hours of Sleep",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                        Text(
+                            text = "Minutes Playing Video Games",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                    }
+                }
+
+                // Past Metrics
+                Column() {
+                    Text(
+                        text = "Past Metrics",
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        fontWeight = FontWeight.Bold,
+                    );
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(15.dp)
+                    ) {
+                        Text(
+                            text = "Minutes of Exercise",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                        Text(
+                            text = "Minutes Watching YouTube",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                    }
+                }
+
+                // Recommended Metrics
+                Column() {
+                    Text(
+                        text = "Recommended Metrics",
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        fontWeight = FontWeight.Bold,
+                    );
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(15.dp)
+                    ) {
+                        Text(
+                            text = "Minutes Studying",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                        Text(
+                            text = "Hours Working",
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        );
+                    }
+                }
+
+                // Friends list
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Friends",
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontWeight = FontWeight.Bold,
+                        );
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Text(
-                                text = "Brian Peng",
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            );
-                            Card(
-                                modifier = Modifier
-                                    .size(50.dp),
-                                shape = CircleShape,
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Image(
-                                    painterResource(R.drawable.ic_profile),
+                                Text(
+                                    text = "Brian Peng",
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                );
+                                Card(
                                     modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop
-                                )
-                            };
-                        }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "William Tam",
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            );
-                            Card(
-                                modifier = Modifier
-                                    .size(50.dp),
-                                shape = CircleShape,
+                                        .size(50.dp),
+                                    shape = CircleShape,
+                                ) {
+                                    Image(
+                                        painterResource(R.drawable.ic_profile),
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop
+                                    )
+                                };
+                            }
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Image(
-                                    painterResource(R.drawable.ic_profile),
+                                Text(
+                                    text = "William Tam",
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                );
+                                Card(
                                     modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop
-                                )
-                            };
-                        }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Sarman Aulakh",
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            );
-                            Card(
-                                modifier = Modifier
-                                    .size(50.dp)
-                                    .align(alignment = Alignment.CenterHorizontally),
-                                shape = CircleShape,
+                                        .size(50.dp),
+                                    shape = CircleShape,
+                                ) {
+                                    Image(
+                                        painterResource(R.drawable.ic_profile),
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop
+                                    )
+                                };
+                            }
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Image(
-                                    painterResource(R.drawable.ic_profile),
+                                Text(
+                                    text = "Sarman Aulakh",
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                );
+                                Card(
                                     modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop
-                                )
-                            };
+                                        .size(50.dp)
+                                        .align(alignment = Alignment.CenterHorizontally),
+                                    shape = CircleShape,
+                                ) {
+                                    Image(
+                                        painterResource(R.drawable.ic_profile),
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop
+                                    )
+                                };
+                            }
                         }
                     }
                 }
             }
         }
     }
+
 }

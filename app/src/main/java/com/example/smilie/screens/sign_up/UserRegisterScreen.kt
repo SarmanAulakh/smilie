@@ -3,12 +3,10 @@ package com.example.smilie.screens.sign_up
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -32,14 +30,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.ui.components.ProfileImage
-import com.example.smilie.ui.components.common.EmailField
-import com.example.smilie.ui.components.common.LoadingButton
-import com.example.smilie.ui.components.common.PasswordField
-import com.example.smilie.ui.components.common.ext.fieldModifier
-import com.example.smilie.ui.navigation.LOGIN_SCREEN
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,30 +43,38 @@ fun UserRegisterScreen(
 ) {
     val uiState by viewModel.uiState
     val errorMessage by viewModel.errorMessage
-    TopAppBar(title = { Text("Create your User") })
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ProfileImage(imageUri = uiState.imageUrl, setImageUri = {})
-        UsernameInput(uiState.username, viewModel::onUsernameChange)
-        UserTypeDropdown(uiState.userType.name, viewModel::onUserTypeChange)
-
-        Button(
-            onClick = { viewModel.onRegisterUserClick(openAndPopUp) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopAppBar(title = { Text("Create Your User") })
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Finish")
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ProfileImage(imageUri = uiState.imageUri, setImageUri = viewModel::onImageChange)
+            }
+            UsernameInput(uiState.username, viewModel::onUsernameChange)
+            UserTypeDropdown(uiState.userType.name, viewModel::onUserTypeChange)
+
+            Button(
+                onClick = { viewModel.onRegisterUserClick(openAndPopUp) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp)
+            ) {
+                Text(text = "Finish")
+            }
+            Text(text = uiState.message, color = Color.Red)
+            Text(text = errorMessage, color = Color.Red)
         }
-        Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
-        Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
     }
 }
 
@@ -84,14 +84,16 @@ fun UsernameInput(
     value: String,
     onChange: (String) -> Unit,
 ) {
-    OutlinedTextField(
-        modifier = Modifier.fieldModifier(),
-        value = value,
-        onValueChange = { onChange(it) },
-        placeholder =  { Text("username") },
-        leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-    )
+    Box(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = value,
+            onValueChange = { onChange(it) },
+            placeholder = { Text("username") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,22 +104,21 @@ fun UserTypeDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text("Select user type:")
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = {expanded = !expanded}
+            onExpandedChange = { expanded = !expanded },
+            modifier = Modifier.fillMaxWidth()
         ) {
             TextField(
                 value = value,
                 onValueChange = {},
                 readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)},
-                modifier = Modifier.menuAnchor()
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
             )
 
             ExposedDropdownMenu(
@@ -130,7 +131,6 @@ fun UserTypeDropdown(
                         onClick = {
                             onChange(item)
                             expanded = false
-//                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                         }
                     )
                 }

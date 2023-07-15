@@ -56,16 +56,20 @@ fun MainApp(
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = smilieTabRowScreens.find { it.route == currentDestination?.route } ?: Home
+        var showBottomNav by remember {mutableStateOf(false)}
 
         Scaffold(
             bottomBar = {
-                BottomNavBar(
-                    allScreens = smilieTabRowScreens,
-                    onTabSelected = { newScreen ->
-                        navController.navigateSingleTopTo(newScreen.route)
-                    },
-                    currentScreen = currentScreen
-                )
+                // null if current route != row tab route options
+                if (showBottomNav) {
+                    BottomNavBar(
+                        allScreens = smilieTabRowScreens,
+                        onTabSelected = { newScreen ->
+                            navController.navigateSingleTopTo(newScreen.route)
+                        },
+                        currentScreen = currentScreen
+                    )
+                }
             }
         ) { innerPadding ->
             NavHost(
@@ -74,33 +78,43 @@ fun MainApp(
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(route = Home.route) {
+                    showBottomNav = true
                     HomeScreen()
                 }
                 composable(route = Profile.route) {
+                    showBottomNav = true
                     var userData = viewModel.userData
                     ProfileScreen(user=userData)
                 }
                 composable(route = Settings.route) {
+                    showBottomNav = true
                     SettingsScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        darkModeManager = darkModeManager)
-                }
-                composable(LOGIN_SCREEN) {
-                    LoginScreen(
-                        openAndPopUp = {
-                            navController.navigateSingleTopTo(it)
-                            viewModel.getUserDetails() },
+                        darkModeManager = darkModeManager
                     )
                 }
+                composable(LOGIN_SCREEN) {
+                    showBottomNav = false
+                    LoginScreen(openAndPopUp = {
+                        navController.navigateSingleTopTo(it)
+                        viewModel.getUserDetails()
+                    })
+                }
                 composable(SIGN_UP_SCREEN) {
-                    SignUpScreen(openAndPopUp = { route -> navController.navigateSingleTopTo(route) })
+                    showBottomNav = false
+                    SignUpScreen(openAndPopUp = {
+                        route -> navController.navigateSingleTopTo(route)
+                        viewModel.getUserDetails()
+                    })
                 }
                 composable(USER_REGISTER_SCREEN) {
+                    showBottomNav = false
                     UserRegisterScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                     )
                 }
                 composable(route = RateYourDay.route) {
+                    showBottomNav = true
                     RateYourDay()
                 }
             }

@@ -2,6 +2,7 @@ package com.example.smilie.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,9 +35,9 @@ object Settings : NavDestination {
 }
 
 object RateYourDay : NavDestination {
-    override val name = "RateYourDay"
+    override val name = "Rate"
     override val route = "RateYourDay"
-    override val icon = Icons.Rounded.Settings
+    override val icon = Icons.Rounded.Add
 }
 
 // tab routes

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import com.example.smilie.model.User
 import com.example.smilie.ui.components.common.EmailField
 import com.example.smilie.ui.components.common.LoadingButton
 import com.example.smilie.ui.components.common.PasswordField
+import com.example.smilie.ui.components.common.SecondaryButton
 import com.example.smilie.ui.components.common.ext.fieldModifier
 import com.example.smilie.ui.navigation.LOGIN_SCREEN
 
@@ -33,35 +35,27 @@ fun SignUpScreen(
     val uiState by viewModel.uiState
     val errorMessage by viewModel.errorMessage
 
-    TopAppBar(title = { Text("Sign up Page") })
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
-        PasswordField(uiState.password, "password", viewModel::onPasswordChange, Modifier.fieldModifier())
-        PasswordField(uiState.repeatPassword, "repeat password", viewModel::onRepeatPasswordChange, Modifier.fieldModifier())
-
-        LoadingButton(
-            text = "Sign up",
-            onClick = { viewModel.onSignUpClick(openAndPopUp) },
-            modifier = Modifier
+    Column(modifier = modifier.fillMaxSize()) {
+        TopAppBar(title = { Text("Sign up Page") })
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(12.dp),
-            isLoading = uiState.loading
-        )
-        Button(
-            onClick = { openAndPopUp(LOGIN_SCREEN) }
+                .fillMaxHeight()
+                .padding(vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Go Back")
+            EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
+            PasswordField(uiState.password, "password", viewModel::onPasswordChange, Modifier.fieldModifier())
+            PasswordField(uiState.repeatPassword, "repeat password", viewModel::onRepeatPasswordChange, Modifier.fieldModifier())
+            LoadingButton(
+                text = "Sign up",
+                onClick = { viewModel.onSignUpClick(openAndPopUp) },
+                isLoading = uiState.loading
+            )
+            SecondaryButton(text = "Go Back", onClick = { openAndPopUp(LOGIN_SCREEN) })
+            Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
+            Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
         }
-        Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
-        Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
     }
 }
