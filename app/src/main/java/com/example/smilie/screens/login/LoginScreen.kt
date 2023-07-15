@@ -17,10 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smilie.model.User
 import com.example.smilie.ui.components.common.EmailField
+import com.example.smilie.ui.components.common.LoadingButton
 import com.example.smilie.ui.components.common.PasswordField
+import com.example.smilie.ui.components.common.SecondaryButton
 import com.example.smilie.ui.components.common.ext.fieldModifier
-import com.example.smilie.ui.components.navigation.SIGN_UP_SCREEN
+import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,37 +33,34 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
-
-    TopAppBar(title = { Text("Login In Page") })
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
-        PasswordField(uiState.password, viewModel::onPasswordChange, Modifier.fieldModifier())
-
-        Button(
-            onClick = { viewModel.onSignInClick(openAndPopUp) },
-            modifier = Modifier
+    Column(modifier = modifier.fillMaxSize()) {
+        TopAppBar(title = { Text("Login Page") })
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .fillMaxHeight()
+                .padding(vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Sign in")
+            EmailField(uiState.email, viewModel::onEmailChange, Modifier.fieldModifier())
+            PasswordField(
+                uiState.password,
+                "password",
+                viewModel::onPasswordChange,
+                Modifier.fieldModifier()
+            )
+            LoadingButton(
+                text = "Sign In",
+                onClick = { viewModel.onSignInClick(openAndPopUp) },
+                isLoading = uiState.loading,
+            )
+            SecondaryButton(text = "Sign up", onClick = { openAndPopUp(SIGN_UP_SCREEN) })
+            Text(
+                text = uiState.message,
+                color = Color.Red,
+                modifier = Modifier.padding(vertical = 12.dp)
+            )
         }
-        Button(
-            onClick = { openAndPopUp(SIGN_UP_SCREEN) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-        ) {
-            Text(text = "Sign up")
-        }
-        Text(text = uiState.message, color = Color.Red, modifier = Modifier.padding(vertical = 12.dp))
     }
 }

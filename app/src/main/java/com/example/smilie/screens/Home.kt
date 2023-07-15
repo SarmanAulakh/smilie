@@ -1,55 +1,50 @@
 package com.example.smilie.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.geometry.Offset
+import java.util.*
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+
+    val userName = "Dohyun"
+
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
+            .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         MaterialTheme {
             Column {
-                Home("Dohyun", 7.8)
-//                Title(text = "User Feedback Page")
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(horizontal = 20.dp)
+                    contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
+                    item { Home(userName, 78) }
+
                     val metricData = listOf(
-                        Metric("Metric 1", 80),
-                        Metric("Metric 2", 60),
-                        Metric("Metric 3", 40),
-                        Metric("Metric 4", 70),
-                        Metric("Metric 5", 90),
-                        Metric("Metric 6", 35),
-                        Metric("Metric 7", 20),
-                        Metric("Metric 8", 90),
-                        Metric("Metric 9", 45),
-                        Metric("Metric 10", 75)
+                        Metric("Amount of Sleep", 80),
+                        Metric("Quality of Sleep", 35),
+                        Metric("Time spent with Friends", 60),
+                        Metric("Productivity", 40),
+                        Metric("Exercise", 70),
+                        Metric("Entertainment", 90),
+                        Metric("Time spent Studying", 20),
                     )
+
+                    item{ Title("$userName's Data") }
 
                     items(metricData) {metric ->
                         Box(
@@ -59,7 +54,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 Text(
                                     text = metric.name,
                                     style = TextStyle(
-                                        color = Color.DarkGray,
                                         fontSize = 28.sp,
                                         fontWeight = FontWeight.Bold
                                     ),
@@ -77,9 +71,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun Rectangle(value: Int) {
-//    val hexcolor = "B200ED"
-//    val color = Color(android.graphics.Color.parseColor(hexcolor))
-    val color = Color.Magenta
     val height: Dp = 25.dp
     val width = (value / 100f)
     Row() {
@@ -89,12 +80,10 @@ fun Rectangle(value: Int) {
                 .weight(10f)
                 .height(height)
                 .fillMaxWidth(0.75f),
-            color = color,
         )
         Text(
             text = value.toString(),
             style = TextStyle(
-                color = Color.DarkGray,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             ),
@@ -106,7 +95,6 @@ fun Rectangle(value: Int) {
 //            .wrapContentWidth(align = Alignment.Start)
 //            .height(height)
 //            .fillMaxWidth(width)
-//            .background(color)
 //            .padding(20.dp)
 //    )
 }
@@ -116,7 +104,6 @@ fun Title(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            color = Color.DarkGray,
             fontSize = 36.sp,
             fontWeight = FontWeight.ExtraBold
         ),
@@ -128,18 +115,23 @@ fun Title(text: String) {
 }
 
 @Composable
-fun Home(name: String, value: Double) {
+fun Home(name: String, value: Int) {
     Column(modifier = Modifier.padding(16.dp)) {
+        val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val greeting = getGreeting(currentHour)
+
+        val expandedState = remember { mutableStateOf(false) }
+        val anchorPosition = remember { mutableStateOf<Offset?>(null) }
+
         val textData = listOf(
-            TextType("Hello $name! Welcome!", 2),
-            TextType("Over the last week, you've average a ${value.toString()}/10!", 1),
+            TextType("$greeting $name! Welcome back!", 2),
+            TextType("Over the last week, you've average a ${value.toString()}/100 !", 1),
             TextType("Keep up the work!", 1)
         )
         for (textval in textData) {
             Text(
                 text = textval.text,
                 style = TextStyle(
-                    color = Color.DarkGray,
                     fontSize = (18 * textval.type).sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
@@ -150,50 +142,90 @@ fun Home(name: String, value: Double) {
             )
         }
 
+        val metricText = listOf(
+            TextType("- sleep", 2),
+            TextType("- time spent with friends", 2),
+            TextType("- productivity", 2),
+        )
 
-        Row() {
-            Column(modifier = Modifier.padding(10.dp)) {
-                val metricText = listOf(
-                    TextType("Popular Metrics:", 2),
-                    TextType("- sleep", 1),
-                    TextType("- time spent with friends", 1),
-                    TextType("- productivity", 1),
-                )
-                for (metric in metricText) {
-                    Text(
-                        text = metric.text,
-                        style = TextStyle(
-                            color = Color.DarkGray,
-                            fontSize = (15 * metric.type).sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
+        Box {
+            Button(
+                onClick = {
+                    expandedState.value = !expandedState.value
+                    anchorPosition.value = Offset.Zero
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(
+                    text = "Popular Metrics",
+                    style = TextStyle(
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
-                }
-            }
-            Column(modifier = Modifier.padding(10.dp)) {
-                val helpfulLinks = listOf(
-                    TextType("Helpful Links:", 2),
-                    TextType("- betterhelp.org", 1),
-                    TextType("- LeagueofLegends.com", 1),
                 )
-                for (link in helpfulLinks) {
-                    Text(
-                        text = link.text,
-                        style = TextStyle(
-                            color = Color.DarkGray,
-                            fontSize = (15 * link.type).sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                    )
-                }
             }
         }
-    }
 
+        for (metric in metricText) {
+            Text(
+                text = metric.text,
+                style = TextStyle(
+                    fontSize = (15 * metric.type).sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            )
+        }
+
+        val helpfulLinks = listOf(
+            TextType("- betterhelp.org", 2),
+            TextType("- LeagueofLeg.com", 2),
+        )
+
+        Box {
+            Button(
+                onClick = {
+                    expandedState.value = !expandedState.value
+                    anchorPosition.value = Offset.Zero
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(
+                    text = "Helpful Links",
+                    style = TextStyle(
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                )
+            }
+        }
+
+        for (link in helpfulLinks) {
+            Text(
+                text = link.text,
+                style = TextStyle(
+                    fontSize = (15 * link.type).sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            )
+        }
+    }
+}
+
+private fun getGreeting(hour: Int): String {
+    return when (hour) {
+        in 0..11 -> "Good Morning"
+        in 12..16 -> "Good Afternoon"
+        else -> "Good Evening"
+    }
+}
+
+private fun handleMetricClick(metric: TextType) {
+    // Handle the metric click here
+    println("Selected metric: ${metric.text}")
 }
 data class Metric(val name: String, val value: Int)
 

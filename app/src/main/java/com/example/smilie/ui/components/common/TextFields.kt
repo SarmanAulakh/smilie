@@ -22,28 +22,23 @@ import com.example.smilie.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
+fun EmailField(value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) {
     OutlinedTextField(
         modifier = modifier,
         value = value,
-        onValueChange = { onNewValue(it) },
-        placeholder =  { Text(stringResource(R.string.email)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+        onValueChange = { onChange(it) },
+        placeholder =  { Text("email") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
     )
 }
 
-@Composable
-fun PasswordField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
-    PasswordField(value, R.string.password, onNewValue, modifier)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PasswordField(
+fun PasswordField(
     value: String,
-    @StringRes placeholder: Int,
-    onNewValue: (String) -> Unit,
+    placeholder: String,
+    onChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isVisible by remember { mutableStateOf(false) }
@@ -58,9 +53,9 @@ private fun PasswordField(
     OutlinedTextField(
         modifier = modifier,
         value = value,
-        onValueChange = { onNewValue(it) },
-        placeholder = { Text(text = stringResource(placeholder)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Lock") },
+        onValueChange = { onChange(it) },
+        placeholder = { Text(placeholder) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "") },
         trailingIcon = {
             IconButton(onClick = { isVisible = !isVisible }) {
                 Icon(painter = icon, contentDescription = "Visibility")
