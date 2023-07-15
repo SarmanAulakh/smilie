@@ -1,59 +1,127 @@
 {
   "users": {
-    "sarman": {
-      "userHandle": "sarman",
-      "firstName": "string",
-      "lastName": "string",
+    "uid1": {
+      "id": "uid1",
+      "username": "sarman",
+      "name": "full name",
       "type": "student",
       "email": "string",
       "imageUrl": "",
       "bio": "",
       "createdAt": "dateString",
-      "followers": ["uid1", "uid2"],
+      "following": ["uid3", "uid2"],
+      "followers": ["uid3", "uid2"],
+      "registrationTokens": ["token1", "token2"],
+      "metrics": {
+        "metricId1": {
+          "name": "string",
+          "public": "boolean",
+          // sorted, new items appended to back
+          "values": [
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            },
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            }
+          ]
+        },
+        "metricId2": {
+          "name": "string",
+          "public": "boolean",
+          "values": [
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            },
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            }
+          ]
+        }
+      },
+      "feed": [
+        {
+          "senderId": "string",
+          "message": "string"
+        },
+        {
+          "senderId": "string",
+          "message": "string"
+        }
+      ]
     },
-    "uid": {
-      "userHandle": "uid",
-      "firstName": "string",
-      "lastName": "string",
+    "uid2": {
+      "id": "uid2",
+      "username": "user",
+      "name": "full name",
       "type": "default",
       "email": "string",
       "imageUrl": "",
       "bio": "",
       "createdAt": "dateString",
-      "followers": ["uid2"],
+      "following": ["uid4"],
+      "followers": ["uid1", "uid4"],
+      "metrics": {
+        "metricId1": {
+          "name": "string",
+          "public": "boolean",
+          // sorted, new items appended to back
+          "values": [
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            },
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            }
+          ]
+        },
+        "metricId2": {
+          "name": "string",
+          "public": "boolean",
+          "values": [
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            },
+            {
+              "value": "number",
+              "date": "dateString",
+              "weight": "number"
+            }
+          ]
+        }
+      },
+      "feed": [
+        {
+          "senderId": "string",
+          "message": "string"
+        },
+        {
+          "senderId": "string",
+          "message": "string"
+        }
+      ]
     }
   },
-  "metrics": {
-    "sarman": {
-      "metircId1": {
-        "name": "string",
-        "public": "boolean",
-        // sorted, new items appended to back
-        "values": [
-          {
-            "value": "number",
-            "date": "dateString",
-          },
-          {
-            "value": "number",
-            "date": "dateString",
-          }
-        ],
-      },
-      "metircId2": {
-        "name": "string",
-        "public": "boolean",
-        "values": [
-          {
-            "value": "number",
-            "date": "dateString",
-          },
-          {
-            "value": "number",
-            "date": "dateString",
-          }
-        ],
-      }
+  "notifications": {
+    "id": {
+      "type": "dayRated",
+      "date": "datestring",
+      "sender": "uid",
+      "followers": ["uid1","uid2"]
     }
   }
 }

@@ -1,6 +1,10 @@
 | Date       | Sarman (s3aulakh) | Matthew (m39lam) | Dohyun (d6moon) | Brian (b36peng) | William (w29tam) | Daniel (dzotkin) | Task                                                                                    |
 |------------|-------------------|------------------|-----------------|-----------------|------------------|------------------|-----------------------------------------------------------------------------------------|
-| 2023/06/12 | 1                 | 0                | 0               | 0               | 0                | 0                | Setup Repo                                                                              |
+| 2023/05/24 | 1                 | 1                | 1               | 1               | 1                | 1                | Brainstorming meeting to decide project
+| 2023/05/27 | 2                 | 2                | 2               | 2               | 2                | 2                | Created presentation for initial proposal
+| 2023/06/01 | 2                 | 2                | 2               | 2               | 2               | 2                | Created proposal doc       
+| 2023/06/12 | 1                 | 0                | 0               | 0               | 0                | 0                | Setup Repo
+| 2023/06/14 | 2                 | 2                | 2               | 2               | 2                | 2                | Did buddy team's evaluation                                                                                |
 | 2023/06/17 | 0                 | 1                | 0               | 0               | 0                | 0                | Setup Android App                                                                       |
 | 2023/06/22 | 10                | 0                | 0               | 0               | 0                | 0                | Setup navbar and basic screens for navigation                                           |
 | 2023/06/23 | 0                 | 0                | 2               | 0               | 0                | 0                | Setup initial feedback Page for the app                                                 |
@@ -12,10 +16,14 @@
 | 2023/06/25 | 0                 | 0                | 0               | 0               | 11               | 0                | Created the initial design for the profile page                                         |
 | 2023/06/25 | 0                 | 0                | 4               | 0               | 0                | 0                | Merge Feedback page with homescreen with homescreen message displayed on top of the feedback bars |
 | 2023/06/25 | 5                 | 0                | 0               | 0               | 0                | 0                | Firebase signout configuration and UI, fixed user creation bugs                         |
+| 2023/06/25 | 1                 | 1                | 1               | 1               | 1                | 1                | Practice for demo presentation
+| 2023/06/28 | 3                 | 3                | 3               | 3               | 3                | 3                | Worked on prototype document    
 | 2023/06/30 | 0                 | 0                | 0               | 0               | 0                | 2                | Started sample db for users using FireStore                                             |
 | 2023/07/06 | 0                 | 0                | 2               | 0               | 0                | 0                | Began formatting homescreen with more soothing colors and layout                        |
 | 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
 | 2023/07/12 | 0		 | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
-
 | 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality
+| 2023/07/13 | 2                 | 2                | 2               | 2               | 2                | 2                | Worked on D4  
+| 2023/07/13 | 1                 | 1                | 1               | 1               | 1                | 1                | Progress Meeting and work updates  
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
+| 2023/07/15 | 2                 | 0                | 0               | 2               | 0                | 1                | Meeting regarding pubsub
