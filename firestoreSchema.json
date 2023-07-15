@@ -115,7 +115,7 @@
         }
       ]
     }
-  }
+  },
   "notifications": {
     "id": {
       "type": "dayRated",
