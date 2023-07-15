@@ -19,3 +19,4 @@
 
 | 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
+| 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 3                | Added function for metric population for default user type
