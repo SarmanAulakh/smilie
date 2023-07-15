@@ -28,6 +28,7 @@
       "metircId1": {
         "name": "string",
         "public": "boolean",
+        "weight": "decimal",
         // sorted, new items appended to back
         "values": [
           {
@@ -43,6 +44,7 @@
       "metircId2": {
         "name": "string",
         "public": "boolean",
+        "weight": "decimal",
         "values": [
           {
             "value": "number",
