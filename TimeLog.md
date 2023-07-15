@@ -18,3 +18,4 @@
 | 2023/07/12 | 0		 | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
 
 | 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality
+| 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
