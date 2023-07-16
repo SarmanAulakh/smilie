@@ -2,7 +2,7 @@
 |------------|-------------------|------------------|-----------------|-----------------|------------------|------------------|-----------------------------------------------------------------------------------------|
 | 2023/05/24 | 1                 | 1                | 1               | 1               | 1                | 1                | Brainstorming meeting to decide project
 | 2023/05/27 | 2                 | 2                | 2               | 2               | 2                | 2                | Created presentation for initial proposal
-| 2023/06/01 | 2                 | 2                | 2               | 2               | 2               | 2                | Created proposal doc       
+| 2023/06/01 | 2                 | 2                | 2               | 2               | 2                | 2                | Created proposal doc       
 | 2023/06/12 | 1                 | 0                | 0               | 0               | 0                | 0                | Setup Repo
 | 2023/06/14 | 2                 | 2                | 2               | 2               | 2                | 2                | Did buddy team's evaluation                                                                                |
 | 2023/06/17 | 0                 | 1                | 0               | 0               | 0                | 0                | Setup Android App                                                                       |
@@ -21,9 +21,10 @@
 | 2023/06/30 | 0                 | 0                | 0               | 0               | 0                | 2                | Started sample db for users using FireStore                                             |
 | 2023/07/06 | 0                 | 0                | 2               | 0               | 0                | 0                | Began formatting homescreen with more soothing colors and layout                        |
 | 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
-| 2023/07/12 | 0		 | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
+| 2023/07/12 | 0		               | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
 | 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality
 | 2023/07/13 | 2                 | 2                | 2               | 2               | 2                | 2                | Worked on D4  
 | 2023/07/13 | 1                 | 1                | 1               | 1               | 1                | 1                | Progress Meeting and work updates  
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
 | 2023/07/15 | 2                 | 0                | 0               | 2               | 0                | 1                | Meeting regarding pubsub
+| 2023/07/16 | 0                 | 0                | 0               | 0               | 1                | 0                | Add vertical scrolling
