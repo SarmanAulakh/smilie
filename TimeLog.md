@@ -28,3 +28,4 @@
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
 | 2023/07/15 | 2                 | 0                | 0               | 2               | 0                | 1                | Meeting regarding pubsub
 | 2023/07/16 | 0                 | 0                | 0               | 0               | 1                | 0                | Add vertical scrolling
+| 2023/07/17 | 0                 | 0                | 0               | 0               | 6                | 0                | Added backend communication and horizontal scrolling
