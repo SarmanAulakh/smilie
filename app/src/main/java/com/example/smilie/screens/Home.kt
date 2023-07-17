@@ -5,6 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -14,6 +16,28 @@ import androidx.compose.ui.unit.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import io.grpc.util.OutlierDetectionLoadBalancer.OutlierDetectionLoadBalancerConfig.FailurePercentageEjection
+import java.lang.Math.PI
 import java.util.*
 
 @Composable
@@ -32,7 +56,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
-                    item { Home(userName, 78) }
+//                    item { Home(userName, 78) }
 
                     val metricData = listOf(
                         Metric("Amount of Sleep", 80),
@@ -44,24 +68,49 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         Metric("Time spent Studying", 20),
                     )
 
-                    item{ Title("$userName's Data") }
+//                    item{ Title("$userName's Data") }
 
-                    items(metricData) {metric ->
-                        Box(
-                            modifier = Modifier.padding(start = 0.dp)
-                        ) {
-                            Column {
-                                Text(
-                                    text = metric.name,
-                                    style = TextStyle(
-                                        fontSize = 28.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    modifier = Modifier.padding(8.dp)
-                                )
-                                Rectangle(metric.value)
-                            }
-                        }
+//                    items(metricData) {metric ->
+//                        Box(
+//                            modifier = Modifier.padding(start = 0.dp)
+//                        ) {
+//                            Column {
+//                                Text(
+//                                    text = metric.name,
+//                                    style = TextStyle(
+//                                        fontSize = 28.sp,
+//                                        fontWeight = FontWeight.Bold
+//                                    ),
+//                                    modifier = Modifier.padding(8.dp)
+//                                )
+//                                Rectangle(metric.value)
+//                            }
+//                        }
+//                    }
+
+                    val pieChartIns = listOf(
+                        ChartInput(value = 29, description = "Python"),
+                        ChartInput(value = 21, description = "Swift"),
+                        ChartInput(value = 32, description = "JS"),
+                        ChartInput(value = 18, description = "Java"),
+                        ChartInput(value = 12, description = "Ruby"),
+                        ChartInput(value = 38, description = "Kotlin"),
+                        ChartInput(value = 10, description = "C++"),
+                    )
+
+                    item {
+                        PieChart(
+                            modifier = Modifier
+                                .size(500.dp),
+                            input = pieChartIns
+                        )
+                    }
+
+                    item {
+                        BarGraph(modifier = Modifier
+                            .size(500.dp),
+                            input = pieChartIns
+                        )
                     }
                 }
             }
@@ -214,6 +263,189 @@ fun Home(name: String, value: Int) {
         }
     }
 }
+@Composable
+fun PieChart(
+    modifier: Modifier = Modifier,
+    radius:Float = 500f,
+    input:List<ChartInput>,
+) {
+    val colorList = listOf<Color>(
+        Color(0xAAFF0000),
+        Color(0xAAFF7F00),
+        Color(0xAAFFFF00),
+        Color(0xAA00FF00),
+        Color(0xAA0000FF),
+        Color(0xAA4B0082),
+        Color(0xAA9400D3)
+    )
+
+    var circleCenter by remember {
+        mutableStateOf(Offset.Zero)
+    }
+
+    var inputList by remember {
+        mutableStateOf(input)
+    }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(true) {
+                }
+        ) {
+            val width = size.width
+            val height = size.height
+            circleCenter = Offset(x = width / 2f, y = height / 2f)
+
+            val totalValue = input.sumOf { it.value }
+            val anglePerValue = 360f/totalValue
+            var currentStartAngle = 0f
+
+            inputList.forEachIndexed {  index, pieChartInput ->
+                val scale = 1.0f
+                val angleToDraw = pieChartInput.value * anglePerValue
+                scale(scale){
+                    drawArc(
+                        color = colorList[index],
+                        startAngle = currentStartAngle,
+                        sweepAngle = angleToDraw,
+                        useCenter = true,
+                        size = Size(
+                            width = radius*2f,
+                            height = radius*2f
+                        ),
+                        topLeft = Offset(
+                            (width - radius * 2f) / 2f,
+                            (height - radius * 2f) / 2f
+                        )
+                    )
+                    currentStartAngle += angleToDraw
+                }
+            }
+        }
+    }
+    Column() {
+        inputList.forEachIndexed { index, pieChartInput ->
+            Row(){
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .background(colorList[index])
+                        .align(Alignment.CenterVertically)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = pieChartInput.description,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Left
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BarGraph(
+    modifier: Modifier = Modifier,
+    input:List<ChartInput>,
+) {
+    val colorList = listOf<Color>(
+        Color(0xAAFF0000),
+        Color(0xAAFF7F00),
+        Color(0xAAFFFF00),
+        Color(0xAA00FF00),
+        Color(0xAA0000FF),
+        Color(0xAA4B0082),
+        Color(0xAA9400D3)
+    )
+    val maxValue = input.maxOf { it.value }
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
+        input.forEachIndexed {index, chartInput ->
+            val percentage = chartInput.value / listSum.toFloat()
+            Bar(
+                modifier = Modifier
+                    .height((120 * percentage * input.size).dp)
+                    .width(40.dp),
+                primaryColor = colorList[index],
+                percentage = percentage,
+                description = chartInput.description
+            )
+        }
+    }
+}
+
+@Composable
+fun Bar(
+    modifier: Modifier = Modifier,
+    primaryColor: Color,
+    percentage: Float,
+    description: String
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            val width = size.width
+            val height = size.height
+            val barWidth = width/5 * 3
+            val barHeight = height/8 * 7
+            val barHeight3DPart = height - barHeight
+            val barWidth3DPart = (width - barWidth) * (height * 0.002f)
+
+            var path = Path().apply {
+                moveTo(0f, height)
+                lineTo(barWidth, height)
+                lineTo(barWidth, height - barHeight)
+                lineTo(0f, height - barHeight)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFFFFFFFF), primaryColor)
+                )
+            )
+            path = Path().apply {
+                moveTo(barWidth, height - barHeight)
+                lineTo(barWidth3DPart + barWidth, 0f)
+                lineTo(barWidth3DPart + barWidth, barHeight)
+                lineTo(barWidth, height)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(primaryColor, Color(0xFFFFFFFF))
+                )
+            )
+        }
+    }
+}
+
+data class ChartInput(
+    val value:Int,
+    val description:String
+)
 
 private fun getGreeting(hour: Int): String {
     return when (hour) {
