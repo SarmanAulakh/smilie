@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import java.util.*
 fun HomeScreen(modifier: Modifier = Modifier) {
 
     val userName = "Dohyun"
+    var barToggle by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -56,7 +58,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
-//                    item { Home(userName, 78) }
+                    item { Home(userName, 78) }
 
                     val metricData = listOf(
                         Metric("Amount of Sleep", 80),
@@ -68,25 +70,25 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         Metric("Time spent Studying", 20),
                     )
 
-//                    item{ Title("$userName's Data") }
+                    item{ Title("$userName's Data") }
 
-//                    items(metricData) {metric ->
-//                        Box(
-//                            modifier = Modifier.padding(start = 0.dp)
-//                        ) {
-//                            Column {
-//                                Text(
-//                                    text = metric.name,
-//                                    style = TextStyle(
-//                                        fontSize = 28.sp,
-//                                        fontWeight = FontWeight.Bold
-//                                    ),
-//                                    modifier = Modifier.padding(8.dp)
-//                                )
-//                                Rectangle(metric.value)
-//                            }
-//                        }
-//                    }
+                    items(metricData) {metric ->
+                        Box(
+                            modifier = Modifier.padding(start = 0.dp)
+                        ) {
+                            Column {
+                                Text(
+                                    text = metric.name,
+                                    style = TextStyle(
+                                        fontSize = 28.sp,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                                Rectangle(metric.value)
+                            }
+                        }
+                    }
 
                     val pieChartIns = listOf(
                         ChartInput(value = 29, description = "Python"),
@@ -98,19 +100,39 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         ChartInput(value = 10, description = "C++"),
                     )
 
-                    item {
-                        PieChart(
-                            modifier = Modifier
+                    item { Switch(
+                        checked = barToggle,
+                        onCheckedChange = {
+                            barToggle = it
+                        },
+                         colors = SwitchDefaults.colors(
+                             checkedBorderColor = Color(0xFFFF0000),
+                             uncheckedBorderColor = Color(0xFF0000FF)
+                         )
+                    )}
+
+                    if (barToggle) {
+                        item {
+                            PieChart(
+                                modifier = Modifier
+                                    .size(500.dp),
+                                input = pieChartIns
+                            )
+                        }
+                    } else {
+                        item {
+                            BarGraph(modifier = Modifier
                                 .size(500.dp),
-                            input = pieChartIns
-                        )
+                                input = pieChartIns
+                            )
+                        }
                     }
 
+                    // Buffer to show things hidden from the task bar
                     item {
-                        BarGraph(modifier = Modifier
-                            .size(500.dp),
-                            input = pieChartIns
-                        )
+                        Box(modifier = Modifier
+                            .size(30.dp)) {
+                        }
                     }
                 }
             }
@@ -347,7 +369,6 @@ fun PieChart(
                         textAlign = TextAlign.Left
                     ),
                     modifier = Modifier
-                        .padding(top = 16.dp)
                         .align(Alignment.CenterVertically)
                 )
             }
@@ -385,18 +406,24 @@ fun BarGraph(
                     .width(40.dp),
                 primaryColor = colorList[index],
                 percentage = percentage,
-                description = chartInput.description
+                description = chartInput.description,
+                value = chartInput.value
             )
         }
     }
+    Spacer(modifier = Modifier.width(30.dp))
 }
 
+
+// Referenced from K Apps YouTube Video
+// https://youtu.be/AxTUSBg1tRg
 @Composable
 fun Bar(
     modifier: Modifier = Modifier,
     primaryColor: Color,
     percentage: Float,
-    description: String
+    description: String,
+    value: Int
 ) {
     Box(
         modifier = modifier,
@@ -422,7 +449,7 @@ fun Bar(
             drawPath(
                 path,
                 brush = Brush.linearGradient(
-                    colors = listOf(Color(0xFFFFFFFF), primaryColor)
+                    colors = listOf(Color(0xAAFFFFFF), primaryColor)
                 )
             )
             path = Path().apply {
@@ -435,9 +462,48 @@ fun Bar(
             drawPath(
                 path,
                 brush = Brush.linearGradient(
-                    colors = listOf(primaryColor, Color(0xFFFFFFFF))
+                    colors = listOf(primaryColor, Color(0xAAFFFFFF))
                 )
             )
+            path = Path().apply {
+                moveTo(0f, barHeight3DPart)
+                lineTo(barWidth, barHeight3DPart)
+                lineTo(barWidth+barWidth3DPart, 0f)
+                lineTo(barWidth3DPart, 0f)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xAAFFFFFF), primaryColor)
+                )
+            )
+
+            drawContext.canvas.nativeCanvas.apply {
+                drawText(
+                    "$value",
+                    barWidth/5f,
+                    height + 55f,
+                    android.graphics.Paint().apply {
+                        color = Color(0xFFFFFFFF).toArgb()
+                        textSize = 11.dp.toPx()
+                        isFakeBoldText = true
+                    }
+                )
+            }
+
+            drawContext.canvas.nativeCanvas.apply {
+                drawText(
+                    "$description",
+                    0f,
+                    -20f,
+                    android.graphics.Paint().apply {
+                        color = Color(0xFFFFFFFF).toArgb()
+                        textSize = 14.dp.toPx()
+                        isFakeBoldText = true
+                    }
+                )
+            }
         }
     }
 }
