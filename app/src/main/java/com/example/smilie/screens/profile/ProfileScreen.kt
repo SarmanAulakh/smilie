@@ -30,6 +30,8 @@ import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.ui.components.ProfileImage
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 
 @Composable
 fun ProfileScreen(
@@ -180,72 +182,76 @@ fun ProfileScreen(
                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                             fontWeight = FontWeight.Bold,
                                         );
-                                        Row(
+                                        LazyRow(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            state = rememberLazyListState(),
                                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                                         ) {
-                                            Column(
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Text(
-                                                    text = "Brian Peng",
-                                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                );
-                                                Card(
-                                                    modifier = Modifier
-                                                        .size(50.dp),
-                                                    shape = CircleShape,
+                                            item {
+                                                Column(
+                                                    horizontalAlignment = Alignment.CenterHorizontally
                                                 ) {
-                                                    Image(
-                                                        painterResource(R.drawable.ic_profile),
+                                                    Text(
+                                                        text = "Brian Peng",
+                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                    );
+                                                    Card(
                                                         modifier = Modifier
-                                                            .fillMaxSize(),
-                                                        contentDescription = "",
-                                                        contentScale = ContentScale.Crop
-                                                    )
-                                                };
-                                            }
-                                            Column(
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Text(
-                                                    text = "William Tam",
-                                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                );
-                                                Card(
-                                                    modifier = Modifier
-                                                        .size(50.dp),
-                                                    shape = CircleShape,
+                                                            .size(50.dp),
+                                                        shape = CircleShape,
+                                                    ) {
+                                                        Image(
+                                                            painterResource(R.drawable.ic_profile),
+                                                            modifier = Modifier
+                                                                .fillMaxSize(),
+                                                            contentDescription = "",
+                                                            contentScale = ContentScale.Crop
+                                                        )
+                                                    };
+                                                }
+                                                Column(
+                                                    horizontalAlignment = Alignment.CenterHorizontally
                                                 ) {
-                                                    Image(
-                                                        painterResource(R.drawable.ic_profile),
+                                                    Text(
+                                                        text = "William Tam",
+                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                    );
+                                                    Card(
                                                         modifier = Modifier
-                                                            .fillMaxSize(),
-                                                        contentDescription = "",
-                                                        contentScale = ContentScale.Crop
-                                                    )
-                                                };
-                                            }
-                                            Column(
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Text(
-                                                    text = "Sarman Aulakh",
-                                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                );
-                                                Card(
-                                                    modifier = Modifier
-                                                        .size(50.dp)
-                                                        .align(alignment = Alignment.CenterHorizontally),
-                                                    shape = CircleShape,
+                                                            .size(50.dp),
+                                                        shape = CircleShape,
+                                                    ) {
+                                                        Image(
+                                                            painterResource(R.drawable.ic_profile),
+                                                            modifier = Modifier
+                                                                .fillMaxSize(),
+                                                            contentDescription = "",
+                                                            contentScale = ContentScale.Crop
+                                                        )
+                                                    };
+                                                }
+                                                Column(
+                                                    horizontalAlignment = Alignment.CenterHorizontally
                                                 ) {
-                                                    Image(
-                                                        painterResource(R.drawable.ic_profile),
+                                                    Text(
+                                                        text = "Sarman Aulakh",
+                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                    );
+                                                    Card(
                                                         modifier = Modifier
-                                                            .fillMaxSize(),
-                                                        contentDescription = "",
-                                                        contentScale = ContentScale.Crop
-                                                    )
-                                                };
+                                                            .size(50.dp)
+                                                            .align(alignment = Alignment.CenterHorizontally),
+                                                        shape = CircleShape,
+                                                    ) {
+                                                        Image(
+                                                            painterResource(R.drawable.ic_profile),
+                                                            modifier = Modifier
+                                                                .fillMaxSize(),
+                                                            contentDescription = "",
+                                                            contentScale = ContentScale.Crop
+                                                        )
+                                                    };
+                                                }
                                             }
                                         }
                                     }

@@ -4,11 +4,12 @@ import android.app.Application
 import android.widget.Toast
 import com.example.smilie.model.User
 import com.example.smilie.model.service.AccountService
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+import com.example.smilie.api_interfaces.UserApi
+import android.util.Log
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -16,7 +17,6 @@ class MainViewModel @Inject constructor(
     private val accountService: AccountService
     ) : SmilieViewModel() {
 
-    private var db = Firebase.firestore
     var userData: User? = null
 
     init {
@@ -25,12 +25,20 @@ class MainViewModel @Inject constructor(
 
     fun getUserDetails(userId: String = accountService.currentUserId) {
         if (userId != "") {
-            db.collection("users")
-                .document(userId)
-                .get()
-                .addOnSuccessListener {
-                    if (it.exists()) {
-                        userData = it.toObject<User>()
+            Log.d("BACKEND", "Preparing to call api server 1")
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:5001")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val api = retrofit.create(UserApi::class.java)
+            val call: Call<User?>? = api.getUserById(userId)
+            Log.d("BACKEND", "Calling api server")
+
+            call!!.enqueue(object: Callback<User?> {
+                override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                    if(response.isSuccessful) {
+                        userData = response.body()
                     } else {
                         Toast.makeText(
                             application,
@@ -39,13 +47,16 @@ class MainViewModel @Inject constructor(
                         ).show()
                     }
                 }
-                .addOnFailureListener {
+
+                override fun onFailure(call: Call<User?>, t: Throwable) {
+                    Log.d("TAG", "failed " + t.message)
                     Toast.makeText(
                         application,
                         "Failed to get user data.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            })
         }
     }
 }
