@@ -33,3 +33,4 @@
 | 2023/07/17 | 0                 | 0                | 0               | 6               | 0                | 0                | Reorganized page layout and interaction between pages, repurposed EditMetrics to RemoveMetrics
 | 2023/07/17 | 0                 | 0                | 4               | 0               | 0                | 0                | Implemented PieChart with specific formatting and location within the home page         |
 | 2023/07/18 | 0                 | 0                | 5               | 0               | 0                | 0                | Implemented BarGraph with graph toggle switch to toggle between two types of the graph, refomatted the home page with metric values ranging from 0 to 10 |
+| 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
