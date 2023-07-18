@@ -81,7 +81,8 @@ fun MainApp(
             ) {
                 composable(route = Home.route) {
                     showBottomNav = true
-                    HomeScreen()
+                    var userData = viewModel.userData
+                    HomeScreen(user=userData)
                 }
                 composable(route = Profile.route) {
                     showBottomNav = true
