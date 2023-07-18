@@ -1,6 +1,5 @@
-package com.example.smilie.screens
+package com.example.smilie.screens.rate
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -16,10 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smilie.screens.settings.SignUpViewModel
 
 @Composable
-fun RateYourDay() {
-//    var metrics = Array<String>(10){""}
+fun RateYourDay(
+    openAndPopUp: (String) -> Unit,
+    rateViewModel: RateYourDayViewModel = hiltViewModel()
+) {
     var metrics = mutableListOf<String>(
         "Amount of Sleep",
         "Quality of Sleep",
@@ -28,12 +31,12 @@ fun RateYourDay() {
         "Time with Friends",
         "Video Games",
         "Food",
-        "Overall",
-        "Time spent on Assignments"
+        "Time spent on Assignments",
+        "Overall"
     )
+
     var sliders = mutableListOf<MutableState<Float>>()
     metrics.indices.forEach {
-        //metrics[it] = "Metric "+(it+1).toString()
         sliders.add(remember { mutableStateOf(5F) })
     }
 
@@ -45,25 +48,38 @@ fun RateYourDay() {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
                 text = "Rate Your Day",
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(10.dp)
             )
+            Row(){
+                Button(
+                    onClick = { rateViewModel.onRemoveClick(openAndPopUp) },
+                    //modifier = Modifier.height(30.dp).width(100.dp)
+                ) {
+                    Text(
+                        text = "Remove"
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                Button(
+                    onClick = { rateViewModel.onAddClick(openAndPopUp) },
+                    //modifier = Modifier.height(30.dp).width(100.dp)
+                ) {
+                    Text(
+                        text = "Add"
+                    )
+                }
+            }
+
             LazyColumn(modifier = Modifier.padding(10.dp)) {
-
-                //            item{Text(
-                //                text = "Rate Your Day",
-                //                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                //                fontWeight = FontWeight.Bold,
-                //            )}
-
                 for (i in metrics.indices) {
                     item {
                         Row() {
                             Text(
                                 text = metrics[i],
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                fontWeight = FontWeight.Bold,
+                                fontWeight = FontWeight.Bold
                             )
                             Spacer(Modifier.weight(1f))
                             Text(
@@ -87,25 +103,25 @@ fun RateYourDay() {
                     }
                     item{Spacer(Modifier.height(20.dp))}
                 }
+                item{Spacer(Modifier.height(30.dp))}
             }
         }
         Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(horizontal=15.dp,vertical=10.dp),
-            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(horizontal = 15.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.End
         ) {
-            Button(onClick = { /*TODO*/ }) {
+            Spacer(Modifier.weight(1f))
+            Button(onClick = {
+
+            }) {
                 Text(
-                    text = "Done",
+                    text = "Submit"
                 )
             }
         }
     }
 
-}
-
-@Composable
-@Preview
-fun RateYourDayPreview() {
-    RateYourDay()
 }

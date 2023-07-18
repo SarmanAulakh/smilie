@@ -47,3 +47,5 @@ val smilieTabRowScreens = listOf(Home, Profile, Settings, RateYourDay)
 const val LOGIN_SCREEN = "LoginScreen"
 const val SIGN_UP_SCREEN = "SignUpScreen"
 const val USER_REGISTER_SCREEN = "UserRegisterScreen"
+const val REMOVE_METRICS_SCREEN = "RemoveMetricsScreen"
+const val ADD_METRICS_SCREEN = "AddMetricsScreen"

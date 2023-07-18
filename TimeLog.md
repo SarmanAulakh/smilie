@@ -27,3 +27,6 @@
 | 2023/07/13 | 1                 | 1                | 1               | 1               | 1                | 1                | Progress Meeting and work updates  
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
 | 2023/07/15 | 2                 | 0                | 0               | 2               | 0                | 1                | Meeting regarding pubsub
+| 2023/07/15 | 0                 | 0                | 0               | 5               | 0                | 0                | Relocated and modified RateYourDay page with navigation to popup pages
+| 2023/07/16 | 0                 | 0                | 0               | 7               | 0                | 0                | Added AddMetrics and EditMetrics page to facilitate user manipulation of active metrics
+| 2023/07/17 | 0                 | 0                | 0               | 6               | 0                | 0                | Reorganized page layout and interaction between pages, repurposed EditMetrics to RemoveMetrics
