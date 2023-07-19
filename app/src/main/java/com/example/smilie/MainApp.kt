@@ -19,7 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.smilie.model.User
 import com.example.smilie.screens.HomeScreen
-import com.example.smilie.screens.MainViewModel
+import com.example.smilie.model.view.MainViewModel
 import com.example.smilie.screens.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen

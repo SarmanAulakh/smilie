@@ -29,12 +29,13 @@ import com.example.smilie.R
 import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.ui.components.ProfileImage
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smilie.model.view.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
+    profileViewModel: ProfileViewModel = hiltViewModel(),
     user: User?,
 ) {
     if (user == null) {
@@ -70,12 +71,12 @@ fun ProfileScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(start = 10.dp),
-                                    text = "I like long walks on the beach. I try to get enough sleep but that doesn't always work",
+                                    text = user.bio,
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                 );
                                 Text(
-                                    text = "Type: Student",
+                                    text = "Type: " + user.userType,
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                 );
@@ -187,70 +188,29 @@ fun ProfileScreen(
                                             state = rememberLazyListState(),
                                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                                         ) {
-                                            item {
-                                                Column(
-                                                    horizontalAlignment = Alignment.CenterHorizontally
-                                                ) {
-                                                    Text(
-                                                        text = "Brian Peng",
-                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                    );
-                                                    Card(
-                                                        modifier = Modifier
-                                                            .size(50.dp),
-                                                        shape = CircleShape,
+                                            for (follower in profileViewModel.followingUsers.value) {
+                                                item {
+                                                    Column(
+                                                        horizontalAlignment = Alignment.CenterHorizontally
                                                     ) {
-                                                        Image(
-                                                            painterResource(R.drawable.ic_profile),
+                                                        Text(
+                                                            text = follower.username,
+                                                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                        );
+                                                        Card(
                                                             modifier = Modifier
-                                                                .fillMaxSize(),
-                                                            contentDescription = "",
-                                                            contentScale = ContentScale.Crop
-                                                        )
-                                                    };
-                                                }
-                                                Column(
-                                                    horizontalAlignment = Alignment.CenterHorizontally
-                                                ) {
-                                                    Text(
-                                                        text = "William Tam",
-                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                    );
-                                                    Card(
-                                                        modifier = Modifier
-                                                            .size(50.dp),
-                                                        shape = CircleShape,
-                                                    ) {
-                                                        Image(
-                                                            painterResource(R.drawable.ic_profile),
-                                                            modifier = Modifier
-                                                                .fillMaxSize(),
-                                                            contentDescription = "",
-                                                            contentScale = ContentScale.Crop
-                                                        )
-                                                    };
-                                                }
-                                                Column(
-                                                    horizontalAlignment = Alignment.CenterHorizontally
-                                                ) {
-                                                    Text(
-                                                        text = "Sarman Aulakh",
-                                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                                    );
-                                                    Card(
-                                                        modifier = Modifier
-                                                            .size(50.dp)
-                                                            .align(alignment = Alignment.CenterHorizontally),
-                                                        shape = CircleShape,
-                                                    ) {
-                                                        Image(
-                                                            painterResource(R.drawable.ic_profile),
-                                                            modifier = Modifier
-                                                                .fillMaxSize(),
-                                                            contentDescription = "",
-                                                            contentScale = ContentScale.Crop
-                                                        )
-                                                    };
+                                                                .size(50.dp),
+                                                            shape = CircleShape,
+                                                        ) {
+                                                            Image(
+                                                                painterResource(R.drawable.ic_profile),
+                                                                modifier = Modifier
+                                                                    .fillMaxSize(),
+                                                                contentDescription = "",
+                                                                contentScale = ContentScale.Crop
+                                                            )
+                                                        };
+                                                    }
                                                 }
                                             }
                                         }
@@ -268,5 +228,5 @@ fun ProfileScreen(
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {
-    ProfileScreen(User("test", "test", UserTypes.DEFAULT, "test@gmail.com", "", "this is a sample bio"))
+    ProfileScreen(user = User("test", "test", UserTypes.DEFAULT, "test@gmail.com", "", "this is a sample bio"))
 }

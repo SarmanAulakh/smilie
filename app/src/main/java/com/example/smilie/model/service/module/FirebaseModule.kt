@@ -9,14 +9,18 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 // CODE FROM: https://github.com/FirebaseExtended/make-it-so-android/blob/main/start/app/src/main/java/com/example/makeitso/model/service/module/FirebaseModule.kt
 
 @Module
 @InstallIn(SingletonComponent::class)
 object FirebaseModule {
+    @Singleton
     @Provides
     fun auth(): FirebaseAuth = Firebase.auth
 
-    @Provides fun firestore(): FirebaseFirestore = Firebase.firestore
+    @Singleton
+    @Provides
+    fun firestore(): FirebaseFirestore = Firebase.firestore
 }

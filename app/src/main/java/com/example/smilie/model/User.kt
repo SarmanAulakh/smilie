@@ -1,5 +1,7 @@
 package com.example.smilie.model
 
+import com.google.gson.annotations.SerializedName
+
 enum class UserTypes {
     DEFAULT,
     STUDENT,
