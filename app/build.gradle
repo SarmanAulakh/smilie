@@ -82,6 +82,14 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
 
+    // Open AI
+    // import Kotlin API client BOM
+    implementation platform('com.aallam.openai:openai-client-bom:3.3.0')
+
+    // define dependencies without versions
+    implementation 'com.aallam.openai:openai-client'
+    runtimeOnly 'io.ktor:ktor-client-okhttp'
+
     // test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

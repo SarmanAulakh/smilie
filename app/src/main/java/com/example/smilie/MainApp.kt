@@ -1,5 +1,7 @@
 package com.example.smilie
 
+import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -24,6 +26,7 @@ import com.example.smilie.screens.profile.ProfileScreen
 import com.example.smilie.screens.rate.AddMetrics
 import com.example.smilie.screens.rate.RemoveMetrics
 import com.example.smilie.screens.settings.DarkModeManager
+import com.example.smilie.screens.settings.FontSizeManager
 import com.example.smilie.screens.settings.SettingsScreen
 import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.screens.sign_up.UserRegisterScreen
@@ -32,14 +35,15 @@ import com.example.smilie.ui.navigation.BottomNavBar
 import com.example.smilie.ui.navigation.Home
 import com.example.smilie.ui.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.navigation.Profile
-import com.example.smilie.ui.navigation.REMOVE_METRICS_SCREEN
 import com.example.smilie.ui.navigation.RateYourDay
+import com.example.smilie.ui.navigation.REMOVE_METRICS_SCREEN
 import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 import com.example.smilie.ui.navigation.Settings
 import com.example.smilie.ui.navigation.USER_REGISTER_SCREEN
 import com.example.smilie.ui.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 // REFERENCE: https://github.com/android/codelab-android-compose/blob/main/NavigationCodelab
@@ -50,10 +54,11 @@ fun MainApp(
 ) {
     val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     val startingRoute = if (isUserSignedIn) Home.route else LOGIN_SCREEN
-//    val darkModeManager = DarkModeManager(isSystemInDarkTheme())
-    val darkModeManager = DarkModeManager(true)
 
-    SMILIETheme(darkModeManager) {
+    val darkModeManager = DarkModeManager(true)
+    val fontSizeManager = FontSizeManager(2f)
+
+    SMILIETheme(darkModeManager, fontSizeManager) {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
@@ -93,7 +98,8 @@ fun MainApp(
                     showBottomNav = true
                     SettingsScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        darkModeManager = darkModeManager
+                        darkModeManager = darkModeManager,
+                        fontSizeManager = fontSizeManager,
                     )
                 }
                 composable(LOGIN_SCREEN) {
