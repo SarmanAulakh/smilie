@@ -1,12 +1,10 @@
-package com.example.smilie.model.service
+package com.example.smilie.model.service.backend
 
 import com.example.smilie.model.User
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.flow.Flow
 
 // CODE REF: https://github.com/FirebaseExtended/make-it-so-android/blob/main/start/app/src/main/java/com/example/makeitso/model/service/AccountService.kt
 
-interface AccountService {
+interface AccountBackend {
     val currentUserId: String
     val userExists: Boolean
     // https://developer.android.com/kotlin/flow

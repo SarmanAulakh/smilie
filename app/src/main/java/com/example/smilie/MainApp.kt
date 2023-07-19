@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.smilie.screens.HomeScreen
-import com.example.smilie.screens.MainViewModel
+import com.example.smilie.model.view.MainViewModel
 import com.example.smilie.screens.rate.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
@@ -106,14 +106,14 @@ fun MainApp(
                     showBottomNav = false
                     LoginScreen(openAndPopUp = {
                         navController.navigateSingleTopTo(it)
-                        viewModel.getUserDetails()
+                        viewModel.userData
                     })
                 }
                 composable(SIGN_UP_SCREEN) {
                     showBottomNav = false
                     SignUpScreen(openAndPopUp = {
                         route -> navController.navigateSingleTopTo(route)
-                        viewModel.getUserDetails()
+                        viewModel.userData
                     })
                 }
                 composable(USER_REGISTER_SCREEN) {

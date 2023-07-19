@@ -1,11 +1,10 @@
-package com.example.smilie.screens.sign_up
+package com.example.smilie.model.view
 
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
-import com.example.smilie.model.service.AccountService
-import com.example.smilie.screens.SmilieViewModel
+import com.example.smilie.model.service.backend.AccountBackend
 import com.example.smilie.ui.navigation.Home
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,7 +24,7 @@ data class UserRegisterState(
 )
 
 @HiltViewModel
-class UserRegisterViewModel @Inject constructor(private val accountService: AccountService) : SmilieViewModel() {
+class UserRegisterViewModel @Inject constructor(private val accountBackend: AccountBackend) : SmilieViewModel() {
     lateinit var storage: FirebaseStorage
     var uiState = mutableStateOf(UserRegisterState())
         private set
@@ -78,7 +77,7 @@ class UserRegisterViewModel @Inject constructor(private val accountService: Acco
     }
 
     private fun createUserDocument(openAndPopUp: (String) -> Unit, imageUrl: String) {
-        val currentFirebaseUser = accountService.currentUser
+        val currentFirebaseUser = accountBackend.currentUser
         currentFirebaseUser?.let {
             val user = User(
                 id = it.id,
