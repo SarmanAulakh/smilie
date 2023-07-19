@@ -1,6 +1,5 @@
 package com.example.smilie
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -17,20 +16,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.smilie.model.User
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.model.view.MainViewModel
-import com.example.smilie.screens.RateYourDay
+import com.example.smilie.screens.rate.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
+import com.example.smilie.screens.rate.AddMetrics
+import com.example.smilie.screens.rate.RemoveMetrics
 import com.example.smilie.screens.settings.DarkModeManager
 import com.example.smilie.screens.settings.SettingsScreen
 import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.screens.sign_up.UserRegisterScreen
+import com.example.smilie.ui.navigation.ADD_METRICS_SCREEN
 import com.example.smilie.ui.navigation.BottomNavBar
 import com.example.smilie.ui.navigation.Home
 import com.example.smilie.ui.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.navigation.Profile
+import com.example.smilie.ui.navigation.REMOVE_METRICS_SCREEN
 import com.example.smilie.ui.navigation.RateYourDay
 import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 import com.example.smilie.ui.navigation.Settings
@@ -79,7 +81,8 @@ fun MainApp(
             ) {
                 composable(route = Home.route) {
                     showBottomNav = true
-                    HomeScreen()
+                    var userData = viewModel.userData
+                    HomeScreen(user=userData)
                 }
                 composable(route = Profile.route) {
                     showBottomNav = true
@@ -115,7 +118,21 @@ fun MainApp(
                 }
                 composable(route = RateYourDay.route) {
                     showBottomNav = true
-                    RateYourDay()
+                    RateYourDay(
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                    )
+                }
+                composable(REMOVE_METRICS_SCREEN) {
+                    showBottomNav = false
+                    RemoveMetrics(
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                    )
+                }
+                composable(ADD_METRICS_SCREEN) {
+                    showBottomNav = false
+                    AddMetrics(
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                    )
                 }
             }
         }
