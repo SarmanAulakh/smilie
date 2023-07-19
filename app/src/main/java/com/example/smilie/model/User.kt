@@ -16,4 +16,5 @@ data class User(
     val imageUrl: String = "",
     val bio: String = "",
     val followers: List<String>? = null,
+    val following: List<String>? = null,
 )

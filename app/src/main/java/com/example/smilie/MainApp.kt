@@ -97,14 +97,14 @@ fun MainApp(
                     showBottomNav = false
                     LoginScreen(openAndPopUp = {
                         navController.navigateSingleTopTo(it)
-                        viewModel.getUserDetails()
+                        viewModel.userData
                     })
                 }
                 composable(SIGN_UP_SCREEN) {
                     showBottomNav = false
                     SignUpScreen(openAndPopUp = {
                         route -> navController.navigateSingleTopTo(route)
-                        viewModel.getUserDetails()
+                        viewModel.userData
                     })
                 }
                 composable(USER_REGISTER_SCREEN) {
