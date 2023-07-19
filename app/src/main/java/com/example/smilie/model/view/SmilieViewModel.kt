@@ -1,4 +1,4 @@
-package com.example.smilie.screens
+package com.example.smilie.model.view
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

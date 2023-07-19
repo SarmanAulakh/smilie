@@ -1,5 +1,7 @@
 package com.example.smilie.model
 
+import com.google.gson.annotations.SerializedName
+
 enum class UserTypes {
     DEFAULT,
     STUDENT,
@@ -14,4 +16,5 @@ data class User(
     val imageUrl: String = "",
     val bio: String = "",
     val followers: List<String>? = null,
+    val following: List<String>? = null,
 )
