@@ -23,7 +23,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -80,51 +79,52 @@ fun SettingsScreen(
             )
 
             // ChatGPT
-            var editText = remember { mutableStateOf("") }
-            var messageList: MutableList<Message> = remember { mutableStateListOf() }
-
-            EditTextField(editText)
-            Button(onClick = {
-                if (editText.value.isNotEmpty()) {
-                    var userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
-                    messageList.add(userMessage)
-                    editText.value = ""
-
-                    var chatbotMessage = Message("Typing... ", Message.SENT_BY_BOT)
-                    messageList.add(chatbotMessage)
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val openaiToken = "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"
-                        val openai = OpenAI(openaiToken)
-                        val completionRequest = CompletionRequest(
-                            model = ModelId("text-curie-001"),
-                            prompt = editText.value,
-                            maxTokens = 250,
-                            echo = true
-                        )
-                        val completion = openai.completion(completionRequest)
-                        Log.d("OpenAI", completion.choices[0].text)
-                        if (messageList.size > 0) {
-                            messageList.removeLast()
-                        }
-                        chatbotMessage = Message(completion.choices[0].text, Message.SENT_BY_BOT)
-                        messageList.add(chatbotMessage)
-                    }
-                    Log.d("SmilieSettings", messageList.size.toString())
-                }
-            }) {
-                Text("Send")
-            }
-
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                itemsIndexed(messageList) { index, message ->
-                    MessageBubble(message)
-                }
-            }
-            Spacer(Modifier.height(30.dp))
+//            var editText = remember { mutableStateOf("") }
+//            var messageList: MutableList<Message> = remember { mutableStateListOf() }
+//
+//            EditTextField(editText)
+//            Button(onClick = {
+//                if (editText.value.isNotEmpty()) {
+//                    var userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
+//                    messageList.add(userMessage)
+//                    editText.value = ""
+//
+//                    var chatbotMessage = Message("Typing... ", Message.SENT_BY_BOT)
+//                    messageList.add(chatbotMessage)
+//
+//                    CoroutineScope(Dispatchers.IO).launch {
+//                        val openaiToken = "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"
+//                        val openai = OpenAI(openaiToken)
+//                        val completionRequest = CompletionRequest(
+//                            model = ModelId("text-curie-001"),
+//                            prompt = userMessage.text,
+//                            maxTokens = 250,
+//                            echo = false
+//                        )
+//                        Log.d("ChatGPT", "${completionRequest.prompt}")
+//                        val completion = openai.completion(completionRequest)
+//                        Log.d("OpenAI", completion.choices[0].text)
+//                        if (messageList.size > 0) {
+//                            messageList.removeLast()
+//                        }
+//                        chatbotMessage = Message(completion.choices[0].text.trim(), Message.SENT_BY_BOT)
+//                        messageList.add(chatbotMessage)
+//                    }
+//                    Log.d("SmilieSettings", messageList.size.toString())
+//                }
+//            }) {
+//                Text("Send")
+//            }
+//
+//            LazyColumn(
+//                modifier = Modifier.fillMaxWidth(),
+//                contentPadding = PaddingValues(16.dp)
+//            ) {
+//                itemsIndexed(messageList) { index, message ->
+//                    MessageBubble(message)
+//                }
+//            }
+//            Spacer(Modifier.height(30.dp))
 
             // ChatGPT
             Row() {
@@ -143,47 +143,6 @@ fun SettingsScreen(
                 fontWeight = FontWeight.Bold,
             )
             MetricPrivacy(settingsList, mCheckedState)
-
-//            var inputText = remember { mutableStateOf("") }
-//            LaunchedEffect(Unit) {
-//                val completion = openai.completion(completionRequest)
-//                Log.d("OpenAI", completion.choices[0].text)
-//                inputText.value = completion.choices[0].text
-//            }
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(10.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//            ) {
-//                Text(inputText.value)
-//            }
-//
-//            val openai2 = OpenAI(openaiToken)
-//            val completionRequest2 = CompletionRequest(
-//                model = ModelId("text-curie-001"),
-//                prompt = "In list form, how can I improve time spent with friends?",
-//                maxTokens = 250,
-//                echo = true
-//            )
-//
-//            var inputText2 = remember { mutableStateOf("") }
-//            LaunchedEffect(Unit) {
-//                val completion2 = openai2.completion(completionRequest2)
-//                Log.d("OpenAI", completion2.choices[0].text)
-//                inputText2.value = completion2.choices[0].text
-//            }
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(10.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//            ) {
-//                Text(inputText2.value)
-//            }
-
         }
     }
 }
@@ -255,52 +214,49 @@ fun DarkModeSwitch(darkModeManager: DarkModeManager) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EditTextField(editText: MutableState<String>) {
-
-    TextField(
-        value = editText.value,
-        onValueChange = { editText.value = it },
-    )
-}
-
-//suspend fun getFeedback(): TextCompletion {
-//    val openai = OpenAI(openaiToken)
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun EditTextField(editText: MutableState<String>) {
 //
-//    val completionRequest = CompletionRequest(
-//        model = ModelId("text-ada-001"),
-//        prompt = "Somebody once told me the world is gonna roll me",
-//        echo = true
+//    TextField(
+//        value = editText.value,
+//        onValueChange = { editText.value = it },
 //    )
-//
-//    return openai.completion(completionRequest)
 //}
 
-class Message(var text: String, var sentBy: String) {
+//class Message(var text: String, var sentBy: String) {
+//
+//    companion object {
+//        var SENT_BY_ME = "me"
+//        var SENT_BY_BOT = "bot"
+//    }
+//}
 
-    companion object {
-        var SENT_BY_ME = "me"
-        var SENT_BY_BOT = "bot"
-    }
-}
-
-@Composable
-fun MessageBubble(message: Message) {
-    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) Color.Blue else Color.Gray
-    val textColor = if (message.sentBy == Message.SENT_BY_ME) Color.White else Color.Black
-    Box(
-        modifier = Modifier
-            .padding(8.dp)
-            .background(
-                color = bubbleColor,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(8.dp)
-    ) {
-        Text(
-            text = message.text,
-            color = textColor,
-        )
-    }
-}
+//@Composable
+//fun MessageBubble(message: Message) {
+//    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) Color.Blue else Color.Gray
+//    val textColor = if (message.sentBy == Message.SENT_BY_ME) Color.White else Color.Black
+//
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 16.dp, vertical = 8.dp),
+//        horizontalArrangement = if (message.sentBy == Message.SENT_BY_ME) Arrangement.End else Arrangement.Start
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth(0.85f)
+//                .padding(8.dp)
+//                .background(
+//                    color = bubbleColor,
+//                    shape = RoundedCornerShape(8.dp)
+//                )
+//                .padding(8.dp),
+//        ) {
+//            Text(
+//                text = message.text,
+//                color = textColor,
+//            )
+//        }
+//    }
+//}
