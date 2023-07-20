@@ -1,5 +1,6 @@
 package com.example.smilie.model.service.backend
 
+import android.util.Log
 import android.widget.Toast
 import com.example.smilie.SmilieHiltApp
 import com.example.smilie.model.User
@@ -10,6 +11,9 @@ class UserBackendImpl(
     private val userService: UserService,
 ): UserBackend {
     override suspend fun getById(id: String): User? {
+        if (id == "") {
+            return null
+        }
         val user = userService.get(id)
 
         if (user === null) {
@@ -27,7 +31,9 @@ class UserBackendImpl(
 //        ).show()
 
         return user
+//        return null
     }
+
 
     override suspend fun getByIds(ids: List<String>): List<User> {
         var users = ArrayList<User>()

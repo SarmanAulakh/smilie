@@ -5,17 +5,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -24,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,7 +38,8 @@ import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.completion.TextCompletion
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
-import com.example.smilie.ui.theme.ResizeableTypography
+
+import kotlinx.coroutines.*
 
 data class SettingsItem(val name: String, var isEnabled: Boolean)
 
@@ -60,7 +68,6 @@ fun SettingsScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -71,6 +78,55 @@ fun SettingsScreen(
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 fontWeight = FontWeight.Bold,
             )
+
+            // ChatGPT
+            var editText = remember { mutableStateOf("") }
+            var messageList: MutableList<Message> = remember { mutableStateListOf() }
+
+            EditTextField(editText)
+            Button(onClick = {
+                if (editText.value.isNotEmpty()) {
+                    var userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
+                    messageList.add(userMessage)
+                    editText.value = ""
+
+                    var chatbotMessage = Message("Typing... ", Message.SENT_BY_BOT)
+                    messageList.add(chatbotMessage)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val openaiToken = "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"
+                        val openai = OpenAI(openaiToken)
+                        val completionRequest = CompletionRequest(
+                            model = ModelId("text-curie-001"),
+                            prompt = editText.value,
+                            maxTokens = 250,
+                            echo = true
+                        )
+                        val completion = openai.completion(completionRequest)
+                        Log.d("OpenAI", completion.choices[0].text)
+                        if (messageList.size > 0) {
+                            messageList.removeLast()
+                        }
+                        chatbotMessage = Message(completion.choices[0].text, Message.SENT_BY_BOT)
+                        messageList.add(chatbotMessage)
+                    }
+                    Log.d("SmilieSettings", messageList.size.toString())
+                }
+            }) {
+                Text("Send")
+            }
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                itemsIndexed(messageList) { index, message ->
+                    MessageBubble(message)
+                }
+            }
+            Spacer(Modifier.height(30.dp))
+
+            // ChatGPT
             Row() {
                 Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
                     Text(text = "Sign Out")
@@ -88,15 +144,6 @@ fun SettingsScreen(
             )
             MetricPrivacy(settingsList, mCheckedState)
 
-//            val openaiToken: String = ""
-//            val openai = OpenAI(openaiToken)
-//
-//            val completionRequest = CompletionRequest(
-//                model = ModelId("text-curie-001"),
-//                prompt = "In list form, how can I improve my sleep?",
-//                maxTokens = 250,
-//                echo = true
-//            )
 //            var inputText = remember { mutableStateOf("") }
 //            LaunchedEffect(Unit) {
 //                val completion = openai.completion(completionRequest)
@@ -208,6 +255,16 @@ fun DarkModeSwitch(darkModeManager: DarkModeManager) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditTextField(editText: MutableState<String>) {
+
+    TextField(
+        value = editText.value,
+        onValueChange = { editText.value = it },
+    )
+}
+
 //suspend fun getFeedback(): TextCompletion {
 //    val openai = OpenAI(openaiToken)
 //
@@ -219,3 +276,31 @@ fun DarkModeSwitch(darkModeManager: DarkModeManager) {
 //
 //    return openai.completion(completionRequest)
 //}
+
+class Message(var text: String, var sentBy: String) {
+
+    companion object {
+        var SENT_BY_ME = "me"
+        var SENT_BY_BOT = "bot"
+    }
+}
+
+@Composable
+fun MessageBubble(message: Message) {
+    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) Color.Blue else Color.Gray
+    val textColor = if (message.sentBy == Message.SENT_BY_ME) Color.White else Color.Black
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(
+                color = bubbleColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(8.dp)
+    ) {
+        Text(
+            text = message.text,
+            color = textColor,
+        )
+    }
+}
