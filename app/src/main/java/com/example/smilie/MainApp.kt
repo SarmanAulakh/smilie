@@ -1,5 +1,6 @@
 package com.example.smilie
 
+
 import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.layout.padding
@@ -14,12 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.model.view.MainViewModel
+import com.example.smilie.model.view.ProfileViewModel
 import com.example.smilie.screens.rate.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
@@ -62,7 +66,7 @@ fun MainApp(
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen = smilieTabRowScreens.find { it.route == currentDestination?.route } ?: Home
+        val currentScreen = smilieTabRowScreens.find { it.route == currentDestination?.route?.split("/|\\?".toRegex())?.get(0) } ?: Home
         var showBottomNav by remember {mutableStateOf(false)}
 
         Scaffold(
@@ -89,10 +93,21 @@ fun MainApp(
                     var userData = viewModel.userData
                     HomeScreen(user=userData)
                 }
-                composable(route = Profile.route) {
+                composable(
+                    route = Profile.route + "?userId={userId}",
+                    arguments = listOf(
+                        navArgument("userId") {
+                            type = NavType.StringType
+                            defaultValue = viewModel.userData?.id
+                            nullable = true
+                        }
+                    )
+                ) { entry ->
                     showBottomNav = true
-                    var userData = viewModel.userData
-                    ProfileScreen(user=userData)
+                    ProfileScreen(
+                        userId = entry.arguments?.getString("userId"),
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                    )
                 }
                 composable(route = Settings.route) {
                     showBottomNav = true
@@ -148,9 +163,11 @@ fun MainApp(
 // REFERENCE: https://github.com/android/codelab-android-compose/blob/main/NavigationCodelab
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) {
-        popUpTo(this@navigateSingleTopTo.graph.findStartDestination().id) {
-            saveState = true
-        }
+        // This isn't behaving correctly or I'm misunderstanding something. It's probably the latter.
+        // But it works after I comment it out so that's what I'll do for now
+//        popUpTo(this@navigateSingleTopTo.graph.findStartDestination().id) {
+//            saveState = true
+//        }
         launchSingleTop = true
         restoreState = true
     }

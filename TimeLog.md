@@ -39,3 +39,6 @@
 | 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
 | 2023/07/18 | 0                 | 3                | 0               | 0               | 0                | 0                | Font size changing
 | 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                | Refactored and reorganized files for hilt compatibility
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 8               | 0                | Fixed navigation bug and started backend server user creation
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 2               | 0                | Added user updating and user id token retrieval
+
