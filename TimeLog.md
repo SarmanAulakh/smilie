@@ -21,10 +21,11 @@
 | 2023/06/30 | 0                 | 0                | 0               | 0               | 0                | 2                | Started sample db for users using FireStore                                             |
 | 2023/07/06 | 0                 | 0                | 2               | 0               | 0                | 0                | Began formatting homescreen with more soothing colors and layout                        |
 | 2023/07/08 | 0                 | 0                | 3               | 0               | 0                | 0                | Implementing different format to show popular metrics and helpful links (dropdown)      |
-| 2023/07/12 | 0		               | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
-| 2023/07/13 | 0                 | 3.5                | 0               | 0               | 0                | 0                | Implement dark mode functionality
+| 2023/07/12 | 0		             | 3                | 0               | 0               | 0                | 0                | Created UI for the metric privacy settings
+| 2023/07/13 | 0                 | 3.5              | 0               | 0               | 0                | 0                | Implement dark mode functionality
 | 2023/07/13 | 2                 | 2                | 2               | 2               | 2                | 2                | Worked on D4  
 | 2023/07/13 | 1                 | 1                | 1               | 1               | 1                | 1                | Progress Meeting and work updates  
+| 2023/07/14 | 0                 | 2                | 0               | 0               | 0                | 0                | Added OpenAI API
 | 2023/07/14 | 0                 | 0                | 0               | 0               | 0                | 7                | Add firestore functions and pubsub
 | 2023/07/15 | 2                 | 0                | 0               | 2               | 0                | 1                | Meeting regarding pubsub
 | 2023/07/15 | 0                 | 0                | 0               | 5               | 0                | 0                | Relocated and modified RateYourDay page with navigation to popup pages
@@ -36,4 +37,5 @@
 | 2023/07/17 | 0                 | 0                | 4               | 0               | 0                | 0                | Implemented PieChart with specific formatting and location within the home page         |
 | 2023/07/18 | 0                 | 0                | 5               | 0               | 0                | 0                | Implemented BarGraph with graph toggle switch to toggle between two types of the graph, refomatted the home page with metric values ranging from 0 to 10 |
 | 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
+| 2023/07/18 | 0                 | 3                | 0               | 0               | 0                | 0                | Font size changing
 | 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                | Refactored and reorganized files for hilt compatibility
