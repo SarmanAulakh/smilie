@@ -1,6 +1,7 @@
 package com.example.smilie.screens.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,17 +31,26 @@ import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.ui.components.ProfileImage
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextField
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.smilie.model.view.ProfileViewModel
+import com.example.smilie.ui.navigation.Profile
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
-    user: User?,
+    userId: String?,
+    openAndPopUp: (String) -> Unit
 ) {
+    profileViewModel.updateCurrentlyViewingUser(userId)
+    val user = profileViewModel.currentlyViewingUser.value
     if (user == null) {
         Text(text = "loading...")
     } else {
+        Log.d("SmilieDebug", "userId: ${user.id}")
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -52,6 +62,9 @@ fun ProfileScreen(
                         modifier = Modifier.weight(1f),
                         contentPadding =  PaddingValues(horizontal = 10.dp)
                     ) {
+//                        item {
+//                            TextField(value = "blah", onValueChange = {})
+//                        }
                         item {
                             Column(
                                 modifier = Modifier
@@ -179,28 +192,33 @@ fun ProfileScreen(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Text(
-                                            text = "Friends",
+                                            text = "Following",
                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                             fontWeight = FontWeight.Bold,
                                         );
                                         LazyRow(
                                             modifier = Modifier.fillMaxWidth(),
                                             state = rememberLazyListState(),
-                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                            horizontalArrangement = Arrangement
+                                                .spacedBy(
+                                                    space = 10.dp,
+                                                    alignment = Alignment.CenterHorizontally
+                                                )
                                         ) {
-                                            for (follower in profileViewModel.followingUsers.value) {
+                                            for (following in profileViewModel.followingUsers.value) {
                                                 item {
                                                     Column(
                                                         horizontalAlignment = Alignment.CenterHorizontally
                                                     ) {
                                                         Text(
-                                                            text = follower.username,
+                                                            text = following.username,
                                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                                         );
                                                         Card(
                                                             modifier = Modifier
                                                                 .size(50.dp),
                                                             shape = CircleShape,
+                                                            onClick = { profileViewModel.onFriendClick(openAndPopUp, following.id) }
                                                         ) {
                                                             Image(
                                                                 painterResource(R.drawable.ic_profile),
@@ -223,10 +241,4 @@ fun ProfileScreen(
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ProfileScreenPreview() {
-    ProfileScreen(user = User("test", "test", UserTypes.DEFAULT, "test@gmail.com", "", "this is a sample bio"))
 }

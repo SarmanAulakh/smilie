@@ -1,5 +1,6 @@
 package com.example.smilie.model.view
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.User
 import com.example.smilie.model.service.backend.AccountBackend
@@ -17,7 +18,12 @@ class MainViewModel @Inject constructor(
     var userData: User? = null
 
     init {
+        getUser()
+    }
+
+    fun getUser(userId: String = accountBackend.currentUserId) {
         viewModelScope.launch {
+            Log.d("SmilieDebug", "Current UserId: $userId")
             userData = userBackend.getById(accountBackend.currentUserId)
         }
     }

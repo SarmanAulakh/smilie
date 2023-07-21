@@ -1,18 +1,25 @@
 package com.example.smilie.model.service.backend
 
+import android.util.Log
 import android.widget.Toast
 import com.example.smilie.SmilieHiltApp
 import com.example.smilie.model.User
 import com.example.smilie.model.service.UserService
+import java.net.SocketTimeoutException
 
 class UserBackendImpl(
     private val application: SmilieHiltApp,
     private val userService: UserService,
 ): UserBackend {
     override suspend fun getById(id: String): User? {
+        Log.d("SmilieDebug", "getById: $id")
+        if (id == "") {
+            return null
+        }
+
         val user = userService.get(id)
 
-        if (user === null) {
+        if (user == null) {
             Toast.makeText(
                 application,
                 "User data not found",

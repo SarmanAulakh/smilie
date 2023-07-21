@@ -19,4 +19,8 @@ export function getUserDetails(req: Request, res: Response) {
     });
 }
 
-export function addUserDetails(req: Request, res: Response) {}
+export function addUserDetails(req: Request, res: Response) {
+  console.log("request body" + req.toString())
+
+  return res.status(200)
+}
