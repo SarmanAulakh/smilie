@@ -37,5 +37,10 @@
 | 2023/07/17 | 0                 | 0                | 4               | 0               | 0                | 0                | Implemented PieChart with specific formatting and location within the home page         |
 | 2023/07/18 | 0                 | 0                | 5               | 0               | 0                | 0                | Implemented BarGraph with graph toggle switch to toggle between two types of the graph, refomatted the home page with metric values ranging from 0 to 10 |
 | 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
+| 2023/07/18 | 0                 | 0                | 0               | 0               | 0                | 6                | Researching and Working out weighting Algorithm |
 | 2023/07/18 | 0                 | 3                | 0               | 0               | 0                | 0                | Font size changing
-| 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                | Refactored and reorganized files for hilt compatibility
+| 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                |
+ Refactored and reorganized files for hilt compatibility
+| 2023/07/19 | 0                 | 0                | 0               | 0               | 0                | 11                | Researching and Working out weighting Algorithm |
+| 2023/07/20 | 0                 | 0                | 0               | 0               | 0                | 5                | Finishing weightin algorithm and writing up document for it |
+| 2023/07/20 | 2                 | 2                | 2               | 2               | 2                | 2                | Working on D5 |
