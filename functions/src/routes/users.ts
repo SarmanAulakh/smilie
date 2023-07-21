@@ -20,7 +20,16 @@ export function getUserDetails(req: Request, res: Response) {
 }
 
 export function addUserDetails(req: Request, res: Response) {
-  console.log("request body" + req.toString())
+  let userId = req.params.userId;
+  console.log("request body" + JSON.stringify(req.body))
 
-  return res.status(200)
+  db.doc(`/users/${userId}`)
+    .update({ "bio": req.body["bio"] })
+    .then((doc) => {
+      return res.status(200).json({ success: true })
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ err });
+    })
 }

@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 });
 
 //user routes
-router.post("/user", CheckAuth, addUserDetails);
+router.put("/user/:userId", CheckAuth, addUserDetails);
 router.get("/user/:userId", getUserDetails);
 router.get("/user", (req, res) => {
   res.send("works");
