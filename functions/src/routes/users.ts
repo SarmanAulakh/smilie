@@ -20,10 +20,11 @@ export function getUserDetails(req: Request, res: Response) {
 }
 
 export function addUserDetails(req: Request, res: Response) {
+  // Documentation found here https://dev.to/lucidmach/the-20-firebase-that-ll-do-80-of-the-task-a-firestore-cheatsheet-304p
   let userId = req.params.userId;
   console.log("request body" + JSON.stringify(req.body))
 
-  db.doc(`/users/${userId}`)
+  db.collection("users").doc(userId)
     .update({ "bio": req.body["bio"] })
     .then((doc) => {
       return res.status(200).json({ success: true })
