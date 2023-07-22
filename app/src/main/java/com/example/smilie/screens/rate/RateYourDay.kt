@@ -24,105 +24,106 @@ fun RateYourDay(
     metrics: ArrayList<Metric>?,
     rateViewModel: RateYourDayViewModel = hiltViewModel()
 ) {
-    var metrics = mutableListOf<String>(
-        "Amount of Sleep",
-        "Quality of Sleep",
-        "Exercise",
-        "Productivity (School)",
-        "Time with Friends",
-        "Video Games",
-        "Food",
-        "Time spent on Assignments",
-        "Overall"
-    )
+//    var metrics = mutableListOf<String>(
+//        "Amount of Sleep",
+//        "Quality of Sleep",
+//        "Exercise",
+//        "Productivity (School)",
+//        "Time with Friends",
+//        "Video Games",
+//        "Food",
+//        "Time spent on Assignments",
+//        "Overall"
+//    )
 
     var sliders = mutableListOf<MutableState<Float>>()
-    metrics.indices.forEach {
-        sliders.add(remember { mutableStateOf(5F) })
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(modifier = Modifier.padding(10.dp)) {
-            Text(
-                text = "Rate Your Day",
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(10.dp)
-            )
-            Row(){
-                Button(
-                    onClick = { rateViewModel.onRemoveClick(openAndPopUp) },
-                    //modifier = Modifier.height(30.dp).width(100.dp)
-                ) {
-                    Text(
-                        text = "Remove"
-                    )
-                }
-                Spacer(Modifier.weight(1f))
-                Button(
-                    onClick = { rateViewModel.onAddClick(openAndPopUp) },
-                    //modifier = Modifier.height(30.dp).width(100.dp)
-                ) {
-                    Text(
-                        text = "Add"
-                    )
-                }
-            }
-
-            LazyColumn(modifier = Modifier.padding(10.dp)) {
-                for (i in metrics.indices) {
-                    item {
-                        Row() {
-                            Text(
-                                text = metrics[i],
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(Modifier.weight(1f))
-                            Text(
-                                text = sliders[i].value.toInt().toString(),
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize
-                            )
-                        }
-
-                        Slider(
-                            value = sliders[i].value,
-                            onValueChange = { sliders[i].value = it },
-                            valueRange = 0f..10f,
-                            steps = 9
-                        )
-
-                        Row() {
-                            Text(text = "Terrible")
-                            Spacer(Modifier.weight(1f))
-                            Text(text = "Amazing")
-                        }
-                    }
-                    item{Spacer(Modifier.height(20.dp))}
-                }
-                item{Spacer(Modifier.height(30.dp))}
-            }
+    if (metrics != null) {
+        metrics.indices.forEach {
+            sliders.add(remember { mutableStateOf(5F) })
         }
-        Column(
+
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(horizontal = 15.dp, vertical = 10.dp),
-            horizontalAlignment = Alignment.End
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Spacer(Modifier.weight(1f))
-            Button(onClick = {
-
-            }) {
+            Column(modifier = Modifier.padding(10.dp)) {
                 Text(
-                    text = "Submit"
+                    text = "Rate Your Day",
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(10.dp)
                 )
+                Row(){
+                    Button(
+                        onClick = { rateViewModel.onRemoveClick(openAndPopUp) },
+                        //modifier = Modifier.height(30.dp).width(100.dp)
+                    ) {
+                        Text(
+                            text = "Remove"
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    Button(
+                        onClick = { rateViewModel.onAddClick(openAndPopUp) },
+                        //modifier = Modifier.height(30.dp).width(100.dp)
+                    ) {
+                        Text(
+                            text = "Add"
+                        )
+                    }
+                }
+
+                LazyColumn(modifier = Modifier.padding(10.dp)) {
+                    for (i in metrics.indices) {
+                        item {
+                            Row() {
+                                Text(
+                                    text = metrics[i].name,
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(Modifier.weight(1f))
+                                Text(
+                                    text = sliders[i].value.toInt().toString(),
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                                )
+                            }
+
+                            Slider(
+                                value = sliders[i].value,
+                                onValueChange = { sliders[i].value = it },
+                                valueRange = 0f..10f,
+                                steps = 9
+                            )
+
+                            Row() {
+                                Text(text = "Terrible")
+                                Spacer(Modifier.weight(1f))
+                                Text(text = "Amazing")
+                            }
+                        }
+                        item{Spacer(Modifier.height(20.dp))}
+                    }
+                    item{Spacer(Modifier.height(30.dp))}
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(horizontal = 15.dp, vertical = 10.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Spacer(Modifier.weight(1f))
+                Button(onClick = {
+
+                }) {
+                    Text(
+                        text = "Submit"
+                    )
+                }
             }
         }
     }
-
 }

@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 
 export function getUserDetails(req: Request, res: Response) {
   let userId = req.params.userId;
-  console.log("request body" + JSON.stringify(req))
 
   db.doc(`/users/${userId}`)
     .get()
@@ -39,10 +38,14 @@ export function addUserDetails(req: Request, res: Response) {
 export function getUserMetrics(req: Request, res: Response) {
   let userId = req.params.userId;
 
-  db.doc(`/users/${userId}`)
+  db.collection(`users`)
+    .doc(userId)
     .collection(`metrics`)
     .get()
     .then((doc) => {
+      console.log("metric doc:"+JSON.stringify(doc))
+      console.log("metric docs:"+JSON.stringify(doc.size))
+
       let data:Metric[] = new Array(doc.size);
       for(var i in doc.docs) {
         data[i].id = doc.docs[i].id;
@@ -50,8 +53,8 @@ export function getUserMetrics(req: Request, res: Response) {
         data[i].public = doc.docs[i].data().public;
         data[i].active = doc.docs[i].data().active;
       }
-      
-      return res.status(200).json({ data });
+      console.log("metric data:"+JSON.stringify(data))
+      return res.status(200).json(data);
     })
     .catch((err) => {
       console.error(err);
