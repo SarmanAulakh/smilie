@@ -22,7 +22,7 @@ class MainViewModel @Inject constructor(
     private val auth: FirebaseAuth
     ) : SmilieViewModel() {
 
-    var userData: User? = null
+    var userData: MutableState<User?> = mutableStateOf(null)
     var userIdToken: MutableState<String?> = mutableStateOf(null)
 
     init {
@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
     fun getUser(userId: String = accountBackend.currentUserId) {
         viewModelScope.launch {
             Log.d("SmilieDebug", "Current UserId: $userId")
-            userData = userBackend.getById(accountBackend.currentUserId)
+            userData.value = userBackend.getById(accountBackend.currentUserId)
         }
     }
 
