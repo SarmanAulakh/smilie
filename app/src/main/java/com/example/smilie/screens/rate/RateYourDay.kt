@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smilie.screens.settings.SignUpViewModel
+import com.example.smilie.model.Metric
 
 @Composable
 fun RateYourDay(
     openAndPopUp: (String) -> Unit,
+    metrics: ArrayList<Metric>?,
     rateViewModel: RateYourDayViewModel = hiltViewModel()
 ) {
     var metrics = mutableListOf<String>(

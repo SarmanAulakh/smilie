@@ -16,6 +16,7 @@
         "metricId1": {
           "name": "string",
           "public": "boolean",
+          "active": "boolean",
           // sorted, new items appended to back
           "values": [
             {
@@ -33,6 +34,7 @@
         "metricId2": {
           "name": "string",
           "public": "boolean",
+          "active": "boolean",
           "values": [
             {
               "value": "number",
@@ -73,6 +75,7 @@
         "metricId1": {
           "name": "string",
           "public": "boolean",
+          "active": "boolean",
           // sorted, new items appended to back
           "values": [
             {
@@ -90,6 +93,7 @@
         "metricId2": {
           "name": "string",
           "public": "boolean",
+          "active": "boolean",
           "values": [
             {
               "value": "number",

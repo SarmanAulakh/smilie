@@ -5,6 +5,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.User
+import com.example.smilie.model.Metric
+import com.example.smilie.model.service.backend.MetricBackend
 import com.example.smilie.model.service.backend.AccountBackend
 import com.example.smilie.model.service.backend.UserBackend
 import com.google.android.gms.tasks.OnCompleteListener
@@ -19,21 +21,24 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val accountBackend: AccountBackend,
     private val userBackend: UserBackend,
+    private val metricBackend: MetricBackend,
     private val auth: FirebaseAuth
     ) : SmilieViewModel() {
 
-    var userData: User? = null
+    var userData: MutableState<User?> = mutableStateOf(null)
     var userIdToken: MutableState<String?> = mutableStateOf(null)
+    var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
 
     init {
         getUser()
         getUserIdToken()
+        getMetrics()
     }
 
     fun getUser(userId: String = accountBackend.currentUserId) {
         viewModelScope.launch {
             Log.d("SmilieDebug", "Current UserId: $userId")
-            userData = userBackend.getById(accountBackend.currentUserId)
+            userData.value = userBackend.getById(accountBackend.currentUserId)
         }
     }
 
@@ -53,6 +58,13 @@ class MainViewModel @Inject constructor(
             } else {
                 userIdToken.value = null
             }
+        }
+    }
+
+    fun getMetrics(userId: String = accountBackend.currentUserId) {
+        viewModelScope.launch {
+            Log.d("SmilieDebug", "Current UserId: $userId")
+            metricData.value = metricBackend.getMetricsById(accountBackend.currentUserId)
         }
     }
 }

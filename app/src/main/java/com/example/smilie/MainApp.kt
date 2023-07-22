@@ -90,7 +90,7 @@ fun MainApp(
             ) {
                 composable(route = Home.route) {
                     showBottomNav = true
-                    var userData = viewModel.userData
+                    var userData = viewModel.userData.value
                     HomeScreen(user=userData)
                 }
                 composable(
@@ -98,7 +98,7 @@ fun MainApp(
                     arguments = listOf(
                         navArgument("userId") {
                             type = NavType.StringType
-                            defaultValue = viewModel.userData?.id
+                            defaultValue = viewModel.userData.value?.id
                             nullable = true
                         }
                     )
@@ -121,14 +121,14 @@ fun MainApp(
                     showBottomNav = false
                     LoginScreen(openAndPopUp = {
                         navController.navigateSingleTopTo(it)
-                        viewModel.userData
+                        viewModel.userData.value
                     })
                 }
                 composable(SIGN_UP_SCREEN) {
                     showBottomNav = false
                     SignUpScreen(openAndPopUp = {
                         route -> navController.navigateSingleTopTo(route)
-                        viewModel.userData
+                        viewModel.userData.value
                     })
                 }
                 composable(USER_REGISTER_SCREEN) {
@@ -139,8 +139,10 @@ fun MainApp(
                 }
                 composable(route = RateYourDay.route) {
                     showBottomNav = true
+                    var metricData = viewModel.metricData.value
                     RateYourDay(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData
                     )
                 }
                 composable(REMOVE_METRICS_SCREEN) {
