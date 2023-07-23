@@ -11,9 +11,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Send
@@ -42,7 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val openaiToken = "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"
+const val openaiToken = ""
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
@@ -50,9 +51,10 @@ fun ChatScreen(
     openAndPopUp: (String) -> Unit,
     settingViewModel: SignUpViewModel = hiltViewModel()
 ) {
-    // ChatGPT
-    var editText = remember { mutableStateOf("") }
-    var messageList: MutableList<Message> = remember { mutableStateListOf() }
+    val editText = remember { mutableStateOf("") }
+    val messageList: MutableList<Message> = remember { mutableStateListOf() }
+
+    val lazyListState = rememberLazyListState()
 
     Box(
         modifier = Modifier
@@ -75,6 +77,7 @@ fun ChatScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f),
+                state = lazyListState,
                 contentPadding = PaddingValues(16.dp)
             ) {
                 itemsIndexed(messageList) { _, message ->
@@ -90,7 +93,12 @@ fun ChatScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ){
                 EditTextField(editText)
-                IconButton(onClick = { sendMessage(messageList, editText) }) {
+                IconButton(onClick = {
+                    sendMessage(messageList, editText, lazyListState)
+//                    LaunchedEffect(messageList.size) {
+//                        lazyListState.scrollToItem(messageList.size - 1)
+//                    }
+                }) {
                     Icon(imageVector = Icons.Rounded.Send, contentDescription = "")
                 }
             }
@@ -98,9 +106,9 @@ fun ChatScreen(
     }
 }
 
-fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>) {
+fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>, lazyListState: LazyListState) {
     if (editText.value.isNotEmpty()) {
-        var userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
+        val userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
         messageList.add(userMessage)
         editText.value = ""
 
@@ -115,15 +123,16 @@ fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String
                 maxTokens = 250,
                 echo = false
             )
-            Log.d("ChatGPT", "${completionRequest.prompt}")
+//            Log.d("ChatGPT", "${completionRequest.prompt}")
             val completion = openai.completion(completionRequest)
-            Log.d("OpenAI", completion.choices[0].text)
+//            Log.d("OpenAI", completion.choices[0].text)
             // Removes the typing... message
             if (messageList.size > 0) {
                 messageList.removeLast()
             }
             chatbotMessage = Message(completion.choices[0].text.trim(), Message.SENT_BY_BOT)
             messageList.add(chatbotMessage)
+            lazyListState.scrollToItem(messageList.size - 1)
         }
     }
 }
@@ -136,6 +145,9 @@ fun EditTextField(editText: MutableState<String>) {
             .fillMaxWidth(0.9f),
         value = editText.value,
         onValueChange = { editText.value = it },
+//        label = { Text(text = "Ask") },
+        placeholder = { Text(text = "Ask questions about metrics") },
+        singleLine = false
     )
 }
 
