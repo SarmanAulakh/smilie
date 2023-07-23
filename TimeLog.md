@@ -39,10 +39,11 @@
 | 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
 | 2023/07/18 | 0                 | 0                | 0               | 0               | 0                | 6                | Researching and Working out weighting Algorithm |
 | 2023/07/18 | 0                 | 3                | 0               | 0               | 0                | 0                | Font size changing
-| 2023/07/19 | 0                 | 0                | 0               | 0               | 0                | 11                | Researching and Working out weighting Algorithm |
+| 2023/07/19 | 0                 | 0                | 0               | 0               | 0                | 11               | Researching and Working out weighting Algorithm |
 | 2023/07/20 | 0                 | 0                | 0               | 0               | 0                | 5                | Finishing weightin algorithm and writing up document for it |
 | 2023/07/20 | 2                 | 2                | 2               | 2               | 2                | 2                | Working on D5 |
 | 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                | Refactored and reorganized files for hilt compatibility
-| 2023/07/21 | 0                 | 0                | 0               | 0               | 8               | 0                | Fixed navigation bug and started backend server user creation
-| 2023/07/21 | 0                 | 0                | 0               | 0               | 2               | 0                | Added user updating and user id token retrieval
-| 2023/07/21 | 0                 | 0                | 3               | 0               | 0               | 0                | Fixed Homescreen not loading issue and fixed UI for recommended metrics and helpful links
+| 2023/07/19 | 0                 | 6                | 0               | 0               | 0                | 0                | Chat functionality to get advice on how to improve metrics
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 8                | 0                | Fixed navigation bug and started backend server user creation
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 2                |  0                | Added user updating and user id token retrieval
+| 2023/07/21 | 0                 | 0                | 3               | 0               | 0                | 0                | Fixed Homescreen not loading issue and fixed UI for recommended metrics and helpful links
