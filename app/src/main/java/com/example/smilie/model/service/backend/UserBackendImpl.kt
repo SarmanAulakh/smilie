@@ -24,14 +24,7 @@ class UserBackendImpl(
             ).show()
         }
 
-//        Toast.makeText(
-//            application,
-//            "Failed to get user data",
-//            Toast.LENGTH_SHORT
-//        ).show()
-
         return user
-//        return null
     }
 
 

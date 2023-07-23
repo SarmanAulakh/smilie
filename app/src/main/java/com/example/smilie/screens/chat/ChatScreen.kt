@@ -95,9 +95,6 @@ fun ChatScreen(
                 EditTextField(editText)
                 IconButton(onClick = {
                     sendMessage(messageList, editText, lazyListState)
-//                    LaunchedEffect(messageList.size) {
-//                        lazyListState.scrollToItem(messageList.size - 1)
-//                    }
                 }) {
                     Icon(imageVector = Icons.Rounded.Send, contentDescription = "")
                 }
@@ -123,9 +120,7 @@ fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String
                 maxTokens = 250,
                 echo = false
             )
-//            Log.d("ChatGPT", "${completionRequest.prompt}")
             val completion = openai.completion(completionRequest)
-//            Log.d("OpenAI", completion.choices[0].text)
             // Removes the typing... message
             if (messageList.size > 0) {
                 messageList.removeLast()
@@ -145,7 +140,6 @@ fun EditTextField(editText: MutableState<String>) {
             .fillMaxWidth(0.9f),
         value = editText.value,
         onValueChange = { editText.value = it },
-//        label = { Text(text = "Ask") },
         placeholder = { Text(text = "Ask questions about metrics") },
         singleLine = false
     )
