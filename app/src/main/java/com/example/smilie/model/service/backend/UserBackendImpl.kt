@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.example.smilie.SmilieHiltApp
 import com.example.smilie.model.User
 import com.example.smilie.model.service.UserService
+import java.net.SocketTimeoutException
 
 class UserBackendImpl(
     private val application: SmilieHiltApp,
@@ -16,7 +17,7 @@ class UserBackendImpl(
         }
         val user = userService.get(id)
 
-        if (user === null) {
+        if (user == null) {
             Toast.makeText(
                 application,
                 "User data not found",
