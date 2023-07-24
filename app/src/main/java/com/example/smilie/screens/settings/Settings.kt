@@ -81,7 +81,10 @@ fun SettingsScreen(
                     settingViewModel.saveMetrics(openAndPopUp, metrics)
                 }
             }) {
-                Text("Save Metric Settings")
+                Text(
+                    text = "Save Metric Privacy Settings",
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                )
             }
         }
     }
@@ -107,10 +110,10 @@ fun MetricPrivacy(metrics: ArrayList<Metric>?, privacySettings: MutableList<Muta
                     ) {
                         Text(text = metric.name)
                         Switch(
-                            checked = privacySettings[index].value,
+                            checked = !privacySettings[index].value,
                             onCheckedChange = {
-                                privacySettings[index].value = it
-                                metrics[index].public = it
+                                privacySettings[index].value = !it
+                                metrics[index].public = !it
                             }
                         )
                     }

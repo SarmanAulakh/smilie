@@ -56,4 +56,4 @@
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 | 2023/07/23 | 0                 | 4                | 0               | 0               | 0               | 0                | Refactored the settingsManager and pulled past conversation data for the chat recommendation feature.
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
-
+| 2023/07/24 | 0                 | 3                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase
