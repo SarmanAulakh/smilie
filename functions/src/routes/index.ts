@@ -1,6 +1,6 @@
 import * as express from "express";
 import CheckAuth from "../middleware/CheckAuth";
-import { addUserDetails, getUserDetails } from "./users";
+import { addUserDetails, getUserDetails ,getUserMetrics, updateUserMetrics, addMetricEntry } from "./users";
 
 const router = express.Router();
 
@@ -9,9 +9,12 @@ router.get("/", (req, res) => {
 });
 
 //user routes
-router.put("/user/:userId", CheckAuth, addUserDetails);
-router.get("/user/:userId", getUserDetails);
-router.get("/user", (req, res) => {
+router.put("/users/:userId", CheckAuth, addUserDetails);
+router.get("/users/:userId", getUserDetails);
+router.get("/users/:userId/metrics", getUserMetrics);
+router.put("/users/:userId/metrics", updateUserMetrics);
+router.put("/users/:userId/metrics/:metricId", addMetricEntry);
+router.get("/users", (req, res) => {
   res.send("works");
 });
 

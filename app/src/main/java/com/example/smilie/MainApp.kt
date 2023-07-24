@@ -3,6 +3,7 @@ package com.example.smilie
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -147,20 +148,29 @@ fun MainApp(
                 }
                 composable(route = RateYourDay.route) {
                     showBottomNav = true
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     RateYourDay(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData
                     )
                 }
                 composable(REMOVE_METRICS_SCREEN) {
                     showBottomNav = false
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     RemoveMetrics(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData
                     )
                 }
                 composable(ADD_METRICS_SCREEN) {
                     showBottomNav = false
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     AddMetrics(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData
                     )
                 }
             }
