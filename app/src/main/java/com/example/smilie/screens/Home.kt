@@ -79,98 +79,98 @@ fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
                     ) {
                         item { Home(userName, 7.8f) }
 
-                        val helpfulLinks = listOf(
-                            "betterhelp.org",
-                            "LeagueofLeg.com"
-                        )
-                        val metricText = listOf(
-                            "sleep",
-                            "time spent with friends",
-                            "productivity",
-                        )
-
-                        item { FoldableCards(input= metricText, title = "Recommended Metrics") }
-                        item { FoldableCards(input = helpfulLinks, title = "Helpful Links") }
-
-                        val metricData = listOf(
-                            Metric("Amount of Sleep", 8f),
-                            Metric("Quality of Sleep", 3f),
-                            Metric("Time spent with Friends", 6f),
-                            Metric("Productivity", 4f),
-                            Metric("Exercise", 7f),
-                            Metric("Entertainment", 9f),
-                            Metric("Time spent Studying", 2f),
-                        )
-
-                        item { Title("$userName's Data") }
-
-                        items(metricData) { metric ->
-                            Box(
-                                modifier = Modifier.padding(start = 0.dp)
-                            ) {
-                                Column {
-                                    Text(
-                                        text = metric.name,
-                                        style = TextStyle(
-                                            fontSize = 28.sp,
-                                            fontWeight = FontWeight.Bold
-                                        ),
-                                        modifier = Modifier.padding(8.dp)
-                                    )
-                                    Rectangle(metric.value)
-                                }
-                            }
-                        }
-
-
-                        item {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Switch(
-                                    checked = barToggle,
-                                    onCheckedChange = {
-                                        barToggle = it
-                                    }
-                                )
-                                Text(
-                                    text = "Toggle Graph Type",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    modifier = Modifier.padding(20.dp)
-                                )
-                            }
-                        }
-
-                        if (barToggle) {
-                            item {
-                                PieChart(
-                                    modifier = Modifier
-                                        .size(400.dp),
-                                    input = metricData
-                                )
-                            }
-                        } else {
-                            item {
-                                BarGraph(
-                                    modifier = Modifier
-                                        .size(500.dp),
-                                    input = metricData
-                                )
-                            }
-                        }
-
-                        // Buffer to show things hidden from the task bar
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .size(30.dp)
-                            ) {
-                            }
-                        }
+//                        val helpfulLinks = listOf(
+//                            "betterhelp.org",
+//                            "LeagueofLeg.com"
+//                        )
+//                        val metricText = listOf(
+//                            "sleep",
+//                            "time spent with friends",
+//                            "productivity",
+//                        )
+//
+//                        item { FoldableCards(input= metricText, title = "Recommended Metrics") }
+//                        item { FoldableCards(input = helpfulLinks, title = "Helpful Links") }
+//
+//                        val metricData = listOf(
+//                            Metric("Amount of Sleep", 8f),
+//                            Metric("Quality of Sleep", 3f),
+//                            Metric("Time spent with Friends", 6f),
+//                            Metric("Productivity", 4f),
+//                            Metric("Exercise", 7f),
+//                            Metric("Entertainment", 9f),
+//                            Metric("Time spent Studying", 2f),
+//                        )
+//
+//                        item { Title("$userName's Data") }
+//
+//                        items(metricData) { metric ->
+//                            Box(
+//                                modifier = Modifier.padding(start = 0.dp)
+//                            ) {
+//                                Column {
+//                                    Text(
+//                                        text = metric.name,
+//                                        style = TextStyle(
+//                                            fontSize = 28.sp,
+//                                            fontWeight = FontWeight.Bold
+//                                        ),
+//                                        modifier = Modifier.padding(8.dp)
+//                                    )
+//                                    Rectangle(metric.value)
+//                                }
+//                            }
+//                        }
+//
+//
+//                        item {
+//                            Row(
+//                                horizontalArrangement = Arrangement.Center,
+//                                verticalAlignment = Alignment.CenterVertically
+//                            ) {
+//                                Switch(
+//                                    checked = barToggle,
+//                                    onCheckedChange = {
+//                                        barToggle = it
+//                                    }
+//                                )
+//                                Text(
+//                                    text = "Toggle Graph Type",
+//                                    style = TextStyle(
+//                                        fontSize = 24.sp,
+//                                        fontWeight = FontWeight.Bold
+//                                    ),
+//                                    modifier = Modifier.padding(20.dp)
+//                                )
+//                            }
+//                        }
+//
+//                        if (barToggle) {
+//                            item {
+//                                PieChart(
+//                                    modifier = Modifier
+//                                        .size(400.dp),
+//                                    input = metricData
+//                                )
+//                            }
+//                        } else {
+//                            item {
+//                                BarGraph(
+//                                    modifier = Modifier
+//                                        .size(500.dp),
+//                                    input = metricData
+//                                )
+//                            }
+//                        }
+//
+//                        // Buffer to show things hidden from the task bar
+//                        item {
+//                            Box(
+//                                modifier = Modifier
+//                                    .size(30.dp)
+//                            ) {
+//                            }
+//                        }
                     }
                 }
             }
@@ -504,7 +504,7 @@ fun Bar(
                     barWidth/5f,
                     height + 55f,
                     android.graphics.Paint().apply {
-                        color = primaryColor.toArgb()
+//                        color = primaryColor.toArgb()
                         textSize = 14.dp.toPx()
                         isFakeBoldText = true
                     }
@@ -517,7 +517,7 @@ fun Bar(
                     0f,
                     5f,
                     android.graphics.Paint().apply {
-                        color = primaryColor.toArgb()
+//                        color = primaryColor.toArgb()
                         textSize = 14.dp.toPx()
                         isFakeBoldText = true
                     }
