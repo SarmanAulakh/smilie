@@ -9,17 +9,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.core.view.WindowCompat
-import com.example.smilie.screens.settings.DarkModeManager
-import com.example.smilie.screens.settings.FontSizeManager
+import com.example.smilie.screens.settings.SettingsManager
 
 @Composable
 fun SMILIETheme(
-    darkModeManager: DarkModeManager = DarkModeManager(true),
-    fontSizeManager: FontSizeManager = FontSizeManager(2f),
+    settingsManager: SettingsManager = SettingsManager(true, 2f),
     content: @Composable () -> Unit
 ) {
     val colorPalette = when {
-        darkModeManager.isDark.value -> DarkThemeColors
+        settingsManager.isDark.value -> DarkThemeColors
         else -> LightThemeColors
     }
 
@@ -29,7 +27,7 @@ fun SMILIETheme(
     val typography3 = ResizeableTypography(2)
     val typography4 = ResizeableTypography(4)
 
-    val typography = when (fontSizeManager.fontSizeSlider.value) {
+    val typography = when (settingsManager.fontSizeSlider.value) {
         0f -> typography0.typography
         1f -> typography1.typography
         2f -> typography2.typography
@@ -42,7 +40,7 @@ fun SMILIETheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorPalette.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkModeManager.isDark.value
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = settingsManager.isDark.value
         }
     }
 
