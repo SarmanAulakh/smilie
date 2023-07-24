@@ -123,7 +123,7 @@ fun RateYourDay(
                 ) {
                     Spacer(Modifier.weight(1f))
                     Button(onClick = {
-                        rateViewModel.onSubmit(openAndPopUp, metrics, sliders)
+                        rateViewModel.onSubmit(openAndPopUp, metricsToRate, sliders)
                     }) {
                         Text(
                             text = "Submit"

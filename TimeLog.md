@@ -46,4 +46,4 @@
 | 2023/07/21 | 0                 | 0                | 0               | 12               | 5               | 0                | Continued backend for metric data, including backend calls from the Rate page
 | 2023/07/22 | 0                 | 0                | 0               | 6               | 0               | 0                | Completed backend for metric data
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
-
+| 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.

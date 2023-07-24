@@ -17,6 +17,7 @@ import com.example.smilie.ui.navigation.RateYourDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.example.smilie.model.service.backend.MetricBackend
+import com.example.smilie.ui.navigation.Home
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
@@ -66,6 +67,9 @@ class RateYourDayViewModel @Inject constructor(
                     Log.d("SmilieDebug", "Submitted successfully")
                 }
             }
+        }
+        launchCatching {
+            openAndPopUp(Home.route)
         }
     }
 }
