@@ -37,13 +37,21 @@
 | 2023/07/17 | 0                 | 0                | 4               | 0               | 0                | 0                | Implemented PieChart with specific formatting and location within the home page         |
 | 2023/07/18 | 0                 | 0                | 5               | 0               | 0                | 0                | Implemented BarGraph with graph toggle switch to toggle between two types of the graph, refomatted the home page with metric values ranging from 0 to 10 |
 | 2023/07/18 | 1                 | 1                | 1               | 1               | 1                | 1                | Quick Update Meeting |
+| 2023/07/18 | 0                 | 0                | 0               | 0               | 0                | 6                | Researching and Working out weighting Algorithm |
 | 2023/07/18 | 0                 | 3                | 0               | 0               | 0                | 0                | Font size changing
+| 2023/07/19 | 0                 | 0                | 0               | 0               | 0                | 11               | Researching and Working out weighting Algorithm |
+| 2023/07/20 | 0                 | 0                | 0               | 0               | 0                | 5                | Finishing weightin algorithm and writing up document for it |
+| 2023/07/20 | 2                 | 2                | 2               | 2               | 2                | 2                | Working on D5 |
 | 2023/07/19 | 0                 | 0                | 0               | 0               | 14               | 0                | Refactored and reorganized files for hilt compatibility
+| 2023/07/19 | 0                 | 6                | 0               | 0               | 0                | 0                | Chat functionality to get advice on how to improve metrics
 | 2023/07/20 | 0                 | 0                | 0               | 7               | 0               | 0                | Updated database schema, began working on backend of metric data
 | 2023/07/20 | 2                 | 2                | 2               | 2               | 2               | 2                | Worked on D5
+| 2023/07/21 | 0                 | 0                | 0               | 12               | 5               | 0                | Continued backend for metric data, including backend calls from the Rate page
 | 2023/07/21 | 0                 | 0                | 0               | 0               | 8               | 0                | Fixed navigation bug and started backend server user creation
 | 2023/07/21 | 0                 | 0                | 0               | 0               | 2               | 0                | Added user updating and user id token retrieval
-| 2023/07/21 | 0                 | 0                | 0               | 12               | 5               | 0                | Continued backend for metric data, including backend calls from the Rate page
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 8                | 0                | Fixed navigation bug and started backend server user creation
+| 2023/07/21 | 0                 | 0                | 0               | 0               | 2                |  0                | Added user updating and user id token retrieval
+| 2023/07/21 | 0                 | 0                | 3               | 0               | 0                | 0                | Fixed Homescreen not loading issue and fixed UI for recommended metrics and helpful links
 | 2023/07/22 | 0                 | 0                | 0               | 6               | 0               | 0                | Completed backend for metric data
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
