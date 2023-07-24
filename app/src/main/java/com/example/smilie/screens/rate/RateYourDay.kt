@@ -16,112 +16,121 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smilie.screens.settings.SignUpViewModel
+import com.example.smilie.model.Metric
+import java.time.Instant
 
 @Composable
 fun RateYourDay(
     openAndPopUp: (String) -> Unit,
+    metrics: ArrayList<Metric>?,
     rateViewModel: RateYourDayViewModel = hiltViewModel()
 ) {
-    var metrics = mutableListOf<String>(
-        "Amount of Sleep",
-        "Quality of Sleep",
-        "Exercise",
-        "Productivity (School)",
-        "Time with Friends",
-        "Video Games",
-        "Food",
-        "Time spent on Assignments",
-        "Overall"
-    )
 
     var sliders = mutableListOf<MutableState<Float>>()
-    metrics.indices.forEach {
-        sliders.add(remember { mutableStateOf(5F) })
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(modifier = Modifier.padding(10.dp)) {
-            Text(
-                text = "Rate Your Day",
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(10.dp)
-            )
-            Row(){
-                Button(
-                    onClick = { rateViewModel.onRemoveClick(openAndPopUp) },
-                    //modifier = Modifier.height(30.dp).width(100.dp)
-                ) {
-                    Text(
-                        text = "Remove"
-                    )
-                }
-                Spacer(Modifier.weight(1f))
-                Button(
-                    onClick = { rateViewModel.onAddClick(openAndPopUp) },
-                    //modifier = Modifier.height(30.dp).width(100.dp)
-                ) {
-                    Text(
-                        text = "Add"
-                    )
-                }
+    var metricsToRate = ArrayList<Metric>()
+    if (metrics != null) {
+        metrics.forEach {
+            if(it.active) {
+                sliders.add(remember { mutableStateOf(5F) })
+                metricsToRate.add(it)
             }
+        }
 
-            LazyColumn(modifier = Modifier.padding(10.dp)) {
-                for (i in metrics.indices) {
-                    item {
-                        Row() {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            if(metricsToRate.isNotEmpty() &&
+                metricsToRate[0].values.isNotEmpty() &&
+                metricsToRate[0].values.last().date.split('T')[0] == Instant.now().toString().split('T')[0]) {
+
+                Text(
+                    text = "You've already rated today. Come back tomorrow and rate again!",
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(10.dp)
+                )
+            } else {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Text(
+                        text = "Rate Your Day",
+                        fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                    Row(){
+                        Button(
+                            onClick = { rateViewModel.onRemoveClick(openAndPopUp) },
+                            //modifier = Modifier.height(30.dp).width(100.dp)
+                        ) {
                             Text(
-                                text = metrics[i],
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(Modifier.weight(1f))
-                            Text(
-                                text = sliders[i].value.toInt().toString(),
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                                text = "Remove"
                             )
                         }
-
-                        Slider(
-                            value = sliders[i].value,
-                            onValueChange = { sliders[i].value = it },
-                            valueRange = 0f..10f,
-                            steps = 9
-                        )
-
-                        Row() {
-                            Text(text = "Terrible")
-                            Spacer(Modifier.weight(1f))
-                            Text(text = "Amazing")
+                        Spacer(Modifier.weight(1f))
+                        Button(
+                            onClick = { rateViewModel.onAddClick(openAndPopUp) },
+                            //modifier = Modifier.height(30.dp).width(100.dp)
+                        ) {
+                            Text(
+                                text = "Add"
+                            )
                         }
                     }
-                    item{Spacer(Modifier.height(20.dp))}
-                }
-                item{Spacer(Modifier.height(30.dp))}
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(horizontal = 15.dp, vertical = 10.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            Spacer(Modifier.weight(1f))
-            Button(onClick = {
 
-            }) {
-                Text(
-                    text = "Submit"
-                )
+                    LazyColumn(modifier = Modifier.padding(10.dp)) {
+                        for (i in metricsToRate.indices) {
+                            item {
+
+                                Row() {
+                                    Text(
+                                        text = metricsToRate[i].name,
+                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Spacer(Modifier.weight(1f))
+                                    Text(
+                                        text = sliders[i].value.toInt().toString(),
+                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                                    )
+                                }
+
+                                Slider(
+                                    value = sliders[i].value,
+                                    onValueChange = { sliders[i].value = it },
+                                    valueRange = 0f..10f,
+                                    steps = 9
+                                )
+
+                                Row() {
+                                    Text(text = "Terrible")
+                                    Spacer(Modifier.weight(1f))
+                                    Text(text = "Amazing")
+                                }
+                            }
+                            item{Spacer(Modifier.height(20.dp))}
+                        }
+                        item{Spacer(Modifier.height(30.dp))}
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(horizontal = 15.dp, vertical = 10.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Spacer(Modifier.weight(1f))
+                    Button(onClick = {
+                        rateViewModel.onSubmit(openAndPopUp, metricsToRate, sliders)
+                    }) {
+                        Text(
+                            text = "Submit"
+                        )
+                    }
+                }
             }
         }
     }
-
 }

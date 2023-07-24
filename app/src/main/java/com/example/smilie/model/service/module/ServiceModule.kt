@@ -3,9 +3,12 @@ package com.example.smilie.model.service.module
 
 import android.content.Context
 import com.example.smilie.SmilieHiltApp
+import com.example.smilie.model.service.MetricService
 import com.example.smilie.model.service.UserService
 import com.example.smilie.model.service.backend.AccountBackend
 import com.example.smilie.model.service.backend.AccountBackendImpl
+import com.example.smilie.model.service.backend.MetricBackend
+import com.example.smilie.model.service.backend.MetricBackendImpl
 import com.example.smilie.model.service.backend.UserBackend
 import com.example.smilie.model.service.backend.UserBackendImpl
 import com.google.firebase.auth.FirebaseAuth
@@ -44,9 +47,21 @@ object ServiceModule {
     fun provideUserBackend(application: SmilieHiltApp, userService: UserService): UserBackend {
         return UserBackendImpl(application, userService)
     }
+
+    @Singleton
+    @Provides
+    fun provideMetricBackend(application: SmilieHiltApp, metricService: MetricService): MetricBackend {
+        return MetricBackendImpl(application, metricService)
+    }
     @Singleton
     @Provides
     fun provideUserService(): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMetricService(): MetricService {
+        return retrofit.create(MetricService::class.java)
     }
 }
