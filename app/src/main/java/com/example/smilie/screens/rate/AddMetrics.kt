@@ -54,6 +54,12 @@ fun AddMetrics(
                 add.add(remember { mutableStateOf(false) })
             }
         }
+        metrics.forEach {
+            if(!allMetrics.metrics.contains(it.name) && !it.active) {
+                metricsToAdd.add(it)
+                add.add(remember { mutableStateOf(false) })
+            }
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -73,24 +79,22 @@ fun AddMetrics(
 
                     for (i in metricsToAdd.indices) {
                         item {
-                            if (metricsToAdd[i].name != "Overall") {
-                                Row() {
-                                    Text(
-                                        text = metricsToAdd[i].name,
-                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Spacer(Modifier.weight(1f))
-                                }
+                            Row() {
+                                Text(
+                                    text = metricsToAdd[i].name,
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(Modifier.weight(1f))
+                            }
 
-                                Row() {
-                                    Text(text = "Add")
-                                    Spacer(Modifier.weight(1f))
-                                    Switch(
-                                        checked = add[i].value,
-                                        onCheckedChange = {add[i].value = it}
-                                    )
-                                }
+                            Row() {
+                                Text(text = "Add")
+                                Spacer(Modifier.weight(1f))
+                                Switch(
+                                    checked = add[i].value,
+                                    onCheckedChange = {add[i].value = it}
+                                )
                             }
                         }
                         item{Spacer(Modifier.height(20.dp))}
@@ -105,13 +109,30 @@ fun AddMetrics(
                     .padding(horizontal = 15.dp, vertical = 10.dp),
                 horizontalAlignment = Alignment.End
             ) {
-                Spacer(Modifier.weight(1f))
                 Button(onClick = {
-                    rateViewModel.onEditComplete(openAndPopUp, metricsToAdd, add)
+                    rateViewModel.onCustomClick(openAndPopUp)
                 }) {
                     Text(
-                        text = "Done"
+                        text = "Custom"
                     )
+                }
+                Spacer(Modifier.weight(1f))
+                Row() {
+                    Button(onClick = {
+                        rateViewModel.onCancelClick(openAndPopUp, false)
+                    }) {
+                        Text(
+                            text = "Cancel"
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    Button(onClick = {
+                        rateViewModel.onEditComplete(openAndPopUp, metricsToAdd, add)
+                    }) {
+                        Text(
+                            text = "Done"
+                        )
+                    }
                 }
             }
         }
