@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.smilie.screens.HomeScreen
 import com.example.smilie.model.view.MainViewModel
+import com.example.smilie.screens.chat.ChatScreen
 import com.example.smilie.model.view.ProfileViewModel
 import com.example.smilie.screens.rate.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
@@ -37,6 +38,7 @@ import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.screens.sign_up.UserRegisterScreen
 import com.example.smilie.ui.navigation.ADD_METRICS_SCREEN
 import com.example.smilie.ui.navigation.BottomNavBar
+import com.example.smilie.ui.navigation.ChatResources
 import com.example.smilie.ui.navigation.Home
 import com.example.smilie.ui.navigation.LOGIN_SCREEN
 import com.example.smilie.ui.navigation.Profile
@@ -116,6 +118,12 @@ fun MainApp(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                         darkModeManager = darkModeManager,
                         fontSizeManager = fontSizeManager,
+                    )
+                }
+                composable(route = ChatResources.route) {
+                    showBottomNav = true
+                    ChatScreen(
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                     )
                 }
                 composable(LOGIN_SCREEN) {

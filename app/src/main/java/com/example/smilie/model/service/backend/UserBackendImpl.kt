@@ -12,11 +12,9 @@ class UserBackendImpl(
     private val userService: UserService,
 ): UserBackend {
     override suspend fun getById(id: String): User? {
-        Log.d("SmilieDebug", "getById: $id")
         if (id == "") {
             return null
         }
-
         val user = userService.get(id)
 
         if (user == null) {
@@ -27,14 +25,9 @@ class UserBackendImpl(
             ).show()
         }
 
-//        Toast.makeText(
-//            application,
-//            "Failed to get user data",
-//            Toast.LENGTH_SHORT
-//        ).show()
-
         return user
     }
+
 
     override suspend fun getByIds(ids: List<String>): List<User> {
         var users = ArrayList<User>()
