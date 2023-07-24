@@ -9,12 +9,12 @@ router.get("/", (req, res) => {
 });
 
 //user routes
-router.put("/user/:userId", CheckAuth, addUserDetails);
-router.get("/user/:userId", getUserDetails);
-router.get("/user/:userId/metrics", getUserMetrics);
-router.put("/user/:userId/metrics", updateUserMetrics);
-router.put("/user/:userId/metrics/:metricId/values", addMetricEntry);
-router.get("/user", (req, res) => {
+router.put("/users/:userId", CheckAuth, addUserDetails);
+router.get("/users/:userId", getUserDetails);
+router.get("/users/:userId/metrics", getUserMetrics);
+router.put("/users/:userId/metrics", updateUserMetrics);
+router.put("/users/:userId/metrics/:metricId", addMetricEntry);
+router.get("/users", (req, res) => {
   res.send("works");
 });
 

@@ -43,5 +43,7 @@
 | 2023/07/20 | 2                 | 2                | 2               | 2               | 2               | 2                | Worked on D5
 | 2023/07/21 | 0                 | 0                | 0               | 0               | 8               | 0                | Fixed navigation bug and started backend server user creation
 | 2023/07/21 | 0                 | 0                | 0               | 0               | 2               | 0                | Added user updating and user id token retrieval
-| 2023/07/21 | 0                 | 0                | 0               | 12               | 0               | 0                | Finished backend for metric data, including backend calls from the Rate page
+| 2023/07/21 | 0                 | 0                | 0               | 12               | 5               | 0                | Continued backend for metric data, including backend calls from the Rate page
+| 2023/07/22 | 0                 | 0                | 0               | 6               | 0               | 0                | Completed backend for metric data
+| 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 

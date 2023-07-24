@@ -7,13 +7,14 @@ import com.example.smilie.model.Metric
 import com.example.smilie.model.Value
 import com.example.smilie.model.service.MetricService
 import java.net.SocketTimeoutException
+import java.time.Instant
 
 class MetricBackendImpl(
     private val application: SmilieHiltApp,
     private val metricService: MetricService,
 ): MetricBackend {
     override suspend fun getMetricsById(id: String): ArrayList<Metric> {
-        Log.d("SmilieDebug", "getById: $id")
+        Log.d("SmilieDebug", "getMetricsById: $id")
         if (id == "") {
             return ArrayList<Metric>()
         }
@@ -31,14 +32,14 @@ class MetricBackendImpl(
         return metrics
     }
 
-    override suspend fun editMetrics(id: String, metrics: ArrayList<Metric>): ArrayList<Metric> {
-
+    override suspend fun editMetrics(id: String, metrics: ArrayList<Metric>): Boolean {
+        Log.d("SmilieDebug", "editMetrics: $id")
         val retMetrics = metricService.put(id, metrics)
 
-        if(retMetrics.isEmpty()) {
+        if(!retMetrics) {
             Toast.makeText(
                 application,
-                "Metric data not returned",
+                "Edit metrics failed",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -46,15 +47,14 @@ class MetricBackendImpl(
         return retMetrics
     }
 
-    override suspend fun addMetricEntry(id: String, metricId: String, metricVal: Number): Value {
-        val entryData = Value(metricVal,"",0f)
-
+    override suspend fun addMetricEntry(id: String, metricId: String, metricVal: Number): Boolean {
+        val entryData = Value(metricVal, Instant.now().toString(),0f)
         val retEntry = metricService.put(id, metricId, entryData)
 
-        if(retEntry.weight.toFloat() < 0f) {
+        if(!retEntry) {
             Toast.makeText(
                 application,
-                "Value data not returned",
+                "Add metric entry failed",
                 Toast.LENGTH_SHORT
             ).show()
         }

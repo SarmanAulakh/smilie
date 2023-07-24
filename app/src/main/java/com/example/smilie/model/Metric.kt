@@ -3,7 +3,7 @@ package com.example.smilie.model
 import com.google.gson.annotations.SerializedName
 
 data class Metric(
-    val id: String = "",
+    val id: String? = null,
     val name: String = "",
     val public: Boolean = false,
     val active: Boolean = false,

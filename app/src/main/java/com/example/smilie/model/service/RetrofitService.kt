@@ -13,7 +13,7 @@ interface UserService {
     @Headers(
         "Accept: application/json"
     )
-    @GET("smilie-90a63/us-central1/api/user/{id}")
+    @GET("smilie-90a63/us-central1/api/users/{id}")
     suspend fun get(@Path("id") id: String): User?
 }
 
@@ -21,10 +21,10 @@ interface MetricService {
     @Headers(
         "Accept: application/json"
     )
-    @GET("smilie-90a63/us-central1/api/user/{id}/metrics")
+    @GET("smilie-90a63/us-central1/api/users/{id}/metrics")
     suspend fun getAll(@Path("id") id: String): ArrayList<Metric>
-    @PUT("smilie-90a63/us-central1/api/user/{id}/metrics")
-    suspend fun put(@Path("id") id: String, @Body metrics: ArrayList<Metric>): ArrayList<Metric>
-    @PUT("smilie-90a63/us-central1/api/user/{id}/metrics/{metric_id}/values")
-    suspend fun put(@Path("id") id: String, @Path("metric_id") metric_id: String, @Body value: Value): Value
+    @PUT("smilie-90a63/us-central1/api/users/{id}/metrics")
+    suspend fun put(@Path("id") id: String, @Body metrics: ArrayList<Metric>): Boolean
+    @PUT("smilie-90a63/us-central1/api/users/{id}/metrics/{metric_id}")
+    suspend fun put(@Path("id") id: String, @Path("metric_id") metric_id: String, @Body value: Value): Boolean
 }
