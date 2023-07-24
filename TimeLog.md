@@ -47,3 +47,4 @@
 | 2023/07/22 | 0                 | 0                | 0               | 6               | 0               | 0                | Completed backend for metric data
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
+| 2023/07/24 | 0                 | 0                | 0               | 6               | 0               | 0                | Added page for custom metrics and defined its navigation. Added cancel buttons to all rate popup pages. Fixed issue with metric spacing. Made "Overall" always last to rate

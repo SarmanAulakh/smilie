@@ -29,6 +29,7 @@ import com.example.smilie.screens.rate.RateYourDay
 import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
 import com.example.smilie.screens.rate.AddMetrics
+import com.example.smilie.screens.rate.CustomMetrics
 import com.example.smilie.screens.rate.RemoveMetrics
 import com.example.smilie.screens.settings.DarkModeManager
 import com.example.smilie.screens.settings.FontSizeManager
@@ -45,6 +46,7 @@ import com.example.smilie.ui.navigation.REMOVE_METRICS_SCREEN
 import com.example.smilie.ui.navigation.SIGN_UP_SCREEN
 import com.example.smilie.ui.navigation.Settings
 import com.example.smilie.ui.navigation.USER_REGISTER_SCREEN
+import com.example.smilie.ui.navigation.CUSTOM_METRICS_SCREEN
 import com.example.smilie.ui.navigation.smilieTabRowScreens
 import com.example.smilie.ui.theme.SMILIETheme
 import com.google.firebase.auth.FirebaseAuth
@@ -163,6 +165,12 @@ fun MainApp(
                     AddMetrics(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                         metrics = metricData
+                    )
+                }
+                composable(CUSTOM_METRICS_SCREEN) {
+                    showBottomNav = false
+                    CustomMetrics(
+                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) }
                     )
                 }
             }
