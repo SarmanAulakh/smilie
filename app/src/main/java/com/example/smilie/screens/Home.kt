@@ -55,6 +55,9 @@ import io.grpc.util.OutlierDetectionLoadBalancer.OutlierDetectionLoadBalancerCon
 import java.lang.Math.PI
 import java.util.*
 import kotlin.math.roundToInt
+import com.example.smilie.model.Metric
+import kotlin.collections.ArrayList
+
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
@@ -336,7 +339,7 @@ fun FoldableCards(
 fun PieChart(
     modifier: Modifier = Modifier,
     radius:Float = 500f,
-    input:List<Metric>,
+    input:ArrayList<Metric>?,
 ) {
     val colorList = listOf<Color>(
         Color(0xAAFF0000),
@@ -366,12 +369,19 @@ fun PieChart(
             val width = size.width
             val height = size.height
             circleCenter = Offset(x = width / 2f, y = height / 2f)
-            val totalValue = input.sumOf { (it.value).roundToInt() }
+//            val totalValue = input.sumOf { (it.value).roundToInt() }
+            var totalValue:Float = 0f
+            input?.forEach {
+                if (it.active) {
+                    totalValue += it.values.last().weight.toFloat()
+                }
+            }
+
             val anglePerValue = 360f/totalValue
             var currentStartAngle = 0f
-            inputList.forEachIndexed {  index, pieChartInput ->
+            input?.forEachIndexed {  index, pieChartInput ->
                 val scale = 1.0f
-                val angleToDraw = pieChartInput.value * anglePerValue
+                val angleToDraw = pieChartInput.values.last().weight.toFloat() * anglePerValue
                 scale(scale){
                     drawArc(
                         color = colorList[index],
@@ -395,26 +405,31 @@ fun PieChart(
     Column(
         horizontalAlignment = Alignment.Start
     ) {
-        inputList.forEachIndexed { index, pieChartInput ->
-            Row(){
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .background(colorList[index])
-                        .align(Alignment.CenterVertically)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = pieChartInput.name,
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Left
-                    ),
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                )
+        var index = 0
+        input?.forEach { pieChartInput ->
+            if (pieChartInput.active) {
+                Row(){
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .background(colorList[index])
+                            .align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = pieChartInput.name,
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Left
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+                index += 1
             }
+
         }
     }
 }
@@ -422,7 +437,7 @@ fun PieChart(
 @Composable
 fun BarGraph(
     modifier: Modifier = Modifier,
-    input:List<Metric>,
+    input:ArrayList<Metric>?,
 ) {
     val colorList = listOf<Color>(
         Color(0xAAFF0000),
@@ -433,7 +448,12 @@ fun BarGraph(
         Color(0xAA4B0082),
         Color(0xAA9400D3)
     )
-    val maxValue = input.maxOf { it.value }
+    var maxValue:Float = 0f
+    input?.forEach {
+        if (it.active && it.values.last().weight.toFloat() > maxValue) {
+            maxValue = it.values.last().weight.toFloat()
+        }
+    }
     Column(
         verticalArrangement = Arrangement.Top
     ) {
@@ -443,17 +463,21 @@ fun BarGraph(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 //            val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
-            input.forEachIndexed {index, chartInput ->
-                val percentage = chartInput.value / maxValue.toFloat()
-                Bar(
-                    modifier = Modifier
-                        .height((60 * percentage * input.size).dp)
-                        .width(40.dp),
-                    primaryColor = colorList[index],
-                    percentage = percentage,
-                    description = chartInput.name,
-                    value = chartInput.value
-                )
+            var index = 0
+            input?.forEach {chartInput ->
+                if (chartInput.active) {
+                    val percentage = chartInput.values.last().weight.toFloat() / maxValue
+                    Bar(
+                        modifier = Modifier
+                            .height((60 * percentage * input.size).dp)
+                            .width(40.dp),
+                        primaryColor = colorList[index],
+                        percentage = percentage,
+                        description = chartInput.name,
+                        value = chartInput.values.last().weight.toFloat() / maxValue
+                    )
+                    index += 1
+                }
             }
         }
     }
@@ -539,7 +563,7 @@ private fun handleMetricClick(metric: TextType) {
     // Handle the metric click here
     println("Selected metric: ${metric.text}")
 }
-data class Metric(val name: String, val value: Float)
+//data class Metric(val name: String, val value: Float)
 
 // text: text to display, type: determines fontsize
 data class TextType(val text: String, val type: Int)

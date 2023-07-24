@@ -72,18 +72,19 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.smilie.model.view.ProfileViewModel
-import com.example.smilie.screens.Metric
 import com.example.smilie.screens.TextType
 import com.example.smilie.ui.navigation.Profile
 import java.util.Calendar
 import kotlin.math.roundToInt
+import com.example.smilie.model.Metric
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     userId: String?,
-    openAndPopUp: (String) -> Unit
+    openAndPopUp: (String) -> Unit,
+    metrics: ArrayList<Metric>?
 ) {
     profileViewModel.updateCurrentlyViewingUser(userId)
     val user = profileViewModel.currentlyViewingUser.value
@@ -301,35 +302,49 @@ fun ProfileScreen(
                             )
                         }
 
-                        val metricData = listOf(
-                            Metric("Amount of Sleep", 8f),
-                            Metric("Quality of Sleep", 3f),
-                            Metric("Time spent with Friends", 6f),
-                            Metric("Productivity", 4f),
-                            Metric("Exercise", 7f),
-                            Metric("Entertainment", 9f),
-                            Metric("Time spent Studying", 2f),
-                        )
-
                         item { com.example.smilie.screens.Title("${user.username}'s Data") }
 
-                        items(metricData) { metric ->
-                            Box(
-                                modifier = Modifier.padding(start = 0.dp)
-                            ) {
-                                Column {
-                                    Text(
-                                        text = metric.name,
-                                        style = TextStyle(
-                                            fontSize = 28.sp,
-                                            fontWeight = FontWeight.Bold
-                                        ),
-                                        modifier = Modifier.padding(8.dp)
-                                    )
-                                    com.example.smilie.screens.Rectangle(metric.value)
+                        metrics?.forEach() {
+                            item {
+                                if (it.active) {
+                                    Box(
+                                        modifier = Modifier.padding(start = 0.dp)
+                                    ) {
+                                        Column {
+                                            Text(
+                                                text = it.name,
+                                                style = TextStyle(
+                                                    fontSize = 28.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                modifier = Modifier.padding(8.dp)
+                                            )
+                                            com.example.smilie.screens.Rectangle(it.values.last().value.toFloat())
+                                        }
+                                    }
                                 }
+
                             }
+
                         }
+
+//                        items(metricData) { metric ->
+//                            Box(
+//                                modifier = Modifier.padding(start = 0.dp)
+//                            ) {
+//                                Column {
+//                                    Text(
+//                                        text = metric.name,
+//                                        style = TextStyle(
+//                                            fontSize = 28.sp,
+//                                            fontWeight = FontWeight.Bold
+//                                        ),
+//                                        modifier = Modifier.padding(8.dp)
+//                                    )
+//                                    com.example.smilie.screens.Rectangle(metric.value)
+//                                }
+//                            }
+//                        }
 
 
                         item {
@@ -359,7 +374,7 @@ fun ProfileScreen(
                                 com.example.smilie.screens.PieChart(
                                     modifier = Modifier
                                         .size(400.dp),
-                                    input = metricData
+                                    input = metrics
                                 )
                             }
                         } else {
@@ -367,7 +382,7 @@ fun ProfileScreen(
                                 com.example.smilie.screens.BarGraph(
                                     modifier = Modifier
                                         .size(500.dp),
-                                    input = metricData
+                                    input = metrics
                                 )
                             }
                         }
