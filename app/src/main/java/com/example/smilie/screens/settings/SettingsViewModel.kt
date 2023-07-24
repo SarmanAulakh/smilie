@@ -1,7 +1,6 @@
 package com.example.smilie.screens.settings
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.Metric
 import com.example.smilie.model.service.backend.AccountBackend
