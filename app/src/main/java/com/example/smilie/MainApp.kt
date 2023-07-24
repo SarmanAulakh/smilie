@@ -31,8 +31,7 @@ import com.example.smilie.screens.login.LoginScreen
 import com.example.smilie.screens.profile.ProfileScreen
 import com.example.smilie.screens.rate.AddMetrics
 import com.example.smilie.screens.rate.RemoveMetrics
-import com.example.smilie.screens.settings.DarkModeManager
-import com.example.smilie.screens.settings.FontSizeManager
+import com.example.smilie.screens.settings.SettingsManager
 import com.example.smilie.screens.settings.SettingsScreen
 import com.example.smilie.screens.sign_up.SignUpScreen
 import com.example.smilie.screens.sign_up.UserRegisterScreen
@@ -62,10 +61,9 @@ fun MainApp(
     val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     val startingRoute = if (isUserSignedIn) Home.route else LOGIN_SCREEN
 
-    val darkModeManager = DarkModeManager(true)
-    val fontSizeManager = FontSizeManager(2f)
+    val settingsManager = SettingsManager(true, 2f)
 
-    SMILIETheme(darkModeManager, fontSizeManager) {
+    SMILIETheme(settingsManager) {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
@@ -114,10 +112,12 @@ fun MainApp(
                 }
                 composable(route = Settings.route) {
                     showBottomNav = true
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     SettingsScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        darkModeManager = darkModeManager,
-                        fontSizeManager = fontSizeManager,
+                        metrics = metricData,
+                        settingsManager = settingsManager,
                     )
                 }
                 composable(route = ChatResources.route) {
