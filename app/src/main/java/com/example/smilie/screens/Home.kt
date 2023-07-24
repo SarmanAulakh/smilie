@@ -56,6 +56,17 @@ import java.lang.Math.PI
 import java.util.*
 import kotlin.math.roundToInt
 
+// Using accessible colors (https://venngage.com/tools/accessible-color-palette-generator)
+val colorList = listOf(
+    Color(0xFF90d8b2),
+    Color(0xFF8dd2dd),
+    Color(0xFF8babf1),
+    Color(0xFF8b95f6),
+    Color(0xFF9b8bf4),
+    Color(0xFFf8b8d0),
+    Color(0xFFf194b8)
+)
+
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
 
@@ -338,15 +349,6 @@ fun PieChart(
     radius:Float = 500f,
     input:List<Metric>,
 ) {
-    val colorList = listOf<Color>(
-        Color(0xAAFF0000),
-        Color(0xAAFF7F00),
-        Color(0xAAFFFF00),
-        Color(0xAA00FF00),
-        Color(0xAA0000FF),
-        Color(0xAA4B0082),
-        Color(0xAA9400D3)
-    )
     var circleCenter by remember {
         mutableStateOf(Offset.Zero)
     }
@@ -424,15 +426,6 @@ fun BarGraph(
     modifier: Modifier = Modifier,
     input:List<Metric>,
 ) {
-    val colorList = listOf<Color>(
-        Color(0xAAFF0000),
-        Color(0xAAFF7F00),
-        Color(0xAAFFFF00),
-        Color(0xAA00FF00),
-        Color(0xAA0000FF),
-        Color(0xAA4B0082),
-        Color(0xAA9400D3)
-    )
     val maxValue = input.maxOf { it.value }
     Column(
         verticalArrangement = Arrangement.Top

@@ -4,15 +4,16 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
+// Colours chosen based off of http://web-accessibility.carnegiemuseums.org/design/color/
 // Light
 val PrimaryLight = Color(0xFF0061a4)
 val OnPrimaryLight = Color(0xFFFFFFFF)
-val PrimaryContainerLight = Color(0xFFd1e4ff)
+val PrimaryContainerLight = Color(0xFFd9e4ff)
 val OnPrimaryContainerLight = Color(0xFF001d36)
 
 val SecondaryLight = Color(0xFF535f70)
 val OnSecondaryLight = Color(0xFFffffff)
-val SecondaryContainerLight = Color(0xFFd7e3f7)
+val SecondaryContainerLight = Color(0xFFb3c7f7)
 val OnSecondaryContainerLight = Color(0xFF101c2b)
 
 val TertiaryLight = Color(0xFF6b5778)

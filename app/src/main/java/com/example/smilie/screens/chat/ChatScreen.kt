@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aallam.openai.api.completion.CompletionRequest
@@ -40,7 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val openaiToken = "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"
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
@@ -155,7 +154,7 @@ fun EditTextField(editText: MutableState<String>) {
 
 @Composable
 fun MessageBubble(message: Message) {
-    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
+    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
     val textColor = MaterialTheme.colorScheme.onBackground
 
     Row(

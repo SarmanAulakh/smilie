@@ -42,7 +42,7 @@ object RateYourDay : NavDestination {
 }
 
 object ChatResources : NavDestination {
-    override val name = "Chat"
+    override val name = "Chatbot"
     override val route = "ChatResources"
     override val icon = Icons.Rounded.Chat
 }
