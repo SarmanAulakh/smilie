@@ -4,12 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -25,27 +29,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-
-data class SettingsItem(val name: String, var isEnabled: Boolean)
+import com.example.smilie.model.Metric
+import com.example.smilie.model.view.MainViewModel
 
 @Composable
 fun SettingsScreen(
     openAndPopUp: (String) -> Unit,
-    darkModeManager: DarkModeManager,
-    fontSizeManager: FontSizeManager,
+    metrics: ArrayList<Metric>?,
+    settingsManager: SettingsManager,
     settingViewModel: SignUpViewModel = hiltViewModel()
 ) {
-    val settingsList: MutableList<SettingsItem> = remember {
-        mutableStateListOf(
-            SettingsItem("metric1", true),
-            SettingsItem("metric2",true),
-            SettingsItem("metric3", false)
-        )
-    }
     // Declaring a boolean value for storing checked state
-    val mCheckedState: MutableList<Boolean> = remember{ mutableStateListOf()}
-    settingsList.forEach{
-        mCheckedState.add(it.isEnabled)
+    val privacySettings: MutableList<MutableState<Boolean>> = remember{ mutableListOf()}
+
+    metrics?.forEach{
+        privacySettings.add(mutableStateOf(it.public))
     }
 
     Box(
@@ -68,9 +66,8 @@ fun SettingsScreen(
                     Text(text = "Sign Out")
                 }
             }
-            DarkModeSwitch(darkModeManager)
-            TextSizeSlider(fontSizeManager)
-
+            DarkModeSwitch(settingsManager)
+            TextSizeSlider(settingsManager)
 
             Spacer(Modifier.height(30.dp))
             Text(
@@ -78,35 +75,56 @@ fun SettingsScreen(
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontWeight = FontWeight.Bold,
             )
-            MetricPrivacy(settingsList, mCheckedState)
+            MetricPrivacy(metrics, privacySettings)
+            Button(onClick = {
+                if (metrics != null) {
+                    settingViewModel.saveMetrics(openAndPopUp, metrics)
+                }
+            }) {
+                Text(
+                    text = "Save Metric Privacy Settings",
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun MetricPrivacy(settingsList: List<SettingsItem>, mCheckedState: MutableList<Boolean>) {
-    settingsList.forEachIndexed {index, item ->
-        Row(
+fun MetricPrivacy(metrics: ArrayList<Metric>?, privacySettings: MutableList<MutableState<Boolean>>) {
+    if(metrics != null) {
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .fillMaxHeight(0.85f),
+            contentPadding = PaddingValues(16.dp)
         ) {
-            Text(text = item.name)
-            Switch(
-                checked = mCheckedState[index],
-                onCheckedChange = { mCheckedState[index] = it })
+            itemsIndexed(metrics) { index, metric ->
+                if (metric.active) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(text = metric.name)
+                        Switch(
+                            checked = !privacySettings[index].value,
+                            onCheckedChange = {
+                                privacySettings[index].value = !it
+                                metrics[index].public = !it
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
-class FontSizeManager(initialFontSize: Float) {
-    var fontSizeSlider: MutableState<Float> = mutableStateOf(initialFontSize)
-}
-
 @Composable
-fun TextSizeSlider(fontSizeManager: FontSizeManager) {
+fun TextSizeSlider(settingsManager: SettingsManager) {
     Text(text = "Text Size")
     Row(
         modifier = Modifier
@@ -116,25 +134,17 @@ fun TextSizeSlider(fontSizeManager: FontSizeManager) {
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Slider(
-            value = fontSizeManager.fontSizeSlider.value,
-            onValueChange = { fontSizeManager.fontSizeSlider.value = it },
+            value = settingsManager.fontSizeSlider.value,
+            onValueChange = { settingsManager.fontSizeSlider.value = it },
             valueRange = 0f..4f,
             steps = 3
         )
     }
 }
 
-class DarkModeManager(initialDark: Boolean) {
-    val isDark = mutableStateOf(initialDark)
-
-    fun toggleDarkMode() {
-        isDark.value = !isDark.value
-    }
-}
-
 @Composable
-fun DarkModeSwitch(darkModeManager: DarkModeManager) {
-    val isDarkMode = darkModeManager.isDark.value
+fun DarkModeSwitch(settingsManager: SettingsManager) {
+    val isDarkMode = settingsManager.isDark.value
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +155,7 @@ fun DarkModeSwitch(darkModeManager: DarkModeManager) {
         Text(text = "Dark Mode")
         Switch(
             checked = isDarkMode,
-            onCheckedChange = { darkModeManager.toggleDarkMode() }
+            onCheckedChange = { settingsManager.toggleDarkMode() }
         )
     }
 }

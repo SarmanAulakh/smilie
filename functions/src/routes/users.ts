@@ -44,8 +44,8 @@ export function getUserMetrics(req: Request, res: Response) {
     .collection(`metrics`)
     .get()
     .then((doc) => {
-      //console.log("metric doc:"+JSON.stringify(doc))
-      //console.log("metric docs:"+JSON.stringify(doc.size))
+     // console.log("metric doc:"+JSON.stringify(doc))
+     // console.log("metric docs:"+JSON.stringify(doc.size))
 
       let data:Metric[] = new Array(doc.size);
       for(var i in doc.docs) {
@@ -68,19 +68,19 @@ export function getUserMetrics(req: Request, res: Response) {
 
 export function updateUserMetrics(req: Request, res: Response) {
   let userId = req.params.userId;
-  
   for(var metric of req.body) {
     if(metric.hasOwnProperty("id") && metric["id"] != null) {
       let metricId = metric["id"]
       db.doc(`/users/${userId}`)
         .collection(`metrics`)
         .doc(`/${metricId}`)
-        .update({active: metric["active"]})
+        .update({active: metric["active"], public: metric["public"]})
         .catch((err) => {
           console.error(err);
           return res.status(500).json({ err });
         })
-    } else {
+    }
+    else {
       db.doc(`/users/${userId}`)
         .collection(`metrics`)
         .add({name: metric["name"],

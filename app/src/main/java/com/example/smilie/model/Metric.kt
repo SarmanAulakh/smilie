@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class Metric(
     val id: String? = null,
     val name: String = "",
-    val public: Boolean = false,
-    val active: Boolean = false,
+    var public: Boolean = false,
+    var active: Boolean = false,
     val values: ArrayList<Value> = ArrayList<Value>()
 )
 

@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Send
@@ -43,7 +41,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val openaiToken = ""
+
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
@@ -53,8 +52,6 @@ fun ChatScreen(
 ) {
     val editText = remember { mutableStateOf("") }
     val messageList: MutableList<Message> = remember { mutableStateListOf() }
-
-    val lazyListState = rememberLazyListState()
 
     Box(
         modifier = Modifier
@@ -77,7 +74,6 @@ fun ChatScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f),
-                state = lazyListState,
                 contentPadding = PaddingValues(16.dp)
             ) {
                 itemsIndexed(messageList) { _, message ->
@@ -94,7 +90,7 @@ fun ChatScreen(
             ){
                 EditTextField(editText)
                 IconButton(onClick = {
-                    sendMessage(messageList, editText, lazyListState)
+                    sendMessage(messageList, editText)
                 }) {
                     Icon(imageVector = Icons.Rounded.Send, contentDescription = "")
                 }
@@ -103,20 +99,33 @@ fun ChatScreen(
     }
 }
 
-fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>, lazyListState: LazyListState) {
+fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>) {
     if (editText.value.isNotEmpty()) {
         val userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
         messageList.add(userMessage)
         editText.value = ""
 
-        var chatbotMessage = Message("Typing... ", Message.SENT_BY_BOT)
-        messageList.add(chatbotMessage)
-
         CoroutineScope(Dispatchers.IO).launch {
+            var prompt = ""
+
+            // Retrieves past 10 messages as memory for conversation
+            for (i in maxOf(messageList.size - 10, 0) until messageList.size) {
+                prompt += if (messageList[i].sentBy == Message.SENT_BY_ME) {
+                    "user: "
+                } else {
+                    "system: "
+                }
+                prompt += messageList[i].text + "\n "
+            }
+            Log.d("ChatGPT Prompt", prompt)
+
+            var chatbotMessage = Message("Typing... ", Message.SENT_BY_BOT)
+            messageList.add(chatbotMessage)
+
             val openai = OpenAI(openaiToken)
             val completionRequest = CompletionRequest(
-                model = ModelId("text-curie-001"),
-                prompt = userMessage.text,
+                model = ModelId("text-davinci-003"),
+                prompt = prompt,
                 maxTokens = 250,
                 echo = false
             )
@@ -125,9 +134,11 @@ fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String
             if (messageList.size > 0) {
                 messageList.removeLast()
             }
-            chatbotMessage = Message(completion.choices[0].text.trim(), Message.SENT_BY_BOT)
+
+            Log.d("ChatGPT before", completion.choices[0].text)
+            val completionRes = completion.choices[0].text.substringAfter(":").trim()
+            chatbotMessage = Message(completionRes, Message.SENT_BY_BOT)
             messageList.add(chatbotMessage)
-            lazyListState.scrollToItem(messageList.size - 1)
         }
     }
 }
