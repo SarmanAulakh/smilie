@@ -32,23 +32,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
-import com.example.smilie.screens.settings.SignUpViewModel
+import com.example.smilie.model.Metric
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-const val openaiToken = "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"
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
 fun ChatScreen(
-    openAndPopUp: (String) -> Unit,
-    settingViewModel: SignUpViewModel = hiltViewModel()
+    metrics: ArrayList<Metric>?
 ) {
     val editText = remember { mutableStateOf("") }
     val messageList: MutableList<Message> = remember { mutableStateListOf() }
@@ -158,8 +155,8 @@ fun EditTextField(editText: MutableState<String>) {
 
 @Composable
 fun MessageBubble(message: Message) {
-    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) Color.Blue else Color.Gray
-    val textColor = if (message.sentBy == Message.SENT_BY_ME) Color.White else Color.Black
+    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     Row(
         modifier = Modifier

@@ -21,7 +21,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +39,6 @@ fun SettingsScreen(
 ) {
     // Declaring a boolean value for storing checked state
     val privacySettings: MutableList<MutableState<Boolean>> = remember{ mutableListOf()}
-
     metrics?.forEach{
         privacySettings.add(mutableStateOf(it.public))
     }

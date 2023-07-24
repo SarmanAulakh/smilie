@@ -25,10 +25,8 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun saveMetrics(openAndPopUp: (String) -> Unit, metrics: ArrayList<Metric>) {
-        Log.d("save metrics", "Editing metrics")
 
         viewModelScope.launch {
-            Log.d("save metrics", "$metrics")
             if(metricBackend.editMetrics(id=accountBackend.currentUserId, metrics=metrics)) {
                 Log.d("SmilieDebug", "Edited successfully")
             } else {
