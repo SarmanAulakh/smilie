@@ -2,6 +2,7 @@ package com.example.smilie.screens
 
 import android.icu.text.CaseMap.Title
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -55,27 +56,35 @@ import io.grpc.util.OutlierDetectionLoadBalancer.OutlierDetectionLoadBalancerCon
 import java.lang.Math.PI
 import java.util.*
 import kotlin.math.roundToInt
+import com.example.smilie.model.Metric
+import kotlin.collections.ArrayList
+import com.example.smilie.screens.settings.SettingsManager
+
+
 
 // Using accessible colors (https://venngage.com/tools/accessible-color-palette-generator)
-val colorList = listOf(
+private val colorList = listOf(
     Color(0xFF90d8b2),
     Color(0xFF8dd2dd),
     Color(0xFF8babf1),
     Color(0xFF8b95f6),
     Color(0xFF9b8bf4),
     Color(0xFFf8b8d0),
-    Color(0xFFf194b8)
+    Color(0xFFf194b8),
+    Color(0xFFFAAF90),
+    Color(0xFFFCC9B5),
+    Color(0xFFD9E4FF),
+    Color(0xFFB3C7F7)
 )
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
+fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Metric>?) {
 
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
 
         val userName = user.username
-        var barToggle by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -88,100 +97,18 @@ fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(horizontal = 10.dp)
                     ) {
-                        item { Home(userName, 7.8f) }
+                        var overallAvg = 0f
+                        var count = 0f
 
-                        val helpfulLinks = listOf(
-                            "betterhelp.org",
-                            "LeagueofLeg.com"
-                        )
-                        val metricText = listOf(
-                            "sleep",
-                            "time spent with friends",
-                            "productivity",
-                        )
-
-                        item { FoldableCards(input= metricText, title = "Recommended Metrics") }
-                        item { FoldableCards(input = helpfulLinks, title = "Helpful Links") }
-
-                        val metricData = listOf(
-                            Metric("Amount of Sleep", 8f),
-                            Metric("Quality of Sleep", 3f),
-                            Metric("Time spent with Friends", 6f),
-                            Metric("Productivity", 4f),
-                            Metric("Exercise", 7f),
-                            Metric("Entertainment", 9f),
-                            Metric("Time spent Studying", 2f),
-                        )
-
-                        item { Title("$userName's Data") }
-
-                        items(metricData) { metric ->
-                            Box(
-                                modifier = Modifier.padding(start = 0.dp)
-                            ) {
-                                Column {
-                                    Text(
-                                        text = metric.name,
-                                        style = TextStyle(
-                                            fontSize = 28.sp,
-                                            fontWeight = FontWeight.Bold
-                                        ),
-                                        modifier = Modifier.padding(8.dp)
-                                    )
-                                    Rectangle(metric.value)
+                        metrics?.forEach {
+                            if(it.name == "Overall") {
+                                it.values.forEach {valuee ->
+                                    overallAvg += valuee.value.toFloat()
+                                    count += 1f
                                 }
                             }
                         }
-
-
-                        item {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Switch(
-                                    checked = barToggle,
-                                    onCheckedChange = {
-                                        barToggle = it
-                                    }
-                                )
-                                Text(
-                                    text = "Toggle Graph Type",
-                                    style = TextStyle(
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    modifier = Modifier.padding(20.dp)
-                                )
-                            }
-                        }
-
-                        if (barToggle) {
-                            item {
-                                PieChart(
-                                    modifier = Modifier
-                                        .size(400.dp),
-                                    input = metricData
-                                )
-                            }
-                        } else {
-                            item {
-                                BarGraph(
-                                    modifier = Modifier
-                                        .size(500.dp),
-                                    input = metricData
-                                )
-                            }
-                        }
-
-                        // Buffer to show things hidden from the task bar
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .size(30.dp)
-                            ) {
-                            }
-                        }
+                        item { Home(userName, overallAvg/count) }
                     }
                 }
             }
@@ -232,18 +159,20 @@ fun Home(name: String, value: Float) {
     Column(modifier = Modifier.padding(16.dp)) {
         val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greeting = getGreeting(currentHour)
+        val response = generateResponse(value)
 
         val textData = listOf(
-            TextType("$greeting, $name!", 2),
-            TextType("Welcome back!", 2),
-            TextType("Over the last week, you've average a ${value.toString()}/10 !", 1)
+            TextType("$greeting, $name!", 36),
+            TextType("Welcome back!", 36),
+            TextType("Over the last week, you've average a ${value.toString()}/10 !", 24),
+            TextType("$response", 24)
         )
 
         for (textval in textData) {
             Text(
                 text = textval.text,
                 style = TextStyle(
-                    fontSize = (18 * textval.type).sp,
+                    fontSize = (textval.type).sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
                 modifier = Modifier
@@ -347,14 +276,12 @@ fun FoldableCards(
 fun PieChart(
     modifier: Modifier = Modifier,
     radius:Float = 500f,
-    input:List<Metric>,
+    input:ArrayList<Metric>?,
 ) {
     var circleCenter by remember {
         mutableStateOf(Offset.Zero)
     }
-    var inputList by remember {
-        mutableStateOf(input)
-    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -362,34 +289,43 @@ fun PieChart(
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(true) {
-                }
         ) {
             val width = size.width
             val height = size.height
             circleCenter = Offset(x = width / 2f, y = height / 2f)
-            val totalValue = input.sumOf { (it.value).roundToInt() }
+//            val totalValue = input.sumOf { (it.value).roundToInt() }
+            var totalValue:Float = 0f
+            input?.forEach {
+                if (it.active && it.name != "Overall") {
+                    totalValue += it.values.last().value.toFloat()
+                }
+            }
+
             val anglePerValue = 360f/totalValue
             var currentStartAngle = 0f
-            inputList.forEachIndexed {  index, pieChartInput ->
-                val scale = 1.0f
-                val angleToDraw = pieChartInput.value * anglePerValue
-                scale(scale){
-                    drawArc(
-                        color = colorList[index],
-                        startAngle = currentStartAngle,
-                        sweepAngle = angleToDraw,
-                        useCenter = true,
-                        size = Size(
-                            width = radius*2f,
-                            height = radius*2f
-                        ),
-                        topLeft = Offset(
-                            (width - radius * 2f) / 2f,
-                            (height - radius * 2f) / 2f
+            var index = 0
+            input?.forEach { pieChartInput ->
+                if (pieChartInput.active && pieChartInput.name != "Overall") {
+                    val scale = 1.0f
+                    val angleToDraw = pieChartInput.values.last().value.toFloat() * anglePerValue
+                    scale(scale){
+                        drawArc(
+                            color = colorList[index],
+                            startAngle = currentStartAngle,
+                            sweepAngle = angleToDraw,
+                            useCenter = true,
+                            size = Size(
+                                width = radius*2f,
+                                height = radius*2f
+                            ),
+                            topLeft = Offset(
+                                (width - radius * 2f) / 2f,
+                                (height - radius * 2f) / 2f
+                            )
                         )
-                    )
-                    currentStartAngle += angleToDraw
+                        currentStartAngle += angleToDraw
+                    }
+                    index += 1
                 }
             }
         }
@@ -397,26 +333,31 @@ fun PieChart(
     Column(
         horizontalAlignment = Alignment.Start
     ) {
-        inputList.forEachIndexed { index, pieChartInput ->
-            Row(){
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .background(colorList[index])
-                        .align(Alignment.CenterVertically)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = pieChartInput.name,
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Left
-                    ),
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                )
+        var index = 0
+        input?.forEach { pieChartInput ->
+            if (pieChartInput.active && pieChartInput.name != "Overall") {
+                Row(){
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .background(colorList[index])
+                            .align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = pieChartInput.name,
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Left
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+                index += 1
             }
+
         }
     }
 }
@@ -424,9 +365,17 @@ fun PieChart(
 @Composable
 fun BarGraph(
     modifier: Modifier = Modifier,
-    input:List<Metric>,
+    input:ArrayList<Metric>?,
+    settingsManager: SettingsManager
 ) {
-    val maxValue = input.maxOf { it.value }
+
+    var maxValue:Float = 0f
+    input?.forEach {
+        if (it.active && it.values.last().value.toFloat() > maxValue) {
+            maxValue = it.values.last().value.toFloat()
+        }
+    }
+
     Column(
         verticalArrangement = Arrangement.Top
     ) {
@@ -436,22 +385,58 @@ fun BarGraph(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 //            val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
-            input.forEachIndexed {index, chartInput ->
-                val percentage = chartInput.value / maxValue.toFloat()
-                Bar(
-                    modifier = Modifier
-                        .height((60 * percentage * input.size).dp)
-                        .width(40.dp),
-                    primaryColor = colorList[index],
-                    percentage = percentage,
-                    description = chartInput.name,
-                    value = chartInput.value
-                )
+            var index = 0
+            input?.forEach { chartInput ->
+                if (chartInput.active && chartInput.name != "Overall") {
+                    val percentage = chartInput.values.last().value.toFloat() / maxValue
+                    Bar(
+                        modifier = Modifier
+                            .height((60 * percentage * input.size).dp)
+                            .width(40.dp),
+                        primaryColor = colorList[index],
+                        percentage = percentage,
+                        description = chartInput.name,
+                        value = chartInput.values.last().value.toFloat(),
+                        index = index,
+                        settingsManager = settingsManager
+                    )
+                    index += 1
+                }
+            }
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            var index = 0
+            input?.forEach { chartInput ->
+                if (chartInput.active && chartInput.name != "Overall") {
+                    Row() {
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .background(colorList[index])
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = chartInput.name,
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Left
+                            ),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                    index += 1
+                }
             }
         }
     }
 
-    Spacer(modifier = Modifier.width(30.dp))
+//    Spacer(modifier = Modifier.width(30.dp))
 }
 
 
@@ -463,7 +448,9 @@ fun Bar(
     primaryColor: Color,
     percentage: Float,
     description: String,
-    value: Float
+    value: Float,
+    index: Int,
+    settingsManager: SettingsManager
 ) {
     Box(
         modifier = modifier,
@@ -475,7 +462,7 @@ fun Bar(
             val width = size.width
             val height = size.height
             val barWidth = width/5 * 3
-            val barHeight = height/8 * 7
+            val barHeight = (height/8 * 7)
 
             var path = Path().apply {
                 moveTo(0f, height)
@@ -497,26 +484,24 @@ fun Bar(
                     barWidth/5f,
                     height + 55f,
                     android.graphics.Paint().apply {
-                        color = primaryColor.toArgb()
-                        textSize = 14.dp.toPx()
-                        isFakeBoldText = true
-                    }
-                )
-            }
 
-            drawContext.canvas.nativeCanvas.apply {
-                drawText(
-                    "$description",
-                    0f,
-                    5f,
-                    android.graphics.Paint().apply {
-                        color = primaryColor.toArgb()
+                        color = if (settingsManager.isDark.value) Color(0xFFFFFFFF).toArgb() else Color(0xFF000000).toArgb()
                         textSize = 14.dp.toPx()
                         isFakeBoldText = true
                     }
                 )
             }
         }
+    }
+}
+
+private fun generateResponse(input: Float): String {
+    if (input <= 3) {
+        return "Oof, that's rough.. You got this!!"
+    } else if (input <= 7) {
+        return "You are doing great! Keep up the work!!"
+    } else {
+        return "This is AWESOME!! Continue to keep up your lifestyle!!"
     }
 }
 
@@ -532,7 +517,7 @@ private fun handleMetricClick(metric: TextType) {
     // Handle the metric click here
     println("Selected metric: ${metric.text}")
 }
-data class Metric(val name: String, val value: Float)
+//data class Metric(val name: String, val value: Float)
 
 // text: text to display, type: determines fontsize
 data class TextType(val text: String, val type: Int)
