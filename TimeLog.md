@@ -67,9 +67,6 @@
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
 | 2023/07/24 | 0                 | 9                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase, update color scheme for accessibility and provide chatgpt context about metrics
 | 2023/07/24 | 0                 | 0                | 0               | 6               | 0               | 0                | Added page for custom metrics and defined its navigation. Added cancel buttons to all rate popup pages. Fixed issue with metric spacing. Made "Overall" always last to rate
-<<<<<<< HEAD
 | 2023/07/24 | 0                 | 3                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase
 | 2023/07/24 | 0                 | 0                | 6               | 0               | 0               | 0                | Integrating backend data to display graphs and progressbars accordingly
-=======
 | 2023/07/24 | 7                 | 0                | 0               | 0               | 0                | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
->>>>>>> main
