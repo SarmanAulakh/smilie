@@ -77,6 +77,8 @@ import com.example.smilie.ui.navigation.Profile
 import java.util.Calendar
 import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
+import com.example.smilie.screens.settings.SettingsManager
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +86,8 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     userId: String?,
     openAndPopUp: (String) -> Unit,
-    metrics: ArrayList<Metric>?
+    metrics: ArrayList<Metric>?,
+    settingsManager: SettingsManager
 ) {
     profileViewModel.updateCurrentlyViewingUser(userId)
     val user = profileViewModel.currentlyViewingUser.value
@@ -382,7 +385,8 @@ fun ProfileScreen(
                                 com.example.smilie.screens.BarGraph(
                                     modifier = Modifier
                                         .size(500.dp),
-                                    input = metrics
+                                    input = metrics,
+                                    settingsManager = settingsManager
                                 )
                             }
                         }

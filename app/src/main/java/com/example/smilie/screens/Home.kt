@@ -58,6 +58,8 @@ import java.util.*
 import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
 import kotlin.collections.ArrayList
+import com.example.smilie.screens.settings.SettingsManager
+
 
 
 // Using accessible colors (https://venngage.com/tools/accessible-color-palette-generator)
@@ -69,13 +71,10 @@ private val colorList = listOf(
     Color(0xFF9b8bf4),
     Color(0xFFf8b8d0),
     Color(0xFFf194b8),
-    Color(0xFF330360),
-    Color(0xFF90BF11),
-    Color(0xFF6BdB7E),
-    Color(0xFF511e2d),
-    Color(0xFF0a2f9b),
-    Color(0xFF70aaad),
-    Color(0xFF5715A8)
+    Color(0xFFFAAF90),
+    Color(0xFFFCC9B5),
+    Color(0xFFD9E4FF),
+    Color(0xFFB3C7F7)
 )
 
 @Composable
@@ -367,6 +366,7 @@ fun PieChart(
 fun BarGraph(
     modifier: Modifier = Modifier,
     input:ArrayList<Metric>?,
+    settingsManager: SettingsManager
 ) {
 
     var maxValue:Float = 0f
@@ -397,7 +397,8 @@ fun BarGraph(
                         percentage = percentage,
                         description = chartInput.name,
                         value = chartInput.values.last().value.toFloat(),
-                        index = index
+                        index = index,
+                        settingsManager = settingsManager
                     )
                     index += 1
                 }
@@ -448,7 +449,8 @@ fun Bar(
     percentage: Float,
     description: String,
     value: Float,
-    index: Int
+    index: Int,
+    settingsManager: SettingsManager
 ) {
     Box(
         modifier = modifier,
@@ -482,7 +484,8 @@ fun Bar(
                     barWidth/5f,
                     height + 55f,
                     android.graphics.Paint().apply {
-//                        color = primaryColor.toArgb()
+
+                        color = if (settingsManager.isDark.value) Color(0xFFFFFFFF).toArgb() else Color(0xFF000000).toArgb()
                         textSize = 14.dp.toPx()
                         isFakeBoldText = true
                     }

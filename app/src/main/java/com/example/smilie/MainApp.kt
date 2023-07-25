@@ -115,7 +115,8 @@ fun MainApp(
                     ProfileScreen(
                         userId = entry.arguments?.getString("userId"),
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        metrics = metricData
+                        metrics = metricData,
+                        settingsManager=settingsManager
                     )
                 }
                 composable(route = Settings.route) {
