@@ -61,4 +61,15 @@ class MetricBackendImpl(
 
         return retEntry
     }
+
+    override suspend fun getMetricValueByName(id: String, name: String): Number {
+        val metrics: ArrayList<Metric> = getMetricsById(id)
+        if (metrics.isEmpty()) return -1
+        for (metric in metrics) {
+            if (metric.name != name) continue
+            return metric.values[metric.values.size - 1].value
+        }
+
+        return -1
+    }
 }

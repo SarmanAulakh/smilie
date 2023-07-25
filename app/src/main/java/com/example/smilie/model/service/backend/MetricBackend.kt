@@ -9,4 +9,6 @@ interface MetricBackend {
     suspend fun editMetrics(id: String, metrics: ArrayList<Metric>): Boolean
 
     suspend fun addMetricEntry(id: String, metricId: String, metricVal: Number): Boolean
+
+    suspend fun getMetricValueByName(id: String, name: String): Number?
 }
