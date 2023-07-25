@@ -21,7 +21,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.model.Metric
-import com.example.smilie.model.view.MainViewModel
 
 @Composable
 fun SettingsScreen(
@@ -41,7 +39,6 @@ fun SettingsScreen(
 ) {
     // Declaring a boolean value for storing checked state
     val privacySettings: MutableList<MutableState<Boolean>> = remember{ mutableListOf()}
-
     metrics?.forEach{
         privacySettings.add(mutableStateOf(it.public))
     }
@@ -56,66 +53,87 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "SETTINGS",
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-            )
-            Row() {
-                Button(onClick = { settingViewModel.onSignOutClick(openAndPopUp) }) {
-                    Text(text = "Sign Out")
-                }
-            }
-            DarkModeSwitch(settingsManager)
-            TextSizeSlider(settingsManager)
-
-            Spacer(Modifier.height(30.dp))
-            Text(
-                text = "Metrics Privacy",
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontWeight = FontWeight.Bold,
-            )
-            MetricPrivacy(metrics, privacySettings)
-            Button(onClick = {
-                if (metrics != null) {
-                    settingViewModel.saveMetrics(openAndPopUp, metrics)
-                }
-            }) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(15.dp),
+                horizontalArrangement = Arrangement.Center, // Aligns items to the center of the row
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    text = "Save Metric Privacy Settings",
-                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    text = "SETTINGS",
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
                 )
             }
-        }
-    }
-}
 
-@Composable
-fun MetricPrivacy(metrics: ArrayList<Metric>?, privacySettings: MutableList<MutableState<Boolean>>) {
-    if(metrics != null) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.85f),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            itemsIndexed(metrics) { index, metric ->
-                if (metric.active) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+
+                item {
+                    DarkModeSwitch(settingsManager)
+                }
+                item {
+                    TextSizeSlider(settingsManager)
+                }
+
+                item {
+                    Spacer(Modifier.height(20.dp))
+                }
+                item {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                        modifier = Modifier.fillMaxWidth().padding(5.dp),
+                        horizontalArrangement = Arrangement.Center, // Aligns items to the center of the row
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        Text(text = metric.name)
-                        Switch(
-                            checked = !privacySettings[index].value,
-                            onCheckedChange = {
-                                privacySettings[index].value = !it
-                                metrics[index].public = !it
-                            }
+                        Text(
+                            text = "Metrics Privacy",
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            fontWeight = FontWeight.Bold,
                         )
+                    }
+                }
+
+                if(metrics != null) {
+                    itemsIndexed(metrics) { index, _ ->
+                        MetricPrivacy(metrics, index, privacySettings)
+                    }
+                }
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(5.dp),
+                        horizontalArrangement = Arrangement.Center, // Aligns items to the center of the row
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Button(onClick = {
+                            if (metrics != null) {
+                                settingViewModel.saveMetrics(openAndPopUp, metrics)
+                            }
+                        }) {
+                            Text(
+                                text = "Save Metric Privacy Settings",
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(5.dp),
+                        horizontalArrangement = Arrangement.Center, // Aligns items to the center of the row
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Button(
+                            onClick = { settingViewModel.onSignOutClick(openAndPopUp) },
+                        ) {
+                            Text(
+                                text = "Sign Out",
+                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            )
+                        }
                     }
                 }
             }
@@ -124,12 +142,48 @@ fun MetricPrivacy(metrics: ArrayList<Metric>?, privacySettings: MutableList<Muta
 }
 
 @Composable
+fun MetricPrivacy(metrics: ArrayList<Metric>?, index: Int, privacySettings: MutableList<MutableState<Boolean>>) {
+    if (metrics == null) {
+        return
+    }
+
+    if (metrics[index].active) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(text = metrics[index].name)
+            Switch(
+                checked = !privacySettings[index].value,
+                onCheckedChange = {
+                    privacySettings[index].value = !it
+                    metrics[index].public = !it
+                }
+            )
+        }
+    }
+}
+
+@Composable
 fun TextSizeSlider(settingsManager: SettingsManager) {
-    Text(text = "Text Size")
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start, // Aligns items to the start (left) of the row
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Text Size",
+            modifier = Modifier.padding(start = 10.dp)
+        )
+    }
+
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -140,6 +194,26 @@ fun TextSizeSlider(settingsManager: SettingsManager) {
             steps = 3
         )
     }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "A",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 10.dp)
+        )
+        Text(
+            text = "A",
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(end = 10.dp)
+        )
+
+    }
+
 }
 
 @Composable

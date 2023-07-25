@@ -29,30 +29,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
-import com.example.smilie.screens.settings.SignUpViewModel
+import com.example.smilie.model.Metric
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-const val openaiToken = "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"
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
 fun ChatScreen(
-    openAndPopUp: (String) -> Unit,
-    settingViewModel: SignUpViewModel = hiltViewModel()
+    metrics: ArrayList<Metric>?
 ) {
     val editText = remember { mutableStateOf("") }
     val messageList: MutableList<Message> = remember { mutableStateListOf() }
 
+    var metricStr = "The metrics for the user over the past week is "
+    Log.d("MetricStr", "$metrics")
+    metrics?.forEach{
+        metricStr += "'${it.name}': ${it.values[0].value}, "
+    }
+    metricStr += " where 0 is rated poorly and 10 is rated best. \n"
+    Log.d("MetricStr", metricStr)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +93,7 @@ fun ChatScreen(
             ){
                 EditTextField(editText)
                 IconButton(onClick = {
-                    sendMessage(messageList, editText)
+                    sendMessage(messageList, editText, metricStr)
                 }) {
                     Icon(imageVector = Icons.Rounded.Send, contentDescription = "")
                 }
@@ -99,14 +102,14 @@ fun ChatScreen(
     }
 }
 
-fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>) {
+fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>, metricStr: String) {
     if (editText.value.isNotEmpty()) {
         val userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
         messageList.add(userMessage)
         editText.value = ""
 
         CoroutineScope(Dispatchers.IO).launch {
-            var prompt = ""
+            var prompt = metricStr
 
             // Retrieves past 10 messages as memory for conversation
             for (i in maxOf(messageList.size - 10, 0) until messageList.size) {
@@ -158,8 +161,8 @@ fun EditTextField(editText: MutableState<String>) {
 
 @Composable
 fun MessageBubble(message: Message) {
-    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) Color.Blue else Color.Gray
-    val textColor = if (message.sentBy == Message.SENT_BY_ME) Color.White else Color.Black
+    val bubbleColor = if (message.sentBy == Message.SENT_BY_ME) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     Row(
         modifier = Modifier

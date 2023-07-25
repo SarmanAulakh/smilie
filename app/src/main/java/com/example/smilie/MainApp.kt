@@ -124,8 +124,10 @@ fun MainApp(
                 }
                 composable(route = ChatResources.route) {
                     showBottomNav = true
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     ChatScreen(
-                        openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData,
                     )
                 }
                 composable(LOGIN_SCREEN) {
