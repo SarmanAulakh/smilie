@@ -92,9 +92,11 @@ fun MainApp(
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(route = Home.route) {
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     showBottomNav = true
                     var userData = viewModel.userData.value
-                    HomeScreen(user=userData)
+                    HomeScreen(user=userData, metrics=metricData)
                 }
                 composable(
                     route = Profile.route + "?userId={userId}",

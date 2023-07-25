@@ -2,6 +2,7 @@ package com.example.smilie.screens
 
 import android.icu.text.CaseMap.Title
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -60,14 +61,13 @@ import kotlin.collections.ArrayList
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
+fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Metric>?) {
 
     if (user == null) {
         println("loading....")
     } else {
 
         val userName = user.username
-        var barToggle by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -80,100 +80,18 @@ fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(horizontal = 10.dp)
                     ) {
-                        item { Home(userName, 7.8f) }
+                        var overallAvg = 0f
+                        var count = 0f
 
-//                        val helpfulLinks = listOf(
-//                            "betterhelp.org",
-//                            "LeagueofLeg.com"
-//                        )
-//                        val metricText = listOf(
-//                            "sleep",
-//                            "time spent with friends",
-//                            "productivity",
-//                        )
-//
-//                        item { FoldableCards(input= metricText, title = "Recommended Metrics") }
-//                        item { FoldableCards(input = helpfulLinks, title = "Helpful Links") }
-//
-//                        val metricData = listOf(
-//                            Metric("Amount of Sleep", 8f),
-//                            Metric("Quality of Sleep", 3f),
-//                            Metric("Time spent with Friends", 6f),
-//                            Metric("Productivity", 4f),
-//                            Metric("Exercise", 7f),
-//                            Metric("Entertainment", 9f),
-//                            Metric("Time spent Studying", 2f),
-//                        )
-//
-//                        item { Title("$userName's Data") }
-//
-//                        items(metricData) { metric ->
-//                            Box(
-//                                modifier = Modifier.padding(start = 0.dp)
-//                            ) {
-//                                Column {
-//                                    Text(
-//                                        text = metric.name,
-//                                        style = TextStyle(
-//                                            fontSize = 28.sp,
-//                                            fontWeight = FontWeight.Bold
-//                                        ),
-//                                        modifier = Modifier.padding(8.dp)
-//                                    )
-//                                    Rectangle(metric.value)
-//                                }
-//                            }
-//                        }
-//
-//
-//                        item {
-//                            Row(
-//                                horizontalArrangement = Arrangement.Center,
-//                                verticalAlignment = Alignment.CenterVertically
-//                            ) {
-//                                Switch(
-//                                    checked = barToggle,
-//                                    onCheckedChange = {
-//                                        barToggle = it
-//                                    }
-//                                )
-//                                Text(
-//                                    text = "Toggle Graph Type",
-//                                    style = TextStyle(
-//                                        fontSize = 24.sp,
-//                                        fontWeight = FontWeight.Bold
-//                                    ),
-//                                    modifier = Modifier.padding(20.dp)
-//                                )
-//                            }
-//                        }
-//
-//                        if (barToggle) {
-//                            item {
-//                                PieChart(
-//                                    modifier = Modifier
-//                                        .size(400.dp),
-//                                    input = metricData
-//                                )
-//                            }
-//                        } else {
-//                            item {
-//                                BarGraph(
-//                                    modifier = Modifier
-//                                        .size(500.dp),
-//                                    input = metricData
-//                                )
-//                            }
-//                        }
-//
-//                        // Buffer to show things hidden from the task bar
-//                        item {
-//                            Box(
-//                                modifier = Modifier
-//                                    .size(30.dp)
-//                            ) {
-//                            }
-//                        }
+                        metrics?.forEach {
+                            if(it.name == "Overall") {
+                                it.values.forEach {valuee ->
+                                    overallAvg += valuee.value.toFloat()
+                                    count += 1f
+                                }
+                            }
+                        }
+                        item { Home(userName, overallAvg/count) }
                     }
                 }
             }
@@ -224,18 +142,20 @@ fun Home(name: String, value: Float) {
     Column(modifier = Modifier.padding(16.dp)) {
         val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greeting = getGreeting(currentHour)
+        val response = generateResponse(value)
 
         val textData = listOf(
-            TextType("$greeting, $name!", 2),
-            TextType("Welcome back!", 2),
-            TextType("Over the last week, you've average a ${value.toString()}/10 !", 1)
+            TextType("$greeting, $name!", 36),
+            TextType("Welcome back!", 36),
+            TextType("Over the last week, you've average a ${value.toString()}/10 !", 24),
+            TextType("$response", 24)
         )
 
         for (textval in textData) {
             Text(
                 text = textval.text,
                 style = TextStyle(
-                    fontSize = (18 * textval.type).sp,
+                    fontSize = (textval.type).sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
                 modifier = Modifier
@@ -553,8 +473,14 @@ fun Bar(
     }
 }
 
-private fun getTopSeven(input: ArrayList<Metric>?) {
-
+private fun generateResponse(input: Float): String {
+    if (input <= 3) {
+        return "Oof, that's rough.. You got this!!"
+    } else if (input <= 7) {
+        return "You are doing great! Keep up the work!!"
+    } else {
+        return "This is AWESOME!! Continue to keep up your lifestyle!!"
+    }
 }
 
 private val colorList = listOf<Color>(
