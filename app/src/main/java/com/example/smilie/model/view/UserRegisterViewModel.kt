@@ -1,16 +1,20 @@
 package com.example.smilie.model.view
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.model.service.backend.AccountBackend
+import com.example.smilie.model.service.backend.UserBackend
 import com.example.smilie.ui.navigation.Home
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val DEFAULT_PROFILE = "https://firebasestorage.googleapis.com/v0/b/socialmedia-5f158.appspot.com/o/no-img.png?alt=media&token=119463d0-c5e9-4059-9805-1f4d7dbff3c0"
@@ -24,7 +28,10 @@ data class UserRegisterState(
 )
 
 @HiltViewModel
-class UserRegisterViewModel @Inject constructor(private val accountBackend: AccountBackend) : SmilieViewModel() {
+class UserRegisterViewModel @Inject constructor(
+    private val accountBackend: AccountBackend,
+    private val userBackend: UserBackend
+) : SmilieViewModel() {
     lateinit var storage: FirebaseStorage
     var uiState = mutableStateOf(UserRegisterState())
         private set
@@ -87,9 +94,10 @@ class UserRegisterViewModel @Inject constructor(private val accountBackend: Acco
                 imageUrl = imageUrl,
             )
 
-            // add user to db
-            db.collection("users").document(it.id).set(user)
-            openAndPopUp(Home.route)
+            viewModelScope.launch {
+                userBackend.createUser(user)
+                openAndPopUp(Home.route)
+            }
         }
     }
 }

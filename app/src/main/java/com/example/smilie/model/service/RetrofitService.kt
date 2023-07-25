@@ -8,6 +8,8 @@ import retrofit2.http.PUT
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.POST
 
 interface UserService {
     @Headers(
@@ -15,6 +17,12 @@ interface UserService {
     )
     @GET("smilie-90a63/us-central1/api/users/{id}")
     suspend fun get(@Path("id") id: String): User?
+
+    @Headers(
+        "Accept: application/json"
+    )
+    @POST("smilie-90a63/us-central1/api/users")
+    suspend fun create(@Body user: User): User?
 }
 
 interface MetricService {
