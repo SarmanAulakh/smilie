@@ -39,7 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val openaiToken = "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"
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
@@ -49,6 +49,13 @@ fun ChatScreen(
     val editText = remember { mutableStateOf("") }
     val messageList: MutableList<Message> = remember { mutableStateListOf() }
 
+    var metricStr = "The metrics for the user over the past week is "
+    Log.d("MetricStr", "$metrics")
+    metrics?.forEach{
+        metricStr += "'${it.name}': ${it.values[0].value}, "
+    }
+    metricStr += " where 0 is rated poorly and 10 is rated best. \n"
+    Log.d("MetricStr", metricStr)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +93,7 @@ fun ChatScreen(
             ){
                 EditTextField(editText)
                 IconButton(onClick = {
-                    sendMessage(messageList, editText)
+                    sendMessage(messageList, editText, metricStr)
                 }) {
                     Icon(imageVector = Icons.Rounded.Send, contentDescription = "")
                 }
@@ -95,14 +102,14 @@ fun ChatScreen(
     }
 }
 
-fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>) {
+fun sendMessage(messageList: MutableList<Message>, editText: MutableState<String>, metricStr: String) {
     if (editText.value.isNotEmpty()) {
         val userMessage = Message(editText.value.trim(), Message.SENT_BY_ME)
         messageList.add(userMessage)
         editText.value = ""
 
         CoroutineScope(Dispatchers.IO).launch {
-            var prompt = ""
+            var prompt = metricStr
 
             // Retrieves past 10 messages as memory for conversation
             for (i in maxOf(messageList.size - 10, 0) until messageList.size) {
