@@ -70,7 +70,7 @@ val colorList = listOf(
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, user: User?) {
 
-    if (user == null) {
+    if (user == null || user.equals(null)) {
         println("loading....")
     } else {
 

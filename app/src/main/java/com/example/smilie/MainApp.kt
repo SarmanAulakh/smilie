@@ -93,6 +93,7 @@ fun MainApp(
             ) {
                 composable(route = Home.route) {
                     showBottomNav = true
+                    viewModel.getUser();
                     var userData = viewModel.userData.value
                     HomeScreen(user=userData)
                 }

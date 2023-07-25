@@ -19,4 +19,4 @@ const auth = admin.auth();
 //connect to messaging
 const messanger = admin.messaging();
 
-export { admin, auth, db, store, messanger };
+export { admin, db, auth, store, messanger };
