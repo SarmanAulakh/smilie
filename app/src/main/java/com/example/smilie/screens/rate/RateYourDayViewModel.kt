@@ -1,5 +1,6 @@
 package com.example.smilie.screens.rate
 
+import android.provider.Telephony.Mms.Rate
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import com.example.smilie.model.service.backend.AllMetrics
 import com.example.smilie.model.view.SmilieViewModel
 import com.example.smilie.ui.navigation.ADD_METRICS_SCREEN
 import com.example.smilie.ui.navigation.REMOVE_METRICS_SCREEN
+import com.example.smilie.ui.navigation.CUSTOM_METRICS_SCREEN
 import com.example.smilie.ui.navigation.RateYourDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -34,6 +36,23 @@ class RateYourDayViewModel @Inject constructor(
     fun onAddClick(openAndPopUp: (String) -> Unit) {
         launchCatching {
             openAndPopUp(ADD_METRICS_SCREEN)
+        }
+    }
+    fun onCustomClick(openAndPopUp: (String) -> Unit) {
+        launchCatching {
+            openAndPopUp(CUSTOM_METRICS_SCREEN)
+        }
+    }
+
+    fun onCancelClick(openAndPopUp: (String) -> Unit, fromCustom: Boolean) {
+        if(fromCustom) {
+            launchCatching {
+                openAndPopUp(ADD_METRICS_SCREEN)
+            }
+        } else {
+            launchCatching {
+                openAndPopUp(RateYourDay.route)
+            }
         }
     }
 
@@ -71,5 +90,21 @@ class RateYourDayViewModel @Inject constructor(
         launchCatching {
             openAndPopUp(Home.route)
         }
+    }
+
+    fun onCreateComplete(openAndPopUp: (String) -> Unit, name: String, public: Boolean) {
+        viewModelScope.launch {
+            var inputMet = ArrayList<Metric>()
+            inputMet.add( Metric(null, name, public, false, ArrayList<Value>()) )
+            if(!metricBackend.editMetrics(id=accountBackend.currentUserId, metrics=inputMet)) {
+                Log.d("SmilieDebug", "Failed to create custom metric")
+            } else {
+                Log.d("SmilieDebug", "Created successfully")
+            }
+        }
+        launchCatching {
+            openAndPopUp(ADD_METRICS_SCREEN)
+        }
+
     }
 }

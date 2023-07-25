@@ -28,13 +28,18 @@ fun RateYourDay(
 
     var sliders = mutableListOf<MutableState<Float>>()
     var metricsToRate = ArrayList<Metric>()
+    var overall = Metric()
     if (metrics != null) {
         metrics.forEach {
-            if(it.active) {
+            if(it.name == "Overall") {
+                overall = it
+            } else if(it.active) {
                 sliders.add(remember { mutableStateOf(5F) })
                 metricsToRate.add(it)
             }
         }
+        sliders.add(remember { mutableStateOf(5F) })
+        metricsToRate.add(overall)
 
         Box(
             modifier = Modifier
@@ -82,7 +87,6 @@ fun RateYourDay(
                     LazyColumn(modifier = Modifier.padding(10.dp)) {
                         for (i in metricsToRate.indices) {
                             item {
-
                                 Row() {
                                     Text(
                                         text = metricsToRate[i].name,

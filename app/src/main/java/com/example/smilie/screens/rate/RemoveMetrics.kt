@@ -27,7 +27,7 @@ fun RemoveMetrics(
         var dontRemove = mutableListOf<MutableState<Boolean>>()
         var metricsToRemove = ArrayList<Metric>()
         metrics.forEach {
-            if(it.active) {
+            if(it.active && it.name != "Overall") {
                 dontRemove.add(remember { mutableStateOf(true) })
                 metricsToRemove.add(it)
             }
@@ -50,28 +50,26 @@ fun RemoveMetrics(
                 LazyColumn(modifier = Modifier.padding(10.dp)) {
 
                     for (i in metricsToRemove.indices) {
-                        if (metricsToRemove[i].name != "Overall") {
-                            item {
-                                Row() {
-                                    Text(
-                                        text = metricsToRemove[i].name,
-                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Spacer(Modifier.weight(1f))
-                                }
-
-                                Row() {
-                                    Text(text = "Remove")
-                                    Spacer(Modifier.weight(1f))
-                                    Switch(
-                                        checked = !dontRemove[i].value,
-                                        onCheckedChange = {dontRemove[i].value = !it}
-                                    )
-                                }
+                        item {
+                            Row() {
+                                Text(
+                                    text = metricsToRemove[i].name,
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(Modifier.weight(1f))
                             }
-                            item{Spacer(Modifier.height(20.dp))}
+
+                            Row() {
+                                Text(text = "Remove")
+                                Spacer(Modifier.weight(1f))
+                                Switch(
+                                    checked = !dontRemove[i].value,
+                                    onCheckedChange = {dontRemove[i].value = !it}
+                                )
+                            }
                         }
+                        item{Spacer(Modifier.height(20.dp))}
                     }
                     item{Spacer(Modifier.height(30.dp))}
                 }
@@ -84,12 +82,22 @@ fun RemoveMetrics(
                 horizontalAlignment = Alignment.End
             ) {
                 Spacer(Modifier.weight(1f))
-                Button(onClick = {
-                    rateViewModel.onEditComplete(openAndPopUp, metricsToRemove, dontRemove)
-                }) {
-                    Text(
-                        text = "Done"
-                    )
+                Row() {
+                    Button(onClick = {
+                        rateViewModel.onCancelClick(openAndPopUp, false)
+                    }) {
+                        Text(
+                            text = "Cancel"
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    Button(onClick = {
+                        rateViewModel.onEditComplete(openAndPopUp, metricsToRemove, dontRemove)
+                    }) {
+                        Text(
+                            text = "Done"
+                        )
+                    }
                 }
             }
         }
