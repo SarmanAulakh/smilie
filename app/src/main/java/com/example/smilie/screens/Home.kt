@@ -341,21 +341,10 @@ fun PieChart(
     radius:Float = 500f,
     input:ArrayList<Metric>?,
 ) {
-    val colorList = listOf<Color>(
-        Color(0xAAFF0000),
-        Color(0xAAFF7F00),
-        Color(0xAAFFFF00),
-        Color(0xAA00FF00),
-        Color(0xAA0000FF),
-        Color(0xAA4B0082),
-        Color(0xAA9400D3)
-    )
     var circleCenter by remember {
         mutableStateOf(Offset.Zero)
     }
-    var inputList by remember {
-        mutableStateOf(input)
-    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -363,8 +352,6 @@ fun PieChart(
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(true) {
-                }
         ) {
             val width = size.width
             val height = size.height
@@ -372,32 +359,36 @@ fun PieChart(
 //            val totalValue = input.sumOf { (it.value).roundToInt() }
             var totalValue:Float = 0f
             input?.forEach {
-                if (it.active) {
-                    totalValue += it.values.last().weight.toFloat()
+                if (it.active && it.name != "Overall") {
+                    totalValue += it.values.last().value.toFloat()
                 }
             }
 
             val anglePerValue = 360f/totalValue
             var currentStartAngle = 0f
-            input?.forEachIndexed {  index, pieChartInput ->
-                val scale = 1.0f
-                val angleToDraw = pieChartInput.values.last().weight.toFloat() * anglePerValue
-                scale(scale){
-                    drawArc(
-                        color = colorList[index],
-                        startAngle = currentStartAngle,
-                        sweepAngle = angleToDraw,
-                        useCenter = true,
-                        size = Size(
-                            width = radius*2f,
-                            height = radius*2f
-                        ),
-                        topLeft = Offset(
-                            (width - radius * 2f) / 2f,
-                            (height - radius * 2f) / 2f
+            var index = 0
+            input?.forEach { pieChartInput ->
+                if (pieChartInput.active && pieChartInput.name != "Overall") {
+                    val scale = 1.0f
+                    val angleToDraw = pieChartInput.values.last().value.toFloat() * anglePerValue
+                    scale(scale){
+                        drawArc(
+                            color = colorList[index],
+                            startAngle = currentStartAngle,
+                            sweepAngle = angleToDraw,
+                            useCenter = true,
+                            size = Size(
+                                width = radius*2f,
+                                height = radius*2f
+                            ),
+                            topLeft = Offset(
+                                (width - radius * 2f) / 2f,
+                                (height - radius * 2f) / 2f
+                            )
                         )
-                    )
-                    currentStartAngle += angleToDraw
+                        currentStartAngle += angleToDraw
+                    }
+                    index += 1
                 }
             }
         }
@@ -407,7 +398,7 @@ fun PieChart(
     ) {
         var index = 0
         input?.forEach { pieChartInput ->
-            if (pieChartInput.active) {
+            if (pieChartInput.active && pieChartInput.name != "Overall") {
                 Row(){
                     Box(
                         modifier = Modifier
@@ -439,19 +430,11 @@ fun BarGraph(
     modifier: Modifier = Modifier,
     input:ArrayList<Metric>?,
 ) {
-    val colorList = listOf<Color>(
-        Color(0xAAFF0000),
-        Color(0xAAFF7F00),
-        Color(0xAAFFFF00),
-        Color(0xAA00FF00),
-        Color(0xAA0000FF),
-        Color(0xAA4B0082),
-        Color(0xAA9400D3)
-    )
+
     var maxValue:Float = 0f
     input?.forEach {
-        if (it.active && it.values.last().weight.toFloat() > maxValue) {
-            maxValue = it.values.last().weight.toFloat()
+        if (it.active && it.values.last().value.toFloat() > maxValue) {
+            maxValue = it.values.last().value.toFloat()
         }
     }
     Column(
@@ -464,9 +447,9 @@ fun BarGraph(
         ) {
 //            val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
             var index = 0
-            input?.forEach {chartInput ->
-                if (chartInput.active) {
-                    val percentage = chartInput.values.last().weight.toFloat() / maxValue
+            input?.forEach { chartInput ->
+                if (chartInput.active && chartInput.name != "Overall") {
+                    val percentage = chartInput.values.last().value.toFloat() / maxValue
                     Bar(
                         modifier = Modifier
                             .height((60 * percentage * input.size).dp)
@@ -474,15 +457,46 @@ fun BarGraph(
                         primaryColor = colorList[index],
                         percentage = percentage,
                         description = chartInput.name,
-                        value = chartInput.values.last().weight.toFloat() / maxValue
+                        value = chartInput.values.last().value.toFloat(),
+                        index = index
                     )
+                    index += 1
+                }
+            }
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            var index = 0
+            input?.forEach { chartInput ->
+                if (chartInput.active && chartInput.name != "Overall") {
+                    Row() {
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .background(colorList[index])
+                                .align(Alignment.CenterVertically)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = chartInput.name,
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Left
+                            ),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
                     index += 1
                 }
             }
         }
     }
 
-    Spacer(modifier = Modifier.width(30.dp))
+//    Spacer(modifier = Modifier.width(30.dp))
 }
 
 
@@ -494,7 +508,8 @@ fun Bar(
     primaryColor: Color,
     percentage: Float,
     description: String,
-    value: Float
+    value: Float,
+    index: Int
 ) {
     Box(
         modifier = modifier,
@@ -506,7 +521,7 @@ fun Bar(
             val width = size.width
             val height = size.height
             val barWidth = width/5 * 3
-            val barHeight = height/8 * 7
+            val barHeight = (height/8 * 7)
 
             var path = Path().apply {
                 moveTo(0f, height)
@@ -534,22 +549,30 @@ fun Bar(
                     }
                 )
             }
-
-            drawContext.canvas.nativeCanvas.apply {
-                drawText(
-                    "$description",
-                    0f,
-                    5f,
-                    android.graphics.Paint().apply {
-//                        color = primaryColor.toArgb()
-                        textSize = 14.dp.toPx()
-                        isFakeBoldText = true
-                    }
-                )
-            }
         }
     }
 }
+
+private fun getTopSeven(input: ArrayList<Metric>?) {
+
+}
+
+private val colorList = listOf<Color>(
+    Color(0xAAFF0000),
+    Color(0xAAFF7F00),
+    Color(0xAAFFFF00),
+    Color(0xAA00FF00),
+    Color(0xAA0000FF),
+    Color(0xAAFF00FF),
+    Color(0xAA9400D3),
+    Color(0xAA330360),
+    Color(0xAA90BF11),
+    Color(0xAA6BdB7E),
+    Color(0xAA511e2d),
+    Color(0xAA0a2f9b),
+    Color(0xAA70aaad),
+    Color(0xAA5715A8),
+)
 
 private fun getGreeting(hour: Int): String {
     return when (hour) {
