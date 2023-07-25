@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.model.UserTypes
 import com.example.smilie.model.view.UserRegisterViewModel
 import com.example.smilie.ui.components.ProfileImage
+import com.example.smilie.ui.components.common.LoadingButton
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,14 +66,14 @@ fun UserRegisterScreen(
             UsernameInput(uiState.username, viewModel::onUsernameChange)
             UserTypeDropdown(uiState.userType.name, viewModel::onUserTypeChange)
 
-            Button(
+            LoadingButton(
+                text = "Finish",
                 onClick = { viewModel.onRegisterUserClick(openAndPopUp) },
+                isLoading = uiState.loading,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp)
-            ) {
-                Text(text = "Finish")
-            }
+                .fillMaxWidth()
+                .padding(vertical = 24.dp)
+            )
             Text(text = uiState.message, color = Color.Red)
             Text(text = errorMessage, color = Color.Red)
         }

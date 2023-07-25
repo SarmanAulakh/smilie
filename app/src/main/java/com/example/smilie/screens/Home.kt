@@ -60,10 +60,28 @@ import com.example.smilie.model.Metric
 import kotlin.collections.ArrayList
 
 
+// Using accessible colors (https://venngage.com/tools/accessible-color-palette-generator)
+private val colorList = listOf(
+    Color(0xFF90d8b2),
+    Color(0xFF8dd2dd),
+    Color(0xFF8babf1),
+    Color(0xFF8b95f6),
+    Color(0xFF9b8bf4),
+    Color(0xFFf8b8d0),
+    Color(0xFFf194b8),
+    Color(0xFF330360),
+    Color(0xFF90BF11),
+    Color(0xFF6BdB7E),
+    Color(0xFF511e2d),
+    Color(0xFF0a2f9b),
+    Color(0xFF70aaad),
+    Color(0xFF5715A8)
+)
+
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Metric>?) {
 
-    if (user == null) {
+    if (user == null || user.equals(null)) {
         println("loading....")
     } else {
 
@@ -357,6 +375,7 @@ fun BarGraph(
             maxValue = it.values.last().value.toFloat()
         }
     }
+
     Column(
         verticalArrangement = Arrangement.Top
     ) {
@@ -482,23 +501,6 @@ private fun generateResponse(input: Float): String {
         return "This is AWESOME!! Continue to keep up your lifestyle!!"
     }
 }
-
-private val colorList = listOf<Color>(
-    Color(0xAAFF0000),
-    Color(0xAAFF7F00),
-    Color(0xAAFFFF00),
-    Color(0xAA00FF00),
-    Color(0xAA0000FF),
-    Color(0xAAFF00FF),
-    Color(0xAA9400D3),
-    Color(0xAA330360),
-    Color(0xAA90BF11),
-    Color(0xAA6BdB7E),
-    Color(0xAA511e2d),
-    Color(0xAA0a2f9b),
-    Color(0xAA70aaad),
-    Color(0xAA5715A8),
-)
 
 private fun getGreeting(hour: Int): String {
     return when (hour) {

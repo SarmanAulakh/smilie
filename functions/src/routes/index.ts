@@ -1,6 +1,13 @@
 import * as express from "express";
-import CheckAuth from "../middleware/CheckAuth";
-import { addUserDetails, getUserDetails ,getUserMetrics, updateUserMetrics, addMetricEntry } from "./users";
+// import CheckAuth from "../middleware/CheckAuth";
+import {
+  addUserDetails,
+  getUserDetails,
+  getUserMetrics,
+  updateUserMetrics,
+  addMetricEntry,
+  createNewUser,
+} from "./users";
 
 const router = express.Router();
 
@@ -9,7 +16,8 @@ router.get("/", (req, res) => {
 });
 
 //user routes
-router.put("/users/:userId", CheckAuth, addUserDetails);
+router.post("/users", createNewUser);
+router.put("/users/:userId", addUserDetails);
 router.get("/users/:userId", getUserDetails);
 router.get("/users/:userId/metrics", getUserMetrics);
 router.put("/users/:userId/metrics", updateUserMetrics);

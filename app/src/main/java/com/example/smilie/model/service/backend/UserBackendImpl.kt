@@ -11,6 +11,11 @@ class UserBackendImpl(
     private val application: SmilieHiltApp,
     private val userService: UserService,
 ): UserBackend {
+
+    override suspend fun createUser(user: User): User? {
+        return userService.create(user);
+    }
+
     override suspend fun getById(id: String): User? {
         if (id == "") {
             return null
