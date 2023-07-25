@@ -7,6 +7,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -27,6 +28,7 @@ fun BottomNavBar(
                     Text(
                         text = screen.name,
                         fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
                     )
                 },
                 icon = {

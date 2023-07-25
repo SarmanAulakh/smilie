@@ -30,6 +30,7 @@ class MainViewModel @Inject constructor(
     var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
 
     init {
+//        auth.signOut()
         getUser()
         getUserIdToken()
         getMetrics()

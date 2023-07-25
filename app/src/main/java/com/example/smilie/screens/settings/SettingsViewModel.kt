@@ -1,7 +1,6 @@
 package com.example.smilie.screens.settings
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.Metric
 import com.example.smilie.model.service.backend.AccountBackend
@@ -26,10 +25,8 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun saveMetrics(openAndPopUp: (String) -> Unit, metrics: ArrayList<Metric>) {
-        Log.d("save metrics", "Editing metrics")
 
         viewModelScope.launch {
-            Log.d("save metrics", "$metrics")
             if(metricBackend.editMetrics(id=accountBackend.currentUserId, metrics=metrics)) {
                 Log.d("SmilieDebug", "Edited successfully")
             } else {
