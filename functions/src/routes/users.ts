@@ -100,28 +100,35 @@ export function getUserDetails(req: Request, res: Response) {
 
 export function addUserDetails(req: Request, res: Response) {
   let userId = req.params.userId;
-  const { email, bio, following, isNotificationOn } = req.body;
+  const { followingUserId, isNotificationOn } = req.body;
 
-  let updateObj: any = {};
   if (isNotificationOn != null) {
-    updateObj.show_notifications = isNotificationOn;
-  } else if (following != null) {
-    updateObj.following = following;
-  } else {
-    updateObj.bio = bio;
-    updateObj.email = email;
+    db.collection("users")
+      .doc(userId)
+      .update({
+        show_notifications: isNotificationOn,
+      })
+      .then((_) => {
+        return res.status(200).json({ success: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ err });
+      });
+  } else if (followingUserId != null) {
+    db.collection("users")
+      .doc(userId)
+      .update({
+        following: FieldValue.arrayUnion(followingUserId),
+      })
+      .then((_) => {
+        return res.status(200).json({ success: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ err });
+      });
   }
-
-  db.collection("users")
-    .doc(userId)
-    .update({})
-    .then((_) => {
-      return res.status(200).json({ success: true });
-    })
-    .catch((err) => {
-      console.error(err);
-      return res.status(500).json({ err });
-    });
 }
 
 export function getUserMetrics(req: Request, res: Response) {
@@ -210,16 +217,11 @@ export function addMetricEntry(req: Request, res: Response) {
 }
 
 export function getAllUsers(req: Request, res: Response) {
-    db.collection("users")
-        .get().then(doc => {
-          let data: String[] = new Array(doc.size);
-          for (var i in doc.docs) {
-            data[i] = doc.docs[i].data().username
-          }
-          //console.log("metric data:"+JSON.stringify(data))
-          return res.status(200).json(data);
-        }
-    )
+  db.collection("users")
+    .get()
+    .then((snapshot) => {
+      return res.status(200).json(snapshot.docs.map((doc) => doc.data()));
+    });
 }
 
 interface Metric {
