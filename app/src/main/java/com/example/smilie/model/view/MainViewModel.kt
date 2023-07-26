@@ -28,6 +28,7 @@ class MainViewModel @Inject constructor(
     var userData: MutableState<User?> = mutableStateOf(null)
     var userIdToken: MutableState<String?> = mutableStateOf(null)
     var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
+    var allUsers: MutableState<ArrayList<String>?> = mutableStateOf(null)
 
     init {
 //        auth.signOut()
@@ -66,6 +67,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("SmilieDebug", "Current UserId: $userId")
             metricData.value = metricBackend.getMetricsById(accountBackend.currentUserId)
+        }
+    }
+
+    fun getAllUsers() {
+        viewModelScope.launch {
+            Log.d("SmilieDebug", "Retrieving all user list")
+            allUsers.value = userBackend.getAll()
+            //Log.d("SmilieDebug", "AllUsers: "+allUsers.value.toString())
         }
     }
 }

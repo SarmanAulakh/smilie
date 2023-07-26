@@ -71,4 +71,5 @@
 | 2023/07/24 | 0                 | 0                | 6               | 0               | 0               | 0                | Integrating backend data to display graphs and progressbars accordingly
 | 2023/07/24 | 7                 | 0                | 0               | 0               | 0               | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
 | 2023/07/25 | 0                 | 3                | 0               | 0               | 0               | 0                | Adding notifications functionality
+| 2023/07/25 | 0                 | 0                | 4               | 4               | 0               | 0                | Home page recommended followers list UI added with backend request for getting all users' name
 

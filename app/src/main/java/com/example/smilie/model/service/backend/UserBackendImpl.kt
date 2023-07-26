@@ -51,4 +51,10 @@ class UserBackendImpl(
 
         return users
     }
+
+    override suspend fun getAll(): ArrayList<String>? {
+        var ret = userService.getAll()
+        //Log.d("SmilieDebug", "AllUsers: "+ret.toString())
+        return ret
+    }
 }

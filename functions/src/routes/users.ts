@@ -209,6 +209,19 @@ export function addMetricEntry(req: Request, res: Response) {
     });
 }
 
+export function getAllUsers(req: Request, res: Response) {
+    db.collection("users")
+        .get().then(doc => {
+          let data: String[] = new Array(doc.size);
+          for (var i in doc.docs) {
+            data[i] = doc.docs[i].data().username
+          }
+          //console.log("metric data:"+JSON.stringify(data))
+          return res.status(200).json(data);
+        }
+    )
+}
+
 interface Metric {
   id?: String;
   name: String;
