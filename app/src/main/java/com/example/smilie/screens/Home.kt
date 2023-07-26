@@ -149,12 +149,12 @@ fun Title(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            fontSize = 36.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = 24.dp)
             .wrapContentWidth(align = Alignment.CenterHorizontally)
     )
 }
@@ -169,7 +169,7 @@ fun Home(name: String, value: Float) {
         val textData = listOf(
             TextType("$greeting, $name!", 36),
             TextType("Welcome back!", 36),
-            TextType("Over the last week, you've average a ${value.toString()}/10 !", 24),
+            TextType("Over the last week, you've average a ${value.toInt()}/10 !", 24),
             TextType("$response", 24)
         )
 
@@ -192,7 +192,7 @@ fun Home(name: String, value: Float) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoldableCards(
-    input: List<String>,
+    input: List<String?>,
     title: String
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -256,23 +256,26 @@ fun FoldableCards(
             }
             if(expandedState) {
                 for (item in input) {
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                start = 18.dp,
-                                top = 5.dp,
-                                bottom = 5.dp
+                    if (item != null) {
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    start = 18.dp,
+                                    top = 5.dp,
+                                    bottom = 5.dp
+                                ),
+                            text = item,
+                            style = TextStyle(
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
                             ),
-                        text = item,
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                            maxLines = 4,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
+
         }
     }
 }
