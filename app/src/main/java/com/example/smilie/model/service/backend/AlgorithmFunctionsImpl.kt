@@ -108,7 +108,14 @@ open class AlgorithmFunctionsImpl @Inject constructor(
     // this function DOES NOT have to account for overall
     // return an array of metrics
     override suspend fun calculateWeights(metrics: ArrayList<Metric>): ArrayList<Metric> {
-        val overall = metricBackend.getMetricValueByName(accountBackend.currentUserId, "Overall")
+//        val overall = metricBackend.getMetricValueByName(accountBackend.currentUserId, "Overall")
+        var overall = 0
+        for (metric in metrics) {
+            if (metric.name == "Overall") {
+                overall = metric.values.last().value.toInt()
+                break
+            }
+        }
         var sumImportant = 0
         var sumUnimportant = 0
 

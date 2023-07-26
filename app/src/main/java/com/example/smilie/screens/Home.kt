@@ -107,6 +107,7 @@ fun HomeScreen(
 
                         if (allUsers != null) {
                             var nonFriendList: List<User> = allUsers.filter { user.following?.contains(it.id) == false }
+//                            var nonFriendList: List<User> = allUsers
 
                             item { Title("Recommended People to Follow") }
 

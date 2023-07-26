@@ -26,7 +26,7 @@ import com.example.smilie.model.service.backend.generateDefaultUserWeightsStrate
 import com.example.smilie.model.service.backend.generateInfluencerUserWeightsStrategy
 import com.example.smilie.model.service.backend.generateStudentUserWeightsStrategy
 import androidx.appcompat.app.AlertDialog
-import com.example.smilie.screens.rate.IncorrectValuesAlert
+
 
 
 @HiltViewModel
@@ -138,7 +138,7 @@ class RateYourDayViewModel @Inject constructor(
                 generateDefaultUserWeightsStrategy()
             }
         }
-        var weights: Array<Double> = emptyArray<Double>()
+        var weights: ArrayList<Double> = ArrayList<Double>()
 
 
         viewModelScope.launch {
@@ -155,6 +155,20 @@ class RateYourDayViewModel @Inject constructor(
                 }
             } else if (metrics[0].values.size == 0 ) {
                 weights = algo.generateWeights(metrics)
+                for (i in metrics.indices) {
+                    metrics[i].values += Value(vals[i].value, "temp", weights[i], 0.0)
+                }
+                val weightCalculator = AlgorithmFunctionsImpl(metricBackend, accountBackend)
+                for (i in metrics.indices) {
+                    val temp = Value(vals[i].value, Instant.now().toString())
+                    metrics[i].values += temp
+                }
+                val newMetrics = weightCalculator.calculateWeights(metrics)
+                weights.clear()
+                for (metric in newMetrics) {
+                    weights += metric.values.last().weight.toDouble()
+                }
+
             }
             for(i in metrics.indices) {
 
