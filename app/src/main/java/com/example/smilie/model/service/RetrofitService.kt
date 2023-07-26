@@ -10,6 +10,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserService {
     @Headers(
@@ -44,4 +45,5 @@ interface MetricService {
     suspend fun put(@Path("id") id: String, @Body metrics: ArrayList<Metric>): Boolean
     @PUT("smilie-90a63/us-central1/api/users/{id}/metrics/{metric_id}")
     suspend fun put(@Path("id") id: String, @Path("metric_id") metric_id: String, @Body value: Value): Boolean
+
 }

@@ -47,6 +47,7 @@ import com.example.smilie.model.User
 import java.util.*
 import com.example.smilie.model.Metric
 import com.example.smilie.model.view.HomeViewModel
+import com.example.smilie.model.view.MainViewModel
 import kotlin.collections.ArrayList
 import com.example.smilie.screens.settings.SettingsManager
 
@@ -70,10 +71,13 @@ private val colorList = listOf(
 @Composable
 fun HomeScreen(
     user: User?,
-    metrics: ArrayList<Metric>?,
+
     allUsers: ArrayList<User>?,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+    homeViewModel.getMetrics()
+    var metrics = homeViewModel.metricData.value
+    //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
@@ -102,7 +106,7 @@ fun HomeScreen(
                                 }
                             }
                         }
-                        item { Home(userName, overallAvg/count) }
+                        item { Home(userName, overallAvg/count, metrics) }
 
                         if (allUsers != null) {
                             var nonFriendList: List<User> = if (user.following == null) allUsers else allUsers.filter { !user.following.contains(it.id) }
@@ -136,18 +140,28 @@ fun Title(text: String) {
 }
 
 @Composable
-fun Home(name: String, value: Float) {
+fun Home(name: String, value: Float, metrics: ArrayList<Metric>?) {
+
     Column(modifier = Modifier.padding(16.dp)) {
         val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greeting = getGreeting(currentHour)
         val response = generateResponse(value)
 
-        val textData = listOf(
-            TextType("$greeting, $name!", 36),
-            TextType("Welcome back!", 36),
-            TextType("Over the last week, you've average a ${value.toInt()}/10 !", 24),
-            TextType("$response", 24)
-        )
+        var textData = listOf<TextType>()
+        if (metrics != null && metrics[0].values.isNotEmpty()) {
+            textData = listOf(
+                TextType("$greeting, $name!", 36),
+                TextType("Welcome back!", 36),
+                TextType("Over the last week, you've averaged a ${value.toInt()}/10 !", 24),
+                TextType("$response", 24)
+            )
+        } else {
+            textData = listOf(
+                TextType("$greeting, $name!", 36),
+                TextType("Welcome!", 36),
+                TextType("Please rate your day for the first time!", 24)
+            )
+        }
 
         for (textval in textData) {
             Text(

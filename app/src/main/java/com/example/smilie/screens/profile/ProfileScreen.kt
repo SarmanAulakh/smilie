@@ -186,7 +186,28 @@ fun ProfileScreen(
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                 );
 
-
+                                // for most important metrics
+                                Column(modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 8.dp, bottom = 24.dp)) {
+                                    Text(
+                                        text = "Most Important Metrics:",
+                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(bottom = 16.dp)
+                                    );
+                                    if (metrics != null) {
+                                        for (metric in metrics.sortedByDescending { it.values.sumOf { value -> value.weight.toDouble() } }
+                                            .take(3)) {
+                                            Column(modifier =
+                                            Modifier.padding(bottom = 12.dp)) {
+                                                Text(
+                                                    text = metric.name,
+                                                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                                )
+                                            }
+                                        }
+                                    }
                                 // Current Metrics
                                 Column(modifier = Modifier
                                     .fillMaxSize()
@@ -218,6 +239,9 @@ fun ProfileScreen(
                                             }
                                         }
                                     }
+                                }
+
+
                                 }
 
                                 // Friends list
