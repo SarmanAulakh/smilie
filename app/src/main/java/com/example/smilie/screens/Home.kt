@@ -1,6 +1,7 @@
 package com.example.smilie.screens
 
 import android.icu.text.CaseMap.Title
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -31,6 +32,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.runtime.RecomposeScope
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
@@ -57,6 +60,7 @@ import java.lang.Math.PI
 import java.util.*
 import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
+import com.example.smilie.screens.settings.MetricPrivacy
 import kotlin.collections.ArrayList
 import com.example.smilie.screens.settings.SettingsManager
 
@@ -78,8 +82,9 @@ private val colorList = listOf(
 )
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Metric>?) {
+fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<String>?) {
 
+    //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
@@ -102,13 +107,21 @@ fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Me
 
                         metrics?.forEach {
                             if(it.name == "Overall") {
-                                it.values.forEach {valuee ->
-                                    overallAvg += valuee.value.toFloat()
+                                it.values.forEach {itit ->
+                                    overallAvg += itit.value.toFloat()
                                     count += 1f
                                 }
                             }
                         }
                         item { Home(userName, overallAvg/count) }
+
+                        var nonFriendList: List<String> = filterFriends(user, allUsers)
+
+                        item { Title("Recommended People to Follow") }
+
+                        itemsIndexed(nonFriendList) { _, item ->
+                            Recommendations(item=item)
+                        }
                     }
                 }
             }
@@ -493,6 +506,61 @@ fun Bar(
             }
         }
     }
+}
+
+@Composable
+fun Recommendations(
+    item: String
+) {
+    var buttonState = remember { mutableStateOf(true) }
+    var buttonText = remember { mutableStateOf("Follow") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(text = item)
+        Button(
+            // requires backend calls to add a person to the following list
+            onClick = {
+                buttonState.value = false
+                buttonText.value = "Following!"
+            },
+            enabled = buttonState.value
+        ) {
+            Text(
+                text = buttonText.value,
+                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun RecommendationPreview() {
+    Recommendations(item = "Dohyun")
+}
+
+private fun filterFriends(
+    user: User?,
+    allUsers: ArrayList<String>?
+): List<String> {
+    var nonFriendList = mutableListOf<String>()
+    if (user?.following == null) {
+        if(allUsers != null) {
+            nonFriendList = allUsers.toMutableList()
+        }
+    } else {
+        allUsers?.forEach {
+            if (user.following.contains(it)) {
+                nonFriendList.add(it)
+            }
+        }
+    }
+    return nonFriendList
 }
 
 private fun generateResponse(input: Float): String {
