@@ -63,7 +63,7 @@ fun MainApp(
     val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     val startingRoute = if (isUserSignedIn) Home.route else LOGIN_SCREEN
 
-    val settingsManager = SettingsManager(true, 2f)
+    val settingsManager = SettingsManager(initialDark=true, initialFontSize=2f)
 
     SMILIETheme(settingsManager) {
         val navController = rememberNavController()
@@ -123,9 +123,13 @@ fun MainApp(
                     showBottomNav = true
                     viewModel.getMetrics()
                     var metricData = viewModel.metricData.value
+
+                    viewModel.getUser()
+                    var userData = viewModel.userData.value
                     SettingsScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                         metrics = metricData,
+                        user = userData,
                         settingsManager = settingsManager,
                     )
                 }

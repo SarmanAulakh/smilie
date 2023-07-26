@@ -39,7 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val openaiToken = "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"
+const val openaiToken = "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"
 
 // Adapted from https://github.com/easy-tuto/Android_ChatGPT/tree/main
 @Composable
@@ -50,12 +50,12 @@ fun ChatScreen(
     val messageList: MutableList<Message> = remember { mutableStateListOf() }
 
     var metricStr = "The metrics for the user over the past week is "
-    Log.d("MetricStr", "$metrics")
+//    Log.d("MetricStr", "$metrics")
     metrics?.forEach{
         metricStr += "'${it.name}': ${it.values[0].value}, "
     }
     metricStr += " where 0 is rated poorly and 10 is rated best. \n"
-    Log.d("MetricStr", metricStr)
+//    Log.d("MetricStr", metricStr)
     Box(
         modifier = Modifier
             .fillMaxSize()
