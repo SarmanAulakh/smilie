@@ -112,12 +112,9 @@ fun MainApp(
                     )
                 ) { entry ->
                     showBottomNav = true
-                    viewModel.getMetrics()
-                    var metricData = viewModel.metricData.value
                     ProfileScreen(
                         userId = entry.arguments?.getString("userId"),
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        metrics = metricData,
                         settingsManager=settingsManager
                     )
                 }

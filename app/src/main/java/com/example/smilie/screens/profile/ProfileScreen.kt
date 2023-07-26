@@ -94,11 +94,11 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     userId: String?,
     openAndPopUp: (String) -> Unit,
-    metrics: ArrayList<Metric>?,
     settingsManager: SettingsManager
 ) {
-    profileViewModel.updateCurrentlyViewingUser(userId)
+//    profileViewModel.updateCurrentlyViewingUser(userId)
     val user = profileViewModel.currentlyViewingUser.value
+    val metrics = profileViewModel.metricData.value
     var barToggle by remember { mutableStateOf(false) }
     var showFullFriendList by remember { mutableStateOf(false) }
     if (user == null) {
