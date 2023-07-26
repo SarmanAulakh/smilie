@@ -13,5 +13,6 @@ data class Metric(
 data class Value(
     val value: Number = 0,
     val date: String = "",
-    val weight: Number = 0
+    var weight: Number = 0,
+    var tempWeight: Number = 0
 )
