@@ -23,6 +23,7 @@ constructor(
     private val userBackend: UserBackend,
     private val metricBackend: MetricBackend,
 ) : SmilieViewModel() {
+    val signedInUserId: String = accountBackend.currentUserId;
     val followingUsers: MutableState<List<User>> = mutableStateOf(ArrayList())
     val currentlyViewingUser: MutableState<User?> = mutableStateOf(null)
     var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
@@ -36,7 +37,6 @@ constructor(
 
         viewModelScope.launch {
             val user = userBackend.getById(searchUserId)
-            Log.d("SmilieDebug", "Current UBE: ${user.toString()}")
             if (user != null) {
                 currentlyViewingUser.value = user
                 getMetrics(user.id)
@@ -53,7 +53,6 @@ constructor(
     private fun getMetrics(userId: String = accountBackend.currentUserId) {
         viewModelScope.launch {
             metricData.value = metricBackend.getMetricsById(userId)
-            Log.d("SmilieDebug", "Current metrics: $userId")
             println(metricData.value)
         }
     }
