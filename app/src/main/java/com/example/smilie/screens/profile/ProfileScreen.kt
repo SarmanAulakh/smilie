@@ -1,17 +1,28 @@
 package com.example.smilie.screens.profile
 
+import android.graphics.Paint
 import android.net.Uri
 import android.util.Log
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
@@ -31,22 +42,56 @@ import com.example.smilie.model.User
 import com.example.smilie.model.UserTypes
 import com.example.smilie.ui.components.ProfileImage
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.smilie.model.view.ProfileViewModel
+import com.example.smilie.screens.TextType
 import com.example.smilie.ui.navigation.Profile
+import java.util.Calendar
+import kotlin.math.roundToInt
+import com.example.smilie.model.Metric
+import com.example.smilie.screens.settings.SettingsManager
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     userId: String?,
-    openAndPopUp: (String) -> Unit
+    openAndPopUp: (String) -> Unit,
+    metrics: ArrayList<Metric>?,
+    settingsManager: SettingsManager
 ) {
     profileViewModel.updateCurrentlyViewingUser(userId)
     val user = profileViewModel.currentlyViewingUser.value
+    var barToggle by remember { mutableStateOf(false) }
     if (user == null) {
         Text(text = "loading...")
     } else {
@@ -234,6 +279,124 @@ fun ProfileScreen(
                                         }
                                     }
                                 }
+                            }
+                        }
+
+                        val helpfulLinks = listOf(
+                            "betterhelp.org",
+                            "LeagueofLeg.com"
+                        )
+                        val metricText = listOf(
+                            "sleep",
+                            "time spent with friends",
+                            "productivity",
+                        )
+
+                        item {
+                            com.example.smilie.screens.FoldableCards(
+                                input = metricText,
+                                title = "Recommended Metrics"
+                            )
+                        }
+                        item {
+                            com.example.smilie.screens.FoldableCards(
+                                input = helpfulLinks,
+                                title = "Helpful Links"
+                            )
+                        }
+
+                        item { com.example.smilie.screens.Title("${user.username}'s Data") }
+
+                        metrics?.forEach() {
+                            item {
+                                if (it.active) {
+                                    Box(
+                                        modifier = Modifier.padding(start = 0.dp)
+                                    ) {
+                                        Column {
+                                            Text(
+                                                text = it.name,
+                                                style = TextStyle(
+                                                    fontSize = 28.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                modifier = Modifier.padding(8.dp)
+                                            )
+                                            com.example.smilie.screens.Rectangle(it.values.last().value.toFloat())
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
+//                        items(metricData) { metric ->
+//                            Box(
+//                                modifier = Modifier.padding(start = 0.dp)
+//                            ) {
+//                                Column {
+//                                    Text(
+//                                        text = metric.name,
+//                                        style = TextStyle(
+//                                            fontSize = 28.sp,
+//                                            fontWeight = FontWeight.Bold
+//                                        ),
+//                                        modifier = Modifier.padding(8.dp)
+//                                    )
+//                                    com.example.smilie.screens.Rectangle(metric.value)
+//                                }
+//                            }
+//                        }
+
+
+                        item {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Switch(
+                                    checked = barToggle,
+                                    onCheckedChange = {
+                                        barToggle = it
+                                    }
+                                )
+                                Text(
+                                    text = "Toggle Graph Type",
+                                    style = TextStyle(
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier.padding(20.dp)
+                                )
+                            }
+                        }
+
+                        if (barToggle) {
+                            item {
+                                com.example.smilie.screens.PieChart(
+                                    modifier = Modifier
+                                        .size(400.dp),
+                                    input = metrics
+                                )
+                            }
+                        } else {
+                            item {
+                                com.example.smilie.screens.BarGraph(
+                                    modifier = Modifier
+                                        .size(500.dp),
+                                    input = metrics,
+                                    settingsManager = settingsManager
+                                )
+                            }
+                        }
+
+                        // Buffer to show things hidden from the task bar
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .size(30.dp)
+                            ) {
                             }
                         }
                     }

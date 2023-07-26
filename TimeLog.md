@@ -63,9 +63,15 @@
 | 2023/07/22 | 0                 | 0                | 0               | 6               | 0               | 0                | Completed backend for metric data
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 | 2023/07/23 | 0                 | 4                | 0               | 0               | 0               | 0                | Refactored the settingsManager and pulled past conversation data for the chat recommendation feature.
+| 2023/07/23 | 0                 | 0                | 3               | 0               | 0               | 0                | Migrating Contents from HomeScreen to Profile Page
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
 | 2023/07/24 | 0                 | 9                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase, update color scheme for accessibility and provide chatgpt context about metrics
 | 2023/07/24 | 0                 | 0                | 0               | 6               | 0               | 0                | Added page for custom metrics and defined its navigation. Added cancel buttons to all rate popup pages. Fixed issue with metric spacing. Made "Overall" always last to rate
 | 2023/07/24 | 7                 | 0                | 0               | 0               | 0                | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
 | 2023/07/24 | 0                 | 0                | 0               | 0               | 0                | 6.5              | Starting to implement algorithm functions
 | 2023/07/25 | 0                 | 0                | 0               | 0               | 0                | 11               | Finish implementing algorithm functions
+| 2023/07/24 | 0                 | 3                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase
+| 2023/07/24 | 0                 | 0                | 6               | 0               | 0               | 0                | Integrating backend data to display graphs and progressbars accordingly
+| 2023/07/24 | 7                 | 0                | 0               | 0               | 0               | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
+| 2023/07/25 | 0                 | 3                | 0               | 0               | 0               | 0                | Adding notifications functionality
+

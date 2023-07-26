@@ -3,6 +3,7 @@ package com.example.smilie.model.service
 import com.example.smilie.model.User
 import com.example.smilie.model.Metric
 import com.example.smilie.model.Value
+import com.example.smilie.screens.settings.NotificationUpdateBody
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Headers
@@ -24,6 +25,12 @@ interface UserService {
     )
     @POST("smilie-90a63/us-central1/api/users")
     suspend fun create(@Body user: User): User?
+
+    @Headers(
+        "Accept: application/json"
+    )
+    @PUT("smilie-90a63/us-central1/api/users/{id}")
+    suspend fun put(@Path("id") id: String, @Body notificationUpdateBody: NotificationUpdateBody): User?
 }
 
 interface MetricService {

@@ -29,11 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.model.Metric
+import com.example.smilie.model.User
 
 @Composable
 fun SettingsScreen(
     openAndPopUp: (String) -> Unit,
     metrics: ArrayList<Metric>?,
+    user: User?,
     settingsManager: SettingsManager,
     settingViewModel: SignUpViewModel = hiltViewModel()
 ) {
@@ -41,6 +43,10 @@ fun SettingsScreen(
     val privacySettings: MutableList<MutableState<Boolean>> = remember{ mutableListOf()}
     metrics?.forEach{
         privacySettings.add(mutableStateOf(it.public))
+    }
+
+    if (user != null) {
+        settingViewModel.isNotificationsOn.value = user.show_notifications
     }
 
     Box(
@@ -71,7 +77,9 @@ fun SettingsScreen(
                     .fillMaxHeight(),
                 contentPadding = PaddingValues(16.dp)
             ) {
-
+                item {
+                    NotificationsSwitch(settingViewModel)
+                }
                 item {
                     DarkModeSwitch(settingsManager)
                 }
@@ -230,6 +238,26 @@ fun DarkModeSwitch(settingsManager: SettingsManager) {
         Switch(
             checked = isDarkMode,
             onCheckedChange = { settingsManager.toggleDarkMode() }
+        )
+    }
+}
+
+@Composable
+fun NotificationsSwitch(settingViewModel: SignUpViewModel) {
+    val isNotificationsOn = settingViewModel.isNotificationsOn.value
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(text = "Notifications")
+        Switch(
+            checked = isNotificationsOn,
+            onCheckedChange = {
+                settingViewModel.toggleNotificationsMode()
+            }
         )
     }
 }

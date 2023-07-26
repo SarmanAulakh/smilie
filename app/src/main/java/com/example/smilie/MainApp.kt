@@ -63,7 +63,7 @@ fun MainApp(
     val isUserSignedIn = FirebaseAuth.getInstance().currentUser != null
     val startingRoute = if (isUserSignedIn) Home.route else LOGIN_SCREEN
 
-    val settingsManager = SettingsManager(true, 2f)
+    val settingsManager = SettingsManager(initialDark=true, initialFontSize=2f)
 
     SMILIETheme(settingsManager) {
         val navController = rememberNavController()
@@ -92,10 +92,12 @@ fun MainApp(
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(route = Home.route) {
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     showBottomNav = true
                     viewModel.getUser();
                     var userData = viewModel.userData.value
-                    HomeScreen(user=userData)
+                    HomeScreen(user=userData, metrics=metricData)
                 }
                 composable(
                     route = Profile.route + "?userId={userId}",
@@ -108,18 +110,26 @@ fun MainApp(
                     )
                 ) { entry ->
                     showBottomNav = true
+                    viewModel.getMetrics()
+                    var metricData = viewModel.metricData.value
                     ProfileScreen(
                         userId = entry.arguments?.getString("userId"),
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
+                        metrics = metricData,
+                        settingsManager=settingsManager
                     )
                 }
                 composable(route = Settings.route) {
                     showBottomNav = true
                     viewModel.getMetrics()
                     var metricData = viewModel.metricData.value
+
+                    viewModel.getUser()
+                    var userData = viewModel.userData.value
                     SettingsScreen(
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
                         metrics = metricData,
+                        user = userData,
                         settingsManager = settingsManager,
                     )
                 }
