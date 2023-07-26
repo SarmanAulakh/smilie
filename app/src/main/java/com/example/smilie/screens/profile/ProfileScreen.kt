@@ -290,9 +290,9 @@ fun ProfileScreen(
                             "LeagueofLeg.com"
                         )
                         val metricText = listOf(
-                            "sleep",
-                            "time spent with friends",
-                            "productivity",
+                            metrics?.get(0)?.name,
+                            metrics?.get(1)?.name,
+                            metrics?.get(2)?.name
                         )
 
                         item {
@@ -427,10 +427,4 @@ fun ProfileScreen(
             }
         }
     }
-}
-
-private fun findLowestThreeMetric(
-    metrics: Metric?
-) {
-
 }
