@@ -155,8 +155,19 @@ fun ProfileScreen(
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                 );
+                                var overallAvg = 0f
+                                var count = 0f
+
+                                metrics?.forEach {
+                                    if(it.name == "Overall") {
+                                        it.values.forEach {itit ->
+                                            overallAvg += itit.value.toFloat()
+                                            count += 1f
+                                        }
+                                    }
+                                }
                                 Text(
-                                    text = "9/10",
+                                    text = (overallAvg/count).toInt().toString() + "/10",
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                 );
 
@@ -275,12 +286,12 @@ fun ProfileScreen(
                                 title = "Recommended Metrics"
                             )
                         }
-                        item {
-                            com.example.smilie.screens.FoldableCards(
-                                input = helpfulLinks,
-                                title = "Helpful Links"
-                            )
-                        }
+//                        item {
+//                            com.example.smilie.screens.FoldableCards(
+//                                input = helpfulLinks,
+//                                title = "Helpful Links"
+//                            )
+//                        }
 
                         item {
                             Row(
@@ -401,4 +412,10 @@ fun ProfileScreen(
             }
         }
     }
+}
+
+private fun findLowestThreeMetric(
+    metrics: Metric?
+) {
+
 }

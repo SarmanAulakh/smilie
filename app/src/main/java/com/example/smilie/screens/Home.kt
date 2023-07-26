@@ -149,7 +149,7 @@ fun Title(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            fontSize = 36.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.ExtraBold
         ),
         modifier = Modifier
@@ -169,7 +169,7 @@ fun Home(name: String, value: Float) {
         val textData = listOf(
             TextType("$greeting, $name!", 36),
             TextType("Welcome back!", 36),
-            TextType("Over the last week, you've average a ${value.toString()}/10 !", 24),
+            TextType("Over the last week, you've average a ${value.toInt()}/10 !", 24),
             TextType("$response", 24)
         )
 
