@@ -26,9 +26,9 @@ class SignUpViewModel @Inject constructor(
     val isNotificationsOn = mutableStateOf(true)
 
     fun onSignOutClick(openAndPopUp: (String) -> Unit) {
+        openAndPopUp(LOGIN_SCREEN)
         launchCatching {
             accountBackend.signOut()
-            openAndPopUp(LOGIN_SCREEN)
         }
     }
 

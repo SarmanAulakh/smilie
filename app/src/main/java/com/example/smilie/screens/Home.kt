@@ -1,6 +1,7 @@
 package com.example.smilie.screens
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -73,8 +74,6 @@ fun HomeScreen(
     allUsers: ArrayList<User>?,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-
-    //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
@@ -106,7 +105,7 @@ fun HomeScreen(
                         item { Home(userName, overallAvg/count) }
 
                         if (allUsers != null) {
-                            var nonFriendList: List<User> = allUsers.filter { user.following?.contains(it.id) == false }
+                            var nonFriendList: List<User> = if (user.following == null) allUsers else allUsers.filter { !user.following.contains(it.id) }
 
                             item { Title("Recommended People to Follow") }
 
@@ -118,29 +117,6 @@ fun HomeScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Rectangle(value: Float) {
-    val height: Dp = 25.dp
-    val width = (value / 10f)
-    Row() {
-        LinearProgressIndicator(
-            progress = width,
-            modifier = Modifier
-                .weight(10f)
-                .height(height)
-                .fillMaxWidth(0.75f),
-        )
-        Text(
-            text = value.toString(),
-            style = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier.padding(start = 25.dp)
-        )
     }
 }
 
@@ -304,7 +280,7 @@ fun PieChart(
 //            val totalValue = input.sumOf { (it.value).roundToInt() }
             var totalValue:Float = 0f
             input?.forEach {
-                if (it.active && it.name != "Overall") {
+                if (it.active && it.values.size > 0 && it.name != "Overall") {
                     totalValue += it.values.last().value.toFloat()
                 }
             }
@@ -315,7 +291,8 @@ fun PieChart(
             input?.forEach { pieChartInput ->
                 if (pieChartInput.active && pieChartInput.name != "Overall") {
                     val scale = 1.0f
-                    val angleToDraw = pieChartInput.values.last().value.toFloat() * anglePerValue
+                    val last = if (pieChartInput.values.size > 0) pieChartInput.values.last().value.toFloat() else 0.0f;
+                    val angleToDraw = last * anglePerValue
                     scale(scale){
                         drawArc(
                             color = colorList[index],
@@ -377,75 +354,76 @@ fun BarGraph(
     settingsManager: SettingsManager
 ) {
 
-    var maxValue:Float = 0f
-    input?.forEach {
-        if (it.active && it.values.last().value.toFloat() > maxValue) {
-            maxValue = it.values.last().value.toFloat()
-        }
-    }
-
-    Column(
-        verticalArrangement = Arrangement.Top
-    ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-//            val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
-            var index = 0
-            input?.forEach { chartInput ->
-                if (chartInput.active && chartInput.name != "Overall") {
-                    val percentage = chartInput.values.last().value.toFloat() / maxValue
-                    Bar(
-                        modifier = Modifier
-                            .height((60 * percentage * input.size).dp)
-                            .width(40.dp),
-                        primaryColor = colorList[index],
-                        percentage = percentage,
-                        description = chartInput.name,
-                        value = String.format("%.1f",chartInput.values.last().value.toFloat()).toFloat(),
-                        index = index,
-                        settingsManager = settingsManager
-                    )
-                    index += 1
-                }
+    if (input != null && input.size > 0) {
+        var maxValue:Float = 0f
+        input?.forEach {
+            if (it.active && it.values.size > 0 && it.values.last().value.toFloat() > maxValue) {
+                maxValue = it.values.last().value.toFloat()
             }
         }
-        Spacer(modifier = Modifier.width(20.dp))
+
         Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(top=24.dp)
+            verticalArrangement = Arrangement.Top
         ) {
-            var index = 0
-            input?.forEach { chartInput ->
-                if (chartInput.active && chartInput.name != "Overall") {
-                    Row() {
-                        Box(
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+//            val listSum by remember { mutableStateOf(input.sumOf { it.value }) }
+                var index = 0
+                input?.forEach { chartInput ->
+                    if (chartInput.active && chartInput.name != "Overall") {
+                        var last = if (chartInput.values.size > 0) chartInput.values.last().value.toFloat() else 0.0f;
+                        val percentage =last / maxValue;
+                        Bar(
                             modifier = Modifier
-                                .size(10.dp)
-                                .background(colorList[index])
-                                .align(Alignment.CenterVertically)
+                                .height((60 * percentage * input.size).dp)
+                                .width(40.dp),
+                            primaryColor = colorList[index],
+                            percentage = percentage,
+                            description = chartInput.name,
+                            value = String.format("%.1f",last).toFloat(),
+                            index = index,
+                            settingsManager = settingsManager
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = chartInput.name,
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Medium,
-                                textAlign = TextAlign.Left
-                            ),
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
+                        index += 1
                     }
-                    index += 1
+                }
+            }
+            Spacer(modifier = Modifier.width(20.dp))
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.padding(top=24.dp)
+            ) {
+                var index = 0
+                input?.forEach { chartInput ->
+                    if (chartInput.active && chartInput.name != "Overall") {
+                        Row() {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .background(colorList[index])
+                                    .align(Alignment.CenterVertically)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = chartInput.name,
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Left
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                            )
+                        }
+                        index += 1
+                    }
                 }
             }
         }
     }
-
-//    Spacer(modifier = Modifier.width(30.dp))
 }
 
 
@@ -569,12 +547,6 @@ private fun getGreeting(hour: Int): String {
         else -> "Good Evening"
     }
 }
-
-private fun handleMetricClick(metric: TextType) {
-    // Handle the metric click here
-    println("Selected metric: ${metric.text}")
-}
-//data class Metric(val name: String, val value: Float)
 
 // text: text to display, type: determines fontsize
 data class TextType(val text: String, val type: Int)

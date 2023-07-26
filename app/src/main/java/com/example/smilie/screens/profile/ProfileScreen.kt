@@ -198,7 +198,7 @@ fun ProfileScreen(
                                         modifier = Modifier.padding(bottom = 16.dp)
                                     );
                                     if (metrics != null) {
-                                        for (metric in metrics) {
+                                        for (metric in metrics.filter { it.public }) {
                                             Column(modifier =
                                                 Modifier.padding(bottom = 12.dp)) {
                                                 Text(
