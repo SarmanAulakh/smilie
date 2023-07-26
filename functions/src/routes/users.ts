@@ -29,9 +29,19 @@ export function createNewUser(req: Request, res: Response) {
   switch (userType) {
     case UserTypes.STUDENT:
       metrics = metrics.concat([
-        { name: "Productivity (School)", public: true, active: true, values: [] },
+        {
+          name: "Productivity (School)",
+          public: true,
+          active: true,
+          values: [],
+        },
         { name: "Video Games", public: false, active: true, values: [] },
-        { name: "Time spent on Assignments", public: true, active: true, values: [] },
+        {
+          name: "Time spent on Assignments",
+          public: true,
+          active: true,
+          values: [],
+        },
       ]);
       break;
     case UserTypes.INFLUENCER:
@@ -57,7 +67,7 @@ export function createNewUser(req: Request, res: Response) {
       batch
         .commit()
         .then(() => {
-          console.log("bastched")
+          console.log("bastched");
           return res.status(200).json({ success: true });
         })
         .catch((err) => {
@@ -90,22 +100,33 @@ export function getUserDetails(req: Request, res: Response) {
 
 export function addUserDetails(req: Request, res: Response) {
   let userId = req.params.userId;
-  const { email, bio, show_notifications } = req.body
+  const { email, bio, isNotificationOn } = req.body;
 
-  db.collection("users")
-    .doc(userId)
-    .update({ 
-      email,
-      bio,
-      show_notifications,
-    })
-    .then((_) => {
-      return res.status(200).json({ success: true });
-    })
-    .catch((err) => {
-      console.error(err);
-      return res.status(500).json({ err });
-    });
+  if (isNotificationOn != null) {
+    db.collection("users")
+      .doc(userId)
+      .update({
+        show_notifications: isNotificationOn,
+      })
+      .then((_) => {
+        return res.status(200).json({ success: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ err });
+      });
+  } else {
+    db.collection("users")
+      .doc(userId)
+      .update({ bio, email })
+      .then((_) => {
+        return res.status(200).json({ success: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ err });
+      });
+  }
 }
 
 export function getUserMetrics(req: Request, res: Response) {
