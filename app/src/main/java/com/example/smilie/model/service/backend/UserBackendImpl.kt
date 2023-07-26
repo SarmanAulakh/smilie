@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.example.smilie.SmilieHiltApp
 import com.example.smilie.model.User
 import com.example.smilie.model.service.UserService
+import com.example.smilie.screens.settings.NotificationUpdateBody
 import java.net.SocketTimeoutException
 
 class UserBackendImpl(
@@ -14,6 +15,10 @@ class UserBackendImpl(
 
     override suspend fun createUser(user: User): User? {
         return userService.create(user);
+    }
+
+    override suspend fun updateUser(id: String, notificationUpdateBody: NotificationUpdateBody): User? {
+        return userService.put(id, notificationUpdateBody);
     }
 
     override suspend fun getById(id: String): User? {
