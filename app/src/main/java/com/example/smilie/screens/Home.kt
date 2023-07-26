@@ -1,9 +1,7 @@
 package com.example.smilie.screens
 
-import android.icu.text.CaseMap.Title
-import android.util.Log
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -17,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
 import androidx.compose.foundation.lazy.*
@@ -25,42 +22,30 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.RecomposeScope
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.smilie.model.User
-import com.google.android.gms.common.util.AndroidUtilsLight
-import io.grpc.util.OutlierDetectionLoadBalancer.OutlierDetectionLoadBalancerConfig.FailurePercentageEjection
-import java.lang.Math.PI
 import java.util.*
-import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
-import com.example.smilie.screens.settings.MetricPrivacy
+import com.example.smilie.model.view.HomeViewModel
 import kotlin.collections.ArrayList
 import com.example.smilie.screens.settings.SettingsManager
 
@@ -82,7 +67,12 @@ private val colorList = listOf(
 )
 
 @Composable
-fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<String>?) {
+fun HomeScreen(
+    user: User?,
+    metrics: ArrayList<Metric>?,
+    allUsers: ArrayList<User>?,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+) {
 
     //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
@@ -115,12 +105,14 @@ fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<Str
                         }
                         item { Home(userName, overallAvg/count) }
 
-                        var nonFriendList: List<String> = filterFriends(user, allUsers)
+                        if (allUsers != null) {
+                            var nonFriendList: List<User> = allUsers.filter { user.following?.contains(it.id) == false }
 
-                        item { Title("Recommended People to Follow") }
+                            item { Title("Recommended People to Follow") }
 
-                        itemsIndexed(nonFriendList) { _, item ->
-                            Recommendations(item=item)
+                            itemsIndexed(nonFriendList) { _, u ->
+                                Recommendations(user =u, addFollowing = homeViewModel::addFollowing)
+                            }
                         }
                     }
                 }
@@ -511,7 +503,8 @@ fun Bar(
 
 @Composable
 fun Recommendations(
-    item: String
+    user: User,
+    addFollowing: (userId: String) -> Unit,
 ) {
     var buttonState = remember { mutableStateOf(true) }
     var buttonText = remember { mutableStateOf("Follow") }
@@ -522,12 +515,29 @@ fun Recommendations(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = item)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Card(
+                shape = CircleShape,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(50.dp)
+            ) {
+                AsyncImage(
+                    model = Uri.parse(user.imageUrl),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .wrapContentSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Text(text = user.username, modifier = Modifier.padding(horizontal = 12.dp))
+        }
         Button(
             // requires backend calls to add a person to the following list
             onClick = {
                 buttonState.value = false
                 buttonText.value = "Following!"
+                addFollowing(user.id)
             },
             enabled = buttonState.value
         ) {
@@ -537,31 +547,6 @@ fun Recommendations(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun RecommendationPreview() {
-    Recommendations(item = "Dohyun")
-}
-
-private fun filterFriends(
-    user: User?,
-    allUsers: ArrayList<String>?
-): List<String> {
-    var nonFriendList = mutableListOf<String>()
-    if (user?.following == null) {
-        if(allUsers != null) {
-            nonFriendList = allUsers.toMutableList()
-        }
-    } else {
-        allUsers?.forEach {
-            if (user.following.contains(it)) {
-                nonFriendList.add(it)
-            }
-        }
-    }
-    return nonFriendList
 }
 
 private fun generateResponse(input: Float): String {

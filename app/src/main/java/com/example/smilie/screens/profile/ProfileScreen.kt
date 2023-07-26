@@ -282,34 +282,6 @@ fun ProfileScreen(
                             )
                         }
 
-//                        item { com.example.smilie.screens.Title("${user.username}'s Data") }
-//
-//                        metrics?.forEach() {
-//                            item {
-//                                if (it.active) {
-//                                    Box(
-//                                        modifier = Modifier.padding(start = 0.dp)
-//                                    ) {
-//                                        Column {
-//                                            Text(
-//                                                text = it.name,
-//                                                style = TextStyle(
-//                                                    fontSize = 28.sp,
-//                                                    fontWeight = FontWeight.Bold
-//                                                ),
-//                                                modifier = Modifier.padding(8.dp)
-//                                            )
-//                                            if (it.values.size > 0) {
-//                                                com.example.smilie.screens.Rectangle(String.format("%.1f",it.values.last().value).toFloat())
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//
-//                            }
-//
-//                        }
-
                         item {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
@@ -397,6 +369,7 @@ fun ProfileScreen(
                                     RoundedCornerShape(8.dp)
                                 )
                                 .clickable(onClick = {
+                                    showFullFriendList = false;
                                     profileViewModel.updateCurrentlyViewingUser(
                                         following.id
                                     )

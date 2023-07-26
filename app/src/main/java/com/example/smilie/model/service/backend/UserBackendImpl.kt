@@ -1,12 +1,10 @@
 package com.example.smilie.model.service.backend
 
-import android.util.Log
 import android.widget.Toast
 import com.example.smilie.SmilieHiltApp
 import com.example.smilie.model.User
 import com.example.smilie.model.service.UserService
-import com.example.smilie.screens.settings.NotificationUpdateBody
-import java.net.SocketTimeoutException
+import com.example.smilie.screens.settings.UserUpdateBody
 
 class UserBackendImpl(
     private val application: SmilieHiltApp,
@@ -17,8 +15,8 @@ class UserBackendImpl(
         return userService.create(user);
     }
 
-    override suspend fun updateUser(id: String, notificationUpdateBody: NotificationUpdateBody): User? {
-        return userService.put(id, notificationUpdateBody);
+    override suspend fun updateUser(id: String, userUpdateBody: UserUpdateBody): User? {
+        return userService.put(id, userUpdateBody);
     }
 
     override suspend fun getById(id: String): User? {
@@ -52,9 +50,7 @@ class UserBackendImpl(
         return users
     }
 
-    override suspend fun getAll(): ArrayList<String>? {
-        var ret = userService.getAll()
-        //Log.d("SmilieDebug", "AllUsers: "+ret.toString())
-        return ret
+    override suspend fun getAll(): ArrayList<User>? {
+        return userService.getAll();
     }
 }
