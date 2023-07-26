@@ -1,6 +1,7 @@
 package com.example.smilie.screens
 
 import android.icu.text.CaseMap.Title
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -83,6 +84,7 @@ private val colorList = listOf(
 @Composable
 fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<String>?) {
 
+    //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
@@ -545,10 +547,15 @@ private fun filterFriends(
     allUsers: ArrayList<String>?
 ): List<String> {
     var nonFriendList = mutableListOf<String>()
-
-    allUsers?.forEach {
-        if (user?.following != null && user.following.contains(it)) {
-            nonFriendList.add(it)
+    if (user?.following == null) {
+        if(allUsers != null) {
+            nonFriendList = allUsers.toMutableList()
+        }
+    } else {
+        allUsers?.forEach {
+            if (user.following.contains(it)) {
+                nonFriendList.add(it)
+            }
         }
     }
     return nonFriendList

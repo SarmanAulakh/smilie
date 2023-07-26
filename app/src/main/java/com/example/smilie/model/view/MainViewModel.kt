@@ -74,6 +74,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("SmilieDebug", "Retrieving all user list")
             allUsers.value = userBackend.getAll()
+            //Log.d("SmilieDebug", "AllUsers: "+allUsers.value.toString())
         }
     }
 }
