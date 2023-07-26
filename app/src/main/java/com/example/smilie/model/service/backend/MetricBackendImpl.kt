@@ -47,8 +47,12 @@ class MetricBackendImpl(
         return retMetrics
     }
 
-    override suspend fun addMetricEntry(id: String, metricId: String, metricVal: Number): Boolean {
-        val entryData = Value(metricVal, Instant.now().toString(),0f)
+    // can pass in weight as parameter
+    override suspend fun addMetricEntry(id: String, metricId: String, metricVal: Number, weightVal: Number): Boolean {
+        val entryData = Value(metricVal, Instant.now().toString(),weightVal)
+
+        // algorithm stuff here before putting, then we dont have to set anything
+
         val retEntry = metricService.put(id, metricId, entryData)
 
         if(!retEntry) {
@@ -61,4 +65,19 @@ class MetricBackendImpl(
 
         return retEntry
     }
+
+    override suspend fun getMetricValueByName(id: String, name: String): Number {
+        val metrics: ArrayList<Metric> = getMetricsById(id)
+        if (metrics.isEmpty()) return -1
+        for (metric in metrics) {
+            if (metric.name != name) continue
+            return metric.values[metric.values.size - 1].value
+        }
+
+        return -1
+    }
+
+//    override suspend fun setMetricWeightByName(id: String, name: String): Boolean {
+//
+//    }
 }

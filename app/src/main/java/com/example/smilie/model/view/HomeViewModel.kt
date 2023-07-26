@@ -21,13 +21,21 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val accountBackend: AccountBackend,
+    private val metricBackend: MetricBackend,
     private val userBackend: UserBackend,
     private val auth: FirebaseAuth
     ) : SmilieViewModel() {
-
+    var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
     fun addFollowing(userId: String) {
         viewModelScope.launch {
             userBackend.updateUser(id=accountBackend.currentUserId, UserUpdateBody(followingUserId = userId))
+        }
+    }
+
+    fun getMetrics(userId: String = accountBackend.currentUserId) {
+        viewModelScope.launch {
+            Log.d("SmilieDebug", "Current UserId: $userId")
+            metricData.value = metricBackend.getMetricsById(accountBackend.currentUserId)
         }
     }
 }

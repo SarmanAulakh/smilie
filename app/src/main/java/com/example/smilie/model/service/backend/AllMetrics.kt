@@ -10,6 +10,7 @@ class AllMetrics {
         "Video Games",
         "Food",
         "Time spent on Assignments",
+        "Time on Phone",
         "Overall"
     )
 }
