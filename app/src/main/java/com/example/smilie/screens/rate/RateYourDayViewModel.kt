@@ -94,40 +94,40 @@ class RateYourDayViewModel @Inject constructor(
             }
         }
 
-        var index = 0
-        while(index < vals.size) {
-            if (vals[index].value != overall) break
-            index += 1
-        }
-        // if not every value is the same as overall
-        if (index != vals.size) {
-            Log.d("first check", "checking if all values are the same")
-            index = 0
-            while (index < vals.size) {
-                if (vals[index].value > overall) break
-                index += 1
-            }
+        // var index = 0
+        // while(index < vals.size) {
+        //     if (vals[index].value != overall) break
+        //     index += 1
+        // }
+        // // if not every value is the same as overall
+        // if (index != vals.size) {
+        //     Log.d("first check", "checking if all values are the same")
+        //     index = 0
+        //     while (index < vals.size) {
+        //         if (vals[index].value > overall) break
+        //         index += 1
+        //     }
 
-            // checking if every value is less than or equal to overall
-            Log.d("second check", "checking if all values are less than or equal")
-            if (index != vals.size) {
-                index = 0
-                while (index < vals.size) {
-                    if (vals[index].value < overall) break
-                    index += 1
-                }
+        //     // checking if every value is less than or equal to overall
+        //     Log.d("second check", "checking if all values are less than or equal")
+        //     if (index != vals.size) {
+        //         index = 0
+        //         while (index < vals.size) {
+        //             if (vals[index].value < overall) break
+        //             index += 1
+        //         }
 
-                // checking if every value is >= overall
-                if (index == vals.size) {
-                    // notification and return
-                }
-            } else {
-                Log.d("lessThanOrEqual", "all values are less than or equal")
-                // notification and return
-                return
+        //         // checking if every value is >= overall
+        //         if (index == vals.size) {
+        //             // notification and return
+        //         }
+        //     } else {
+        //         Log.d("lessThanOrEqual", "all values are less than or equal")
+        //         // notification and return
+        //         return
 
-            }
-        }
+        //     }
+        // }
 
 
 

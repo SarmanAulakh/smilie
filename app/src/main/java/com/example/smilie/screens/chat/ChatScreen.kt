@@ -52,7 +52,8 @@ fun ChatScreen(
     var metricStr = "The metrics for the user over the past week is "
 //    Log.d("MetricStr", "$metrics")
     metrics?.forEach{
-        metricStr += "'${it.name}': ${it.values[0].value}, "
+        val v = if (it.values.size > 0) it.values[0] else 5;
+        metricStr += "'${it.name}': ${v}, "
     }
     metricStr += " where 0 is rated poorly and 10 is rated best. \n"
 //    Log.d("MetricStr", metricStr)

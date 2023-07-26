@@ -219,7 +219,7 @@ fun ProfileScreen(
                                         modifier = Modifier.padding(bottom = 16.dp)
                                     );
                                     if (metrics != null) {
-                                        for (metric in metrics.filter { it.public }) {
+                                        for (metric in metrics.filter { profileViewModel.signedInUserId == user.id || it.public }) {
                                             Column(modifier =
                                                 Modifier.padding(bottom = 12.dp)) {
                                                 Text(

@@ -64,6 +64,7 @@
 | 2023/07/23 | 0                 | 0                | 0               | 10               | 0               | 0                | Implemented backend calls and rerouting on Rate page. Adding, removing, and submitting default metrics complete
 | 2023/07/23 | 0                 | 4                | 0               | 0               | 0               | 0                | Refactored the settingsManager and pulled past conversation data for the chat recommendation feature.
 | 2023/07/23 | 0                 | 0                | 3               | 0               | 0               | 0                | Migrating Contents from HomeScreen to Profile Page
+| 2023/07/23 | 4                 | 0                | 1               | 0               | 0               | 0                | Made powerpoint for final demo
 | 2023/07/24 | 0                 | 0                | 0               | 3               | 0               | 0                | Submitting Ratings redirects to Home. Rate page shows special message if already rated. Fixed bug with database updates.
 | 2023/07/24 | 0                 | 9                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase, update color scheme for accessibility and provide chatgpt context about metrics
 | 2023/07/24 | 0                 | 0                | 0               | 6               | 0               | 0                | Added page for custom metrics and defined its navigation. Added cancel buttons to all rate popup pages. Fixed issue with metric spacing. Made "Overall" always last to rate
@@ -75,5 +76,8 @@
 | 2023/07/25 | 0                 | 3                | 0               | 0               | 0               | 0                | Adding notifications functionality
 | 2023/07/25 | 0                 | 0                | 0               | 0               | 0                | 18               | Finish implementing algorithm functions
 | 2023/07/25 | 0                 | 0                | 4               | 4               | 0               | 0                | Home page recommended followers list UI added with backend request for getting all users' name
+| 2023/07/25 | 12                 | 0                | 0               | 0               | 0               | 0               | update BE user put, rebuild profile page, created friend list screen, see different profiles screen, notificications working, fixed bugs, following list screen, ability to follow, navigation updates
 | 2023/07/26 | 0                 | 0                | 0               | 0               | 0               | 4                | Final algo touches and updates to home screen
+| 2023/07/26 | 4                 | 0                | 0               | 0               | 0               | 0                | Bug fixes
+| 2023/07/26 | 4                 | 4                | 4               | 4               | 4               | 4                | Demo video recording, video editing
 

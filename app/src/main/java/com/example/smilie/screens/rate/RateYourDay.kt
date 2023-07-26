@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smilie.model.Metric
 import java.time.Instant
+import kotlin.math.roundToInt
 
 @Composable
 fun RateYourDay(
@@ -102,7 +103,7 @@ fun RateYourDay(
 
                                 Slider(
                                     value = sliders[i].value,
-                                    onValueChange = { sliders[i].value = it },
+                                    onValueChange = { sliders[i].value = it.roundToInt().toFloat() },
                                     valueRange = 0f..10f,
                                     steps = 9
                                 )
