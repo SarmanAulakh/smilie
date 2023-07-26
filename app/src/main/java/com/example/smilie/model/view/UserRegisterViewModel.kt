@@ -11,10 +11,12 @@ import com.example.smilie.model.service.backend.UserBackend
 import com.example.smilie.ui.navigation.Home
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 const val DEFAULT_PROFILE = "https://firebasestorage.googleapis.com/v0/b/socialmedia-5f158.appspot.com/o/no-img.png?alt=media&token=119463d0-c5e9-4059-9805-1f4d7dbff3c0"
@@ -86,15 +88,16 @@ class UserRegisterViewModel @Inject constructor(
     private fun createUserDocument(openAndPopUp: (String) -> Unit, imageUrl: String) {
         val currentFirebaseUser = accountBackend.currentUser
         currentFirebaseUser?.let {
-            val user = User(
-                id = it.id,
-                username = uiState.value.username,
-                userType = uiState.value.userType,
-                email = it.email,
-                imageUrl = imageUrl,
-            )
-
             viewModelScope.launch {
+                val fcmToken = Firebase.messaging.token.await();
+                val user = User(
+                    id = it.id,
+                    username = uiState.value.username,
+                    userType = uiState.value.userType,
+                    email = it.email,
+                    imageUrl = imageUrl,
+                    fcmToken = fcmToken
+                )
                 userBackend.createUser(user)
                 openAndPopUp(Home.route)
             }

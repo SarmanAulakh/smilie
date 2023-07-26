@@ -18,4 +18,5 @@ data class User(
     val followers: List<String>? = null,
     val following: List<String>? = null,
     val show_notifications: Boolean = true,
+    val fcmToken: String = ""
 )

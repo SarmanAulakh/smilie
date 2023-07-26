@@ -97,7 +97,9 @@ fun MainApp(
                     showBottomNav = true
                     viewModel.getUser();
                     var userData = viewModel.userData.value
-                    HomeScreen(user=userData, metrics=metricData)
+                    viewModel.getAllUsers()
+                    var allUserData = viewModel.allUsers.value
+                    HomeScreen(user=userData, metrics=metricData, allUsers=allUserData)
                 }
                 composable(
                     route = Profile.route + "?userId={userId}",
@@ -110,12 +112,9 @@ fun MainApp(
                     )
                 ) { entry ->
                     showBottomNav = true
-                    viewModel.getMetrics()
-                    var metricData = viewModel.metricData.value
                     ProfileScreen(
                         userId = entry.arguments?.getString("userId"),
                         openAndPopUp = { route -> navController.navigateSingleTopTo(route) },
-                        metrics = metricData,
                         settingsManager=settingsManager
                     )
                 }

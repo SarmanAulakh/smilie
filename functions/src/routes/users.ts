@@ -100,7 +100,7 @@ export function getUserDetails(req: Request, res: Response) {
 
 export function addUserDetails(req: Request, res: Response) {
   let userId = req.params.userId;
-  const { email, bio, isNotificationOn } = req.body;
+  const { followingUserId, isNotificationOn } = req.body;
 
   if (isNotificationOn != null) {
     db.collection("users")
@@ -115,10 +115,12 @@ export function addUserDetails(req: Request, res: Response) {
         console.error(err);
         return res.status(500).json({ err });
       });
-  } else {
+  } else if (followingUserId != null) {
     db.collection("users")
       .doc(userId)
-      .update({ bio, email })
+      .update({
+        following: FieldValue.arrayUnion(followingUserId),
+      })
       .then((_) => {
         return res.status(200).json({ success: true });
       })
@@ -211,6 +213,14 @@ export function addMetricEntry(req: Request, res: Response) {
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ err });
+    });
+}
+
+export function getAllUsers(req: Request, res: Response) {
+  db.collection("users")
+    .get()
+    .then((snapshot) => {
+      return res.status(200).json(snapshot.docs.map((doc) => doc.data()));
     });
 }
 

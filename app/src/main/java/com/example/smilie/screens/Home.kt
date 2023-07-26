@@ -1,8 +1,7 @@
 package com.example.smilie.screens
 
-import android.icu.text.CaseMap.Title
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -16,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
 import androidx.compose.foundation.lazy.*
@@ -24,39 +22,30 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.smilie.model.User
-import com.google.android.gms.common.util.AndroidUtilsLight
-import io.grpc.util.OutlierDetectionLoadBalancer.OutlierDetectionLoadBalancerConfig.FailurePercentageEjection
-import java.lang.Math.PI
 import java.util.*
-import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
+import com.example.smilie.model.view.HomeViewModel
 import kotlin.collections.ArrayList
 import com.example.smilie.screens.settings.SettingsManager
 
@@ -78,8 +67,14 @@ private val colorList = listOf(
 )
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Metric>?) {
+fun HomeScreen(
+    user: User?,
+    metrics: ArrayList<Metric>?,
+    allUsers: ArrayList<User>?,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+) {
 
+    //Log.d("SmilieDebug",allUsers.toString())
     if (user == null || user.equals(null)) {
         println("loading....")
     } else {
@@ -102,13 +97,23 @@ fun HomeScreen(modifier: Modifier = Modifier, user: User?, metrics: ArrayList<Me
 
                         metrics?.forEach {
                             if(it.name == "Overall") {
-                                it.values.forEach {valuee ->
-                                    overallAvg += valuee.value.toFloat()
+                                it.values.forEach {itit ->
+                                    overallAvg += itit.value.toFloat()
                                     count += 1f
                                 }
                             }
                         }
                         item { Home(userName, overallAvg/count) }
+
+                        if (allUsers != null) {
+                            var nonFriendList: List<User> = allUsers.filter { user.following?.contains(it.id) == false }
+
+                            item { Title("Recommended People to Follow") }
+
+                            itemsIndexed(nonFriendList) { _, u ->
+                                Recommendations(user =u, addFollowing = homeViewModel::addFollowing)
+                            }
+                        }
                     }
                 }
             }
@@ -144,12 +149,12 @@ fun Title(text: String) {
     Text(
         text = text,
         style = TextStyle(
-            fontSize = 36.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = 24.dp)
             .wrapContentWidth(align = Alignment.CenterHorizontally)
     )
 }
@@ -164,7 +169,7 @@ fun Home(name: String, value: Float) {
         val textData = listOf(
             TextType("$greeting, $name!", 36),
             TextType("Welcome back!", 36),
-            TextType("Over the last week, you've average a ${value.toString()}/10 !", 24),
+            TextType("Over the last week, you've average a ${value.toInt()}/10 !", 24),
             TextType("$response", 24)
         )
 
@@ -187,7 +192,7 @@ fun Home(name: String, value: Float) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoldableCards(
-    input: List<String>,
+    input: List<String?>,
     title: String
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -251,23 +256,26 @@ fun FoldableCards(
             }
             if(expandedState) {
                 for (item in input) {
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                start = 18.dp,
-                                top = 5.dp,
-                                bottom = 5.dp
+                    if (item != null) {
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    start = 18.dp,
+                                    top = 5.dp,
+                                    bottom = 5.dp
+                                ),
+                            text = item,
+                            style = TextStyle(
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
                             ),
-                        text = item,
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                            maxLines = 4,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
+
         }
     }
 }
@@ -396,7 +404,7 @@ fun BarGraph(
                         primaryColor = colorList[index],
                         percentage = percentage,
                         description = chartInput.name,
-                        value = chartInput.values.last().value.toFloat(),
+                        value = String.format("%.1f",chartInput.values.last().value.toFloat()).toFloat(),
                         index = index,
                         settingsManager = settingsManager
                     )
@@ -406,7 +414,8 @@ fun BarGraph(
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(top=24.dp)
         ) {
             var index = 0
             input?.forEach { chartInput ->
@@ -491,6 +500,54 @@ fun Bar(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun Recommendations(
+    user: User,
+    addFollowing: (userId: String) -> Unit,
+) {
+    var buttonState = remember { mutableStateOf(true) }
+    var buttonText = remember { mutableStateOf("Follow") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Card(
+                shape = CircleShape,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(50.dp)
+            ) {
+                AsyncImage(
+                    model = Uri.parse(user.imageUrl),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .wrapContentSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Text(text = user.username, modifier = Modifier.padding(horizontal = 12.dp))
+        }
+        Button(
+            // requires backend calls to add a person to the following list
+            onClick = {
+                buttonState.value = false
+                buttonText.value = "Following!"
+                addFollowing(user.id)
+            },
+            enabled = buttonState.value
+        ) {
+            Text(
+                text = buttonText.value,
+                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+            )
         }
     }
 }

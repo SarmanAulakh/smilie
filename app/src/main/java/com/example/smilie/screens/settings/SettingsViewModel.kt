@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.smilie.model.Metric
-import com.example.smilie.model.User
 import com.example.smilie.model.service.backend.AccountBackend
 import com.example.smilie.model.service.backend.MetricBackend
 import com.example.smilie.model.service.backend.UserBackend
@@ -15,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class NotificationUpdateBody(var isNotificationOn: Boolean)
+data class UserUpdateBody(var isNotificationOn: Boolean? = null, var followingUserId: String? = null)
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
@@ -40,7 +39,7 @@ class SignUpViewModel @Inject constructor(
 
     fun saveUser() {
         viewModelScope.launch {
-            userBackend.updateUser(id=accountBackend.currentUserId, NotificationUpdateBody(isNotificationsOn.value))
+            userBackend.updateUser(id=accountBackend.currentUserId, UserUpdateBody(isNotificationsOn.value))
         }
     }
 

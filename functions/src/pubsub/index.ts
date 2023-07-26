@@ -52,7 +52,7 @@ exports.insertFromPubsub = functions.pubsub
               if (doc.exists) {
                 const data = doc.data();
                 const payload: MulticastMessage = {
-                  tokens: data ? data.registrationTokens : [], // TODO: https://firebase.google.com/docs/cloud-messaging/send-message
+                  tokens: data ? data.registrationTokens : [], // https://firebase.google.com/docs/cloud-messaging/send-message
                   notification: {
                     title: "New Rating",
                     body: notificationBody,

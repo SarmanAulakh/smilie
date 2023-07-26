@@ -16,3 +16,9 @@ data class Value(
     var weight: Number = 0,
     var tempWeight: Number = 0
 )
+
+fun getMetricLast(values: ArrayList<Value>): Float  {
+    if (values.isEmpty()) return 0.0f
+
+    return String.format("%.1f", values.last().value.toFloat() / 10).toFloat();
+}

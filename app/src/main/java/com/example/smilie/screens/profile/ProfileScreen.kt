@@ -10,6 +10,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
@@ -45,6 +48,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +59,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -71,13 +76,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.smilie.model.view.ProfileViewModel
 import com.example.smilie.screens.TextType
 import com.example.smilie.ui.navigation.Profile
 import java.util.Calendar
 import kotlin.math.roundToInt
 import com.example.smilie.model.Metric
+import com.example.smilie.model.getMetricLast
 import com.example.smilie.screens.settings.SettingsManager
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,12 +94,13 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     userId: String?,
     openAndPopUp: (String) -> Unit,
-    metrics: ArrayList<Metric>?,
     settingsManager: SettingsManager
 ) {
-    profileViewModel.updateCurrentlyViewingUser(userId)
+//    profileViewModel.updateCurrentlyViewingUser(userId)
     val user = profileViewModel.currentlyViewingUser.value
+    val metrics = profileViewModel.metricData.value
     var barToggle by remember { mutableStateOf(false) }
+    var showFullFriendList by remember { mutableStateOf(false) }
     if (user == null) {
         Text(text = "loading...")
     } else {
@@ -101,15 +110,27 @@ fun ProfileScreen(
                 .fillMaxSize(),
                 contentAlignment = Alignment.TopCenter
         ) {
-            MaterialTheme {
+            if (!showFullFriendList) {
                 Column() {
+                    if (profileViewModel.signedInUserId != user.id) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top=8.dp),
+                            contentAlignment = Alignment.TopStart
+                        ) {
+                            Button(onClick = {
+                                showFullFriendList = false;
+                                profileViewModel.updateCurrentlyViewingUser(userId = null);
+                            }) {
+                                Text(text = "Back")
+                            }
+                        }
+                    }
                     LazyColumn(
                         modifier = Modifier.weight(1f),
                         contentPadding =  PaddingValues(horizontal = 10.dp)
                     ) {
-//                        item {
-//                            TextField(value = "blah", onValueChange = {})
-//                        }
                         item {
                             Column(
                                 modifier = Modifier
@@ -125,7 +146,9 @@ fun ProfileScreen(
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center
                                 );
-                                ProfileImage(imageUri = Uri.parse(user.imageUrl), setImageUri = {})
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    ProfileImage(imageUri = Uri.parse(user.imageUrl), setImageUri = {})
+                                }
                                 Text(
                                     modifier = Modifier
                                         .padding(start = 10.dp),
@@ -134,94 +157,66 @@ fun ProfileScreen(
                                     fontWeight = FontWeight.Bold,
                                 );
                                 Text(
-                                    text = "Type: " + user.userType,
+                                    text = "Type: ",
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                 );
                                 Text(
-                                    text = "Current Quality of Life Rating: 9/10",
+                                    text = user.userType.name,
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                );
+                                Text(
+                                    text = "Current Quality of Life Rating:",
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                 );
-                                // Week metric Averages
-                                Column() {
-                                    Text(
-                                        text = "This Week's Metric Averages",
-                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                        fontWeight = FontWeight.Bold,
-                                    );
-                                    Text(
-                                        text = "7 Hours of Sleep",
-                                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                    );
-                                    LinearProgressIndicator(progress = 0.5f);
-                                    Text(
-                                        text = "600 Minutes Playing Video Games",
-                                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                    );
-                                    LinearProgressIndicator(progress = 0.95f);
+                                var overallAvg = 0f
+                                var count = 0f
+
+                                metrics?.forEach {
+                                    if(it.name == "Overall") {
+                                        it.values.forEach {itit ->
+                                            overallAvg += itit.value.toFloat()
+                                            count += 1f
+                                        }
+                                    }
                                 }
+                                Text(
+                                    text = (overallAvg/count).toInt().toString() + "/10",
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                );
+
 
                                 // Current Metrics
-                                Column() {
+                                Column(modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 8.dp, bottom = 24.dp)) {
                                     Text(
-                                        text = "Current Metrics",
+                                        text = "Current Metrics:",
                                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                         fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(bottom = 16.dp)
                                     );
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(15.dp)
-                                    ) {
-                                        Text(
-                                            text = "Hours of Sleep",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
-                                        Text(
-                                            text = "Minutes Playing Video Games",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
-                                    }
-                                }
-
-                                // Past Metrics
-                                Column() {
-                                    Text(
-                                        text = "Past Metrics",
-                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                        fontWeight = FontWeight.Bold,
-                                    );
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(15.dp)
-                                    ) {
-                                        Text(
-                                            text = "Minutes of Exercise",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
-                                        Text(
-                                            text = "Minutes Watching YouTube",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
-                                    }
-                                }
-
-                                // Recommended Metrics
-                                Column() {
-                                    Text(
-                                        text = "Recommended Metrics",
-                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                        fontWeight = FontWeight.Bold,
-                                    );
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(15.dp)
-                                    ) {
-                                        Text(
-                                            text = "Minutes Studying",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
-                                        Text(
-                                            text = "Hours Working",
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                        );
+                                    if (metrics != null) {
+                                        for (metric in metrics) {
+                                            Column(modifier =
+                                                Modifier.padding(bottom = 12.dp)) {
+                                                Text(
+                                                    text = metric.name,
+                                                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                                );
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(8.dp)
+                                                        .background(Color.Gray)
+                                                ) {
+                                                    LinearProgressIndicator(progress = getMetricLast(metric.values), modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .clipToBounds());
+                                                }
+                                            }
+                                        }
                                     }
                                 }
 
@@ -236,43 +231,51 @@ fun ProfileScreen(
                                             .fillMaxWidth(),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Text(
-                                            text = "Following",
-                                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                            fontWeight = FontWeight.Bold,
-                                        );
+                                        Row(modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "Following",
+                                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                fontWeight = FontWeight.Bold,
+                                            );
+                                            Button(onClick = { showFullFriendList = true }) {
+                                                Text(text = "View All")
+                                            }
+                                        }
                                         LazyRow(
                                             modifier = Modifier.fillMaxWidth(),
                                             state = rememberLazyListState(),
                                             horizontalArrangement = Arrangement
                                                 .spacedBy(
                                                     space = 10.dp,
-                                                    alignment = Alignment.CenterHorizontally
+//                                                    alignment = Alignment.CenterHorizontally
                                                 )
                                         ) {
                                             for (following in profileViewModel.followingUsers.value) {
                                                 item {
                                                     Column(
-                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                                        modifier = Modifier.clickable(onClick = { profileViewModel.updateCurrentlyViewingUser(following.id)})
                                                     ) {
                                                         Text(
                                                             text = following.username,
                                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                                         );
                                                         Card(
-                                                            modifier = Modifier
-                                                                .size(50.dp),
                                                             shape = CircleShape,
-                                                            onClick = { profileViewModel.onFriendClick(openAndPopUp, following.id) }
+                                                            modifier = Modifier
+                                                                .padding(8.dp)
+                                                                .size(50.dp)
                                                         ) {
-                                                            Image(
-                                                                painterResource(R.drawable.ic_profile),
-                                                                modifier = Modifier
-                                                                    .fillMaxSize(),
+                                                            AsyncImage(
+                                                                model = Uri.parse(following.imageUrl),
                                                                 contentDescription = "",
+                                                                modifier = Modifier
+                                                                    .wrapContentSize(),
                                                                 contentScale = ContentScale.Crop
                                                             )
-                                                        };
+                                                        }
                                                     }
                                                 }
                                             }
@@ -287,9 +290,9 @@ fun ProfileScreen(
                             "LeagueofLeg.com"
                         )
                         val metricText = listOf(
-                            "sleep",
-                            "time spent with friends",
-                            "productivity",
+                            metrics?.get(0)?.name,
+                            metrics?.get(1)?.name,
+                            metrics?.get(2)?.name
                         )
 
                         item {
@@ -298,57 +301,12 @@ fun ProfileScreen(
                                 title = "Recommended Metrics"
                             )
                         }
-                        item {
-                            com.example.smilie.screens.FoldableCards(
-                                input = helpfulLinks,
-                                title = "Helpful Links"
-                            )
-                        }
-
-                        item { com.example.smilie.screens.Title("${user.username}'s Data") }
-
-                        metrics?.forEach() {
-                            item {
-                                if (it.active) {
-                                    Box(
-                                        modifier = Modifier.padding(start = 0.dp)
-                                    ) {
-                                        Column {
-                                            Text(
-                                                text = it.name,
-                                                style = TextStyle(
-                                                    fontSize = 28.sp,
-                                                    fontWeight = FontWeight.Bold
-                                                ),
-                                                modifier = Modifier.padding(8.dp)
-                                            )
-                                            com.example.smilie.screens.Rectangle(it.values.last().value.toFloat())
-                                        }
-                                    }
-                                }
-
-                            }
-
-                        }
-
-//                        items(metricData) { metric ->
-//                            Box(
-//                                modifier = Modifier.padding(start = 0.dp)
-//                            ) {
-//                                Column {
-//                                    Text(
-//                                        text = metric.name,
-//                                        style = TextStyle(
-//                                            fontSize = 28.sp,
-//                                            fontWeight = FontWeight.Bold
-//                                        ),
-//                                        modifier = Modifier.padding(8.dp)
-//                                    )
-//                                    com.example.smilie.screens.Rectangle(metric.value)
-//                                }
-//                            }
+//                        item {
+//                            com.example.smilie.screens.FoldableCards(
+//                                input = helpfulLinks,
+//                                title = "Helpful Links"
+//                            )
 //                        }
-
 
                         item {
                             Row(
@@ -398,6 +356,71 @@ fun ProfileScreen(
                                     .size(30.dp)
                             ) {
                             }
+                        }
+                    }
+                }
+            } else {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.TopStart
+                    ) {
+                        Button(onClick = {
+                            showFullFriendList = false;
+                            profileViewModel.updateCurrentlyViewingUser(userId = null);
+                        }) {
+                            Text(text = "Back")
+                        }
+                    }
+
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Following List", fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+                    }
+                    for (following in profileViewModel.followingUsers.value) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.primary,
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .clickable(onClick = {
+                                    showFullFriendList = false;
+                                    profileViewModel.updateCurrentlyViewingUser(
+                                        following.id
+                                    )
+                                })
+                        ) {
+                            Card(
+                                shape = CircleShape,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(50.dp)
+                            ) {
+                                AsyncImage(
+                                    model = Uri.parse(following.imageUrl),
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .wrapContentSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            Text(
+                                text = following.username + " - " + following.userType.toString(),
+                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                            );
                         }
                     }
                 }
