@@ -112,6 +112,21 @@ fun ProfileScreen(
         ) {
             if (!showFullFriendList) {
                 Column() {
+                    if (profileViewModel.signedInUserId != user.id) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top=8.dp),
+                            contentAlignment = Alignment.TopStart
+                        ) {
+                            Button(onClick = {
+                                showFullFriendList = false;
+                                profileViewModel.updateCurrentlyViewingUser(userId = null);
+                            }) {
+                                Text(text = "Back")
+                            }
+                        }
+                    }
                     LazyColumn(
                         modifier = Modifier.weight(1f),
                         contentPadding =  PaddingValues(horizontal = 10.dp)
