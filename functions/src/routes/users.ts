@@ -12,6 +12,8 @@ export function createNewUser(req: Request, res: Response) {
   const user = req.body;
   const userType: UserTypes = user.userType;
 
+  user.show_notifications = true;
+
   const batch = db.batch();
 
   console.log(userType, userType === UserTypes.STUDENT);
@@ -87,14 +89,17 @@ export function getUserDetails(req: Request, res: Response) {
 }
 
 export function addUserDetails(req: Request, res: Response) {
-  // Documentation found here https://dev.to/lucidmach/the-20-firebase-that-ll-do-80-of-the-task-a-firestore-cheatsheet-304p
   let userId = req.params.userId;
-  console.log("request body" + JSON.stringify(req.body));
+  const { email, bio, show_notifications } = req.body
 
   db.collection("users")
     .doc(userId)
-    .update({ bio: req.body["bio"] })
-    .then((doc) => {
+    .update({ 
+      email,
+      bio,
+      show_notifications,
+    })
+    .then((_) => {
       return res.status(200).json({ success: true });
     })
     .catch((err) => {
