@@ -117,6 +117,8 @@ fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<Str
 
                         var nonFriendList: List<String> = filterFriends(user, allUsers)
 
+                        item { Title("Recommended People to Follow") }
+
                         itemsIndexed(nonFriendList) { _, item ->
                             Recommendations(item=item)
                         }
