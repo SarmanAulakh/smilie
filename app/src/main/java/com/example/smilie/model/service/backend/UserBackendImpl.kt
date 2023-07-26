@@ -51,4 +51,8 @@ class UserBackendImpl(
 
         return users
     }
+
+    override suspend fun getAll(): ArrayList<User>? {
+        return userService.getAll()
+    }
 }

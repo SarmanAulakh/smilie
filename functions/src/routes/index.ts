@@ -7,6 +7,7 @@ import {
   updateUserMetrics,
   addMetricEntry,
   createNewUser,
+  getAllUsers,
 } from "./users";
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.get("/", (req, res) => {
 
 //user routes
 router.post("/users", createNewUser);
+router.get("/users", getAllUsers);
 router.put("/users/:userId", addUserDetails);
 router.get("/users/:userId", getUserDetails);
 router.get("/users/:userId/metrics", getUserMetrics);

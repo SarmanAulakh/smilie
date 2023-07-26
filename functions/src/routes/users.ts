@@ -214,6 +214,14 @@ export function addMetricEntry(req: Request, res: Response) {
     });
 }
 
+export function getAllUsers(req: Request, res: Response) {
+    db.collection("users")
+        .get().then(doc => {
+                return res.status(200).json(doc)
+            }
+        )
+}
+
 interface Metric {
   id?: String;
   name: String;

@@ -12,4 +12,6 @@ interface UserBackend {
     suspend fun getById(id: String): User?
 
     suspend fun getByIds(ids: List<String>): List<User>
+
+    suspend fun getAll(): ArrayList<User>?
 }

@@ -30,6 +30,9 @@ interface UserService {
     )
     @PUT("smilie-90a63/us-central1/api/users/{id}")
     suspend fun put(@Path("id") id: String, @Body notificationUpdateBody: NotificationUpdateBody): User?
+
+    @GET("smilie-90a63/us-central1/api/users")
+    suspend fun getAll(): ArrayList<User>?
 }
 
 interface MetricService {

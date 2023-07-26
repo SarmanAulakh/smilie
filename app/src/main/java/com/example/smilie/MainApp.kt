@@ -97,7 +97,9 @@ fun MainApp(
                     showBottomNav = true
                     viewModel.getUser();
                     var userData = viewModel.userData.value
-                    HomeScreen(user=userData, metrics=metricData)
+                    viewModel.getAllUsers()
+                    var allUserData = viewModel.allUsers.value
+                    HomeScreen(user=userData, metrics=metricData, allUsers=allUserData)
                 }
                 composable(
                     route = Profile.route + "?userId={userId}",
