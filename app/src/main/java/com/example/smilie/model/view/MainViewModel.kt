@@ -28,7 +28,7 @@ class MainViewModel @Inject constructor(
     var userData: MutableState<User?> = mutableStateOf(null)
     var userIdToken: MutableState<String?> = mutableStateOf(null)
     var metricData: MutableState<ArrayList<Metric>?> = mutableStateOf(null)
-    var allUsers: MutableState<ArrayList<User>?> = mutableStateOf(null)
+    var allUsers: MutableState<ArrayList<String>?> = mutableStateOf(null)
 
     init {
 //        auth.signOut()

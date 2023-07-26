@@ -32,7 +32,7 @@ interface UserService {
     suspend fun put(@Path("id") id: String, @Body notificationUpdateBody: NotificationUpdateBody): User?
 
     @GET("smilie-90a63/us-central1/api/users")
-    suspend fun getAll(): ArrayList<User>?
+    suspend fun getAll(): ArrayList<String>?
 }
 
 interface MetricService {

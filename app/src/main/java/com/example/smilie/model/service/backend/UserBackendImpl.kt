@@ -52,7 +52,7 @@ class UserBackendImpl(
         return users
     }
 
-    override suspend fun getAll(): ArrayList<User>? {
+    override suspend fun getAll(): ArrayList<String>? {
         return userService.getAll()
     }
 }

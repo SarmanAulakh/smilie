@@ -81,7 +81,7 @@ private val colorList = listOf(
 )
 
 @Composable
-fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<User>?) {
+fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<String>?) {
 
     if (user == null || user.equals(null)) {
         println("loading....")
@@ -105,8 +105,8 @@ fun HomeScreen(user: User?, metrics: ArrayList<Metric>?, allUsers: ArrayList<Use
 
                         metrics?.forEach {
                             if(it.name == "Overall") {
-                                it.values.forEach {valuee ->
-                                    overallAvg += valuee.value.toFloat()
+                                it.values.forEach {itit ->
+                                    overallAvg += itit.value.toFloat()
                                     count += 1f
                                 }
                             }
@@ -542,13 +542,13 @@ fun RecommendationPreview() {
 
 private fun filterFriends(
     user: User?,
-    allUsers: ArrayList<User>?
+    allUsers: ArrayList<String>?
 ): List<String> {
     var nonFriendList = mutableListOf<String>()
 
     allUsers?.forEach {
-        if (user?.following != null && user.following.contains(it.username)) {
-            nonFriendList.add(it.username)
+        if (user?.following != null && user.following.contains(it)) {
+            nonFriendList.add(it)
         }
     }
     return nonFriendList
