@@ -68,10 +68,10 @@
 | 2023/07/24 | 0                 | 9                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase, update color scheme for accessibility and provide chatgpt context about metrics
 | 2023/07/24 | 0                 | 0                | 0               | 6               | 0               | 0                | Added page for custom metrics and defined its navigation. Added cancel buttons to all rate popup pages. Fixed issue with metric spacing. Made "Overall" always last to rate
 | 2023/07/24 | 7                 | 0                | 0               | 0               | 0                | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
-| 2023/07/24 | 0                 | 0                | 0               | 0               | 0                | 6.5              | Starting to implement algorithm functions
-| 2023/07/25 | 0                 | 0                | 0               | 0               | 0                | 11               | Finish implementing algorithm functions
 | 2023/07/24 | 0                 | 3                | 0               | 0               | 0               | 0                | Saving privacy metrics to firebase
 | 2023/07/24 | 0                 | 0                | 6               | 0               | 0               | 0                | Integrating backend data to display graphs and progressbars accordingly
 | 2023/07/24 | 7                 | 0                | 0               | 0               | 0               | 0                | batching default metrics intialized by user type. refactored FE to call new create user route
+| 2023/07/24 | 0                 | 0                | 0               | 0               | 0                | 6.5              | Starting to implement algorithm functions
 | 2023/07/25 | 0                 | 3                | 0               | 0               | 0               | 0                | Adding notifications functionality
+| 2023/07/25 | 0                 | 0                | 0               | 0               | 0                | 18               | Finish implementing algorithm functions
 

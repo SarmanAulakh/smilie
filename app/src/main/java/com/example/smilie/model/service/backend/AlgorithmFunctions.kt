@@ -3,18 +3,17 @@ package com.example.smilie.model.service.backend
 import com.example.smilie.model.Metric
 
 public interface AlgorithmFunctions {
-    var importantMetrics: Array<Metric>
-    var unImportantMetrics: Array<Metric>
+    var importantMetrics: ArrayList<Metric>
+    var unImportantMetrics: ArrayList<Metric>
     var overallAccurate: Boolean
 
-    suspend fun trueOverallValue(metrics: Array<Metric>): Double
+    suspend fun trueOverallValue(metrics: ArrayList<Metric>): Double
 
-    suspend fun determiningImportance(metrics: Array<Metric>)
+    suspend fun determiningImportance(metrics: ArrayList<Metric>)
 
-    suspend fun calculateWeights(metrics: Array<Metric>): Array<Metric>
+    suspend fun calculateWeights(metrics: ArrayList<Metric>): ArrayList<Metric>
 
     suspend fun smoothingFunction(weight: Double) : Number
 
-    suspend fun generateWeights(metrics: Array<Metric>) : Array<Double>
 
 }
