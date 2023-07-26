@@ -75,4 +75,5 @@
 | 2023/07/25 | 0                 | 3                | 0               | 0               | 0               | 0                | Adding notifications functionality
 | 2023/07/25 | 0                 | 0                | 0               | 0               | 0                | 18               | Finish implementing algorithm functions
 | 2023/07/25 | 0                 | 0                | 4               | 4               | 0               | 0                | Home page recommended followers list UI added with backend request for getting all users' name
+| 2023/07/26 | 0                 | 0                | 0               | 0               | 0               | 4                | Final algo touches and updates to home screen
 

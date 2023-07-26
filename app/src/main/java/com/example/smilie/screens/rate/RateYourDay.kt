@@ -46,7 +46,7 @@ fun RateYourDay(
                 .fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            if(false && metricsToRate.isNotEmpty() &&
+            if(metricsToRate.isNotEmpty() &&
                 metricsToRate[0].values.isNotEmpty() &&
                 metricsToRate[0].values.last().date.split('T')[0] == Instant.now().toString().split('T')[0]) {
 
