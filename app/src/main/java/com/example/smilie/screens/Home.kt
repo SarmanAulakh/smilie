@@ -396,7 +396,7 @@ fun BarGraph(
                         primaryColor = colorList[index],
                         percentage = percentage,
                         description = chartInput.name,
-                        value = chartInput.values.last().value.toFloat(),
+                        value = String.format("%.1f",chartInput.values.last().value.toFloat()).toFloat(),
                         index = index,
                         settingsManager = settingsManager
                     )
@@ -406,7 +406,8 @@ fun BarGraph(
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(top=24.dp)
         ) {
             var index = 0
             input?.forEach { chartInput ->

@@ -15,3 +15,9 @@ data class Value(
     val date: String = "",
     val weight: Number = 0
 )
+
+fun getMetricLast(values: ArrayList<Value>): Float  {
+    if (values.isEmpty()) return 0.0f
+
+    return String.format("%.1f", values.last().value.toFloat() / 10).toFloat();
+}

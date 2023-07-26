@@ -100,33 +100,28 @@ export function getUserDetails(req: Request, res: Response) {
 
 export function addUserDetails(req: Request, res: Response) {
   let userId = req.params.userId;
-  const { email, bio, isNotificationOn } = req.body;
+  const { email, bio, following, isNotificationOn } = req.body;
 
+  let updateObj: any = {};
   if (isNotificationOn != null) {
-    db.collection("users")
-      .doc(userId)
-      .update({
-        show_notifications: isNotificationOn,
-      })
-      .then((_) => {
-        return res.status(200).json({ success: true });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500).json({ err });
-      });
+    updateObj.show_notifications = isNotificationOn;
+  } else if (following != null) {
+    updateObj.following = following;
   } else {
-    db.collection("users")
-      .doc(userId)
-      .update({ bio, email })
-      .then((_) => {
-        return res.status(200).json({ success: true });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500).json({ err });
-      });
+    updateObj.bio = bio;
+    updateObj.email = email;
   }
+
+  db.collection("users")
+    .doc(userId)
+    .update({})
+    .then((_) => {
+      return res.status(200).json({ success: true });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ err });
+    });
 }
 
 export function getUserMetrics(req: Request, res: Response) {
