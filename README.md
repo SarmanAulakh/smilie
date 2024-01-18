@@ -1,4 +1,4 @@
-# ece452-group2
+# S.M.I.L.I.E
 
 Credit to Open Source projects Used in this Project:
 
